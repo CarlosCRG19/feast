@@ -46,25 +46,40 @@ An app that gamifies and optimizes the decision process for the best restaurant 
 * Registration Screen
    * User can create new account
 * Stream
-    * User can view cards with basic info and images of restaurant
-    * User can swipe left or right to select and ignore restaurants
+    * User can see a sequence of cards with restaurants near the specified location
+    * User can swipe left or right to select or ignore restaurants (up to 5 restaurants to the right)
     * User can view cards of restaurants that match the filters
+    * User can swipe up to see details of restaurants
+    * User can favorite restaurants
 * Filter screen
-    * User can select different characteristics of the restaurants that they want to see in the main stream. 
+    * User can select different characteristics of the restaurants that they want to see in the main stream.
+* Detail screen
+    * User can see specific information of a restaurant
+* Compare screen
+    * User can choose specific atributes to sort the selected restaurants 
+* Favorite screen
+    * User can see a list of restaurants that have been favorited   
 
 ### 3. Navigation
 
 **Tab Navigation** (Tab to Screen)
 
-* [fill out your first tab]
-* [fill out your second tab]
-* [fill out your third tab]
+* Stream
+* Compare screen
+* Favorites screen
 
 **Flow Navigation** (Screen to Screen)
 
-* [list first screen here]
-   * [list screen navigation here]
-   * ...
-* [list second screen here]
-   * [list screen navigation here]
-   * ...
+* Login Screen
+   => Home
+* Registration Screen
+   => Home
+* Stream screen
+   => Filters screen
+   => Details screen
+* Detail screen
+   => None
+* Filters screen
+   => Stream screen
+* Comparison screen
+   => None
