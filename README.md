@@ -71,15 +71,15 @@ An app that gamifies and optimizes the decision process for the best restaurant 
 **Flow Navigation** (Screen to Screen)
 
 * Login Screen
-   => Home
+   * Home
 * Registration Screen
-   => Home
+   * Home
 * Stream screen
-   => Filters screen
-   => Details screen
+   * Filters screen
+   * Details screen
 * Detail screen
-   => None
+   * None
 * Filters screen
-   => Stream screen
+   * Stream screen
 * Comparison screen
-   => None
+   * None
