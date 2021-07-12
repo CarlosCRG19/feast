@@ -83,3 +83,9 @@ An app that gamifies and optimizes the decision process for the best restaurant 
    * Stream screen
 * Comparison screen
    * None
+
+# Wireframes
+Part 1
+<img src='wireframes.png' title='First Wireframe' width='' alt='First wireframe' />
+Part 2
+<img src='wireframes_2' title='Second Wireframe' width='' alt='Second wireframe' />
