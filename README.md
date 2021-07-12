@@ -156,7 +156,15 @@ _Part 2_
 | day | int | From 0 to 6, representing day of the week from Monday to Sunday. Notice that you may get the same day of the week more than once if the business has more than one opening time slots. | 
 | open | String | Start of the opening hours in a day, in 24-hour clock notation, like 1000 means 10 AM. | 
 | end | String | End of the opening hours in a day, in 24-hour clock notation, like 2130 means 9:30 PM. | 
-| restaurant | Pointer to Restaurant | Reference to restaurant object for this location | 
+| restaurant | Pointer to Restaurant | Reference to restaurant object for this hour | 
+
+### Model: Like
+| Property | Type | Description |
+| --- | --- | --- |
+| objectID | String | Unique identifier for the Restaurant (default field) |
+| createdAt | DateTime | date when like is created |
+| user | Pointer to User | User that liked the restaurant
+| restaurant | Pointer to Restaurant | reference to Restaurant object that this like belongs to |
 
 ### Model: User
 | Property | Type | Description |
@@ -174,12 +182,4 @@ _Part 2_
 | createdAt | DateTime | date when visit is created |
 | user | Pointer to User | user that liked the restaurant |
 | restaurant | Pointer to Restaurant | restaurant that has been selected |
-
-### Model: Like
-| Property | Type | Description |
-| --- | --- | --- |
-| objectID | String | Unique identifier for the Restaurant (default field) |
-| createdAt | DateTime | date when like is created |
-| user | Pointer to User | User that liked the restaurant
-| restaurant | Pointer to Restaurant | Restaurant that has been selected |
 
