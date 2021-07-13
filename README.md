@@ -1,7 +1,7 @@
 Original App Design Project - README Template
 ===
 
-# Restaurants Tinder
+# Feast
 
 ## Table of Contents
 1. [Overview](#Overview)
