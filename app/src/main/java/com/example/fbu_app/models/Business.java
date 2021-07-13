@@ -18,87 +18,148 @@ import java.util.List;
 @ParseClassName("Business")
 public class Business extends ParseObject{
 
+    // STATIC METHODS FOR OBJECT CONSTRUCTION
+
+    // Creates a new Business directly from a JSON object and returns it
     public static Business fromJson(JSONObject jsonObject) {
 
+        // Create new ParseObject
         Business business = new Business();
+
+        // Business info
         business.setYelpId(jsonObject.optString("id"));
         business.setName(jsonObject.optString("name"));
         business.setImageUrl(jsonObject.optString("image_url"));
-        business.setRating(jsonObject.optInt("rating"));
-        business.setPrice(jsonObject.optString("price"));
         business.setTelephone(jsonObject.optString("display_phone"));
 
+        /*
+         * NOTE: using optString instead of getString allows us to define a callback (which by default is "" for strings) in case
+         * there is no value for the specified name. getString, throws a JSONException Error
+         */
+
+        // Metrics
+        business.setRating(jsonObject.optInt("rating"));
+        business.setPrice(jsonObject.optString("price"));
+
+        // Coordinates
         JSONObject coordinates = jsonObject.optJSONObject("coordinates");
         business.setCoordLatitude(coordinates.optDouble("latitude"));
         business.setCoordLongitude(coordinates.optDouble("longitude"));
 
+        // Location
         JSONObject location = jsonObject.optJSONObject("location");
         business.setAddress(location.optString("address1"));
         business.setCity(location.optString("city"));
         business.setCountry(location.optString("country"));
 
+        // Categories
+
+        // Create empty list
+        List<String> categoriesList = new ArrayList<>();
+        // Get categories JSONArray
+        JSONArray categories = jsonObject.optJSONArray("categories");
+        // Iterate through array and get category title for each object
+        for (int i=0 ; i < categories.length() ; i++) {
+            categoriesList.add(categories.optJSONObject(i).optString("title"));
+        }
+        // Save categories
+        business.setCategories(categoriesList);
+
+        // Return newly created business
         return business;
 
     }
 
-    public void setYelpId(String yelpId) {
-        put("yelpId", yelpId);
+    // Applies fromJson method to the objects inside a JSON Array and returns a new list of Business objects
+    public static List<Business> fromJsonArray(JSONArray jsonArray) throws JSONException {
+        // Create empty list
+        List<Business> businesses = new ArrayList<>();
+        // Iterate through the array and apply fromJson to each object
+        for(int i=0 ; i < jsonArray.length() ; i++) {
+            businesses.add(fromJson(jsonArray.getJSONObject(i))); // add objects to businesses list
+        }
+        return businesses;
     }
 
-    public String getYelpId() {
-        return getString("yelpId");
+    // SETTERS (use put method from ParseObject)
+
+    public void setYelpId(String yelpId) { // Unique Yelp ID of this business.
+        put("yelpId", yelpId);
     }
 
     public void setName(String name) {
         put("name", name);
     }
 
-    public String getName() {
-        return getString("name");
-    }
-
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(String imageUrl) { // URL of photo for this business.
         put("imageUrl", imageUrl);
     }
 
-    public String getImageUrl() {
-        return getString("imageUrl");
-    }
-
-    public void setRating(int rating) {
+    public void setRating(int rating) { // Rating for this business (value ranges from 1, 1.5, ... 4.5, 5).
         put("rating", rating);
     }
 
-    public int getRating() {
-        return getInt("rating");
-    }
-
-    public void setPrice(String price) {
+    public void setPrice(String price) { // Price level of the business. Value is one of $, $$, $$$ and $$$$.
         put("price", price);
     }
 
-    public String getPrice() {
-        return getString("price");
-    }
-
-    public void setTelephone(String telephone) {
+    public void setTelephone(String telephone) { // Phone number of the business formatted nicely to be displayed to users.
         put("telephone", telephone);
-    }
-
-    public String getTelephone() {
-        return getString("telephone");
     }
 
     public void setCoordLatitude(double latitude) {
         put("coordLatitude", latitude);
     }
 
-    public double getCoordLatitude() {
-        return getDouble("coordLatitude");
-    }
-
     public void setCoordLongitude(double longitude) {
         put("coordLongitude", longitude);
+    }
+
+    public void setAddress(String address) { // Street address of this business.
+        put("address", address);
+    }
+
+    public void setCity(String city) {
+        put("city", city);
+    }
+
+    public void setCountry(String country) {
+        put("country", country);
+    }
+
+    public void setCategories(List<String> categories) {
+        put("categories", categories);
+    }
+
+
+    // GETTERS (get methods from ParseObject)
+
+    public String getYelpId() {
+        return getString("yelpId");
+    }
+
+    public String getName() {
+        return getString("name");
+    }
+
+    public String getImageUrl() {
+        return getString("imageUrl");
+    }
+
+    public int getRating() {
+        return getInt("rating");
+    }
+
+    public String getPrice() {
+        return getString("price");
+    }
+
+    public String getTelephone() {
+        return getString("telephone");
+    }
+
+    public double getCoordLatitude() {
+        return getDouble("coordLatitude");
     }
 
     public double getCoordLongitude() {
@@ -109,31 +170,15 @@ public class Business extends ParseObject{
         return getString("address");
     }
 
-    public void setAddress(String address) {
-        put("address", address);
-    }
-
     public String getCity() {
         return getString("city");
-    }
-
-    public void setCity(String city) {
-        put("city", city);
     }
 
     public String getCountry() {
         return getString("country");
     }
 
-    public void setCountry(String country) {
-        put("country", country);
-    }
-
-    public static List<Business> fromJsonArray(JSONArray jsonArray) throws JSONException {
-        List<Business> businesses = new ArrayList<>();
-        for(int i=0 ; i < jsonArray.length() ; i++) {
-            businesses.add(fromJson(jsonArray.getJSONObject(i)));
-        }
-        return businesses;
+    public List<String> getCategories() {
+        return getList("categories");
     }
 }

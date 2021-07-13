@@ -9,28 +9,31 @@ import java.util.Date;
 @ParseClassName("Visit")
 public class Visit extends ParseObject {
 
-    public void setDate(Date date) {
+    // SETTERS
+
+    public void setDate(Date date) { // Scheduled date for the visit
         put("date", date);
     }
 
-    public Date getDate() {
-        return getDate("date");
+    public void setBusiness(Business business) { // Business selected by the user
+        put("business", business);
     }
 
-    public void setBusiness(Business business) {
-        put("business", business);
+    public void setUser(ParseUser user) { // User that created the visit
+        put("user", user);
+    }
+
+    // GETTERS
+
+    public Date getDate() {
+        return getDate("date");
     }
 
     public Business getBusiness() {
         return (Business) get("business");
     }
 
-    public void setUser(ParseUser user) {
-        put("user", user);
-    }
-
     public ParseUser getUser() {
         return getParseUser("user");
     }
-
 }

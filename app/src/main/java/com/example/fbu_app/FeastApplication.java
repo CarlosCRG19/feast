@@ -11,6 +11,7 @@ import com.parse.ParseObject;
 
 import org.w3c.dom.Comment;
 
+// 
 public class FeastApplication extends Application {
     @Override
     public void onCreate() {
@@ -21,9 +22,6 @@ public class FeastApplication extends Application {
         ParseObject.registerSubclass(Hour.class);
         ParseObject.registerSubclass(Like.class);
         ParseObject.registerSubclass(Visit.class);
-
-
-
 
         // Connect to database using secret keys
         Parse.initialize(new Parse.Configuration.Builder(this)

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         yelpClient = new YelpClient();
 
         Pair<String, String> location = new Pair<>("location", "Seattle");
+        Log.i(TAG, "New query with params: " + location.first + " -> " + location.second);
         yelpClient.getMatchingBusinesses(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -46,18 +47,27 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray jsonArray = response.getJSONArray("businesses");
                     Log.i(TAG, jsonArray.toString());
                     businessList = Business.fromJsonArray(jsonArray);
-                    Log.i(TAG, String.valueOf(businessList.size()));
+                    Log.i(TAG, "List of Businesses created with size of: " + String.valueOf(businessList.size()));
 
                     // Test details
                     Business business = businessList.get(0);
+                    Log.i(TAG, "EXAMPLE BUSINESS");
+                    Log.i(TAG, "YelpID: " + business.getYelpId());
+                    Log.i(TAG, "Name: " + business.getName());
+                    Log.i(TAG, "Address: " + business.getAddress());
+                    Log.i(TAG, "City: " + business.getCity());
+                    Log.i(TAG, "Country: " + business.getCountry());
+                    Log.i(TAG, "Rating: " + String.valueOf(business.getRating()));
+                    business.saveInBackground();
+
                     String testId = business.getYelpId();
                     yelpClient.getBusinessDetails(testId, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
-                            Log.i(TAG, json.toString());
                             try {
                                 JSONObject hours = json.jsonObject.getJSONArray("hours").getJSONObject(0);
                                 List<Hour> hoursList = Hour.fromJsonArray(hours.getJSONArray("open"), business);
+                                hoursList.get(0).saveInBackground();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

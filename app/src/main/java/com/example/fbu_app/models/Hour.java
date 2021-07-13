@@ -12,26 +12,38 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+// Stores the open hours information for a specific business (one-to-many relationship)
 @ParseClassName("Hour")
 public class Hour extends ParseObject{
 
+    // STATIC METHODS FOR OBJECT CREATION
+
+    // Creates a new Hour directly from a JSON object and returns it
     public static Hour fromJson(JSONObject jsonObject) {
 
+        // Create new ParseObject
         Hour hour = new Hour();
 
+        // Set info
         hour.setDay(jsonObject.optInt("day"));
-        hour.setOpen(jsonObject.optString("start"));
+        hour.setStart(jsonObject.optString("start"));
         hour.setEnd(jsonObject.optString("end"));
 
+        // Return newly created object
         return hour;
 
     }
 
+    // Applies fromJson method to the objects inside a JSON Array and returns a new list of hour objects (linked to the same business)
     public static List<Hour> fromJsonArray(JSONArray jsonArray, Business business) throws JSONException {
+        // Create new empty list
         List<Hour> hours = new ArrayList<>();
+        // Iterate through JSON Array and apply fromJson to each object
         for(int i=0 ; i < jsonArray.length() ; i++) {
             Hour hour = fromJson(jsonArray.getJSONObject(i));
+            // Reference the same business to create relationship
             hour.setBusiness(business);
+            // Add new object to the list
             hours.add(hour);
         }
 
@@ -39,38 +51,45 @@ public class Hour extends ParseObject{
 
     }
 
-    public void setDay(int day) {
+    // SETTERS
+
+    public void setDay(int day) { // String representing the day of the week for the opening hours
         put("day", formatDay(day));
     }
 
-    public String getDay() {
-        return getString("day");
+    public void setStart(String start) { // Start of the opening hours in a day, in 24-hour clock notation. Formatted to HH:MM
+        put("start", formatHour(start));
     }
 
-    public void setOpen(String open) {
-        put("open", formatHour(open));
+    public void setEnd(String end) { // End of the opening hours in a day, in 24-hour clock notation. Formatted to HH:MM
+        put("end", formatHour(end));
+    }
+
+    public void setBusiness(Business business) { // Business linked to the Hour
+        put("business", business);
+    }
+
+    // GETTERS
+
+    public String getDay() {
+        return getString("day");
     }
 
     public String getStart() {
         return getString("start") ;
     }
 
-    public void setEnd(String end) {
-        put("closed", formatHour(end));
-    }
-
     public String getEnd() {
         return getString("end");
-    }
-
-    public void setBusiness(Business business) {
-        put("business", business);
     }
 
     public Business getBusiness() {
         return (Business) get("business");
     }
 
+    // HELPER METHODS
+
+    // Day is received as an integer from 0 to 6 (0 being Monday and 6 Sunday). This method transforms the data into redable day names
     private String formatDay(int day) {
         switch (day) {
             case 0:
@@ -92,6 +111,7 @@ public class Hour extends ParseObject{
         }
     }
 
+    // Returns hour formatted as HH:MM
     private String formatHour(String hour) {
 
         return hour.substring(0,2) + ":" + hour.substring(2);
