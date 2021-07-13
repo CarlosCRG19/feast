@@ -1,0 +1,2 @@
+rootProject.name = "FBU-App"
+include ':app'
