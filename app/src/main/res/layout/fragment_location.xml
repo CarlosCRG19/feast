@@ -1,12 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Date: "
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp" />
+
+    <Button
+        android:id="@+id/btnDate"
+        style="?android:spinnerStyle"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_alignTop="@+id/tvDate"
+        android:layout_toEndOf="@id/tvDate"
+        android:text="13 JUL 2021"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tvSelectLocation"
+        android:layout_below="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Location: "
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp" />
+
+    <EditText
+        android:id="@+id/etPlaces"
+        android:layout_below="@+id/tvSelectLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter address"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="16dp"
+        android:drawableLeft="@drawable/ic_location"
+        android:gravity="center_vertical"
+        android:background="@android:drawable/editbox_background" />
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_below="@+id/etPlaces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:fontFamily="monospace"
+        android:padding="14dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="32dp" />
+
+    <TextView
+        android:id="@+id/tvLatLng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLocation"
+        android:layout_marginStart="20dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/btnSelectLocation"
+        android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_height="40dp"
+        android:textColor="@color/white"
         android:text="Select location"/>
+
+
+
+
 
 </RelativeLayout>
