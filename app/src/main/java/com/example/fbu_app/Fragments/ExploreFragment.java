@@ -1,30 +1,32 @@
 package com.example.fbu_app.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.fbu_app.FiltersAdapter;
 import com.example.fbu_app.R;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.FiltersViewModel;
+import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
+import com.yuyakaido.android.cardstackview.CardStackListener;
+import com.yuyakaido.android.cardstackview.CardStackView;
+import com.yuyakaido.android.cardstackview.Direction;
+import com.yuyakaido.android.cardstackview.StackFrom;
+import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -45,11 +47,6 @@ public class ExploreFragment extends Fragment {
     private FiltersViewModel filtersViewModel; // communication object between fragments
     List<Pair<String, String>> filters;
 
-    // Test views
-    RecyclerView rvFilters; // temporary Recycler view to display the applied filters
-    TextView tvFoundBusinesses;
-    FiltersAdapter adapter;
-
     // Navigation views
     Button btnFilters, btnCompare;
 
@@ -58,6 +55,11 @@ public class ExploreFragment extends Fragment {
 
     // Model to store received businesses
     List<Business> businesses;
+
+    // CardStack tools
+    CardStackAdapter adapter; // binds data to the cards
+    CardStackLayoutManager manager; // general manager of the CardStack
+    CardStackView cardStackView; // view from yuyakaido library
 
     // Required empty constructor
     public ExploreFragment(){}
@@ -79,17 +81,56 @@ public class ExploreFragment extends Fragment {
         // Create instance of Client
         yelpClient = new YelpClient();
 
-        // initialize test data
-        filters = new ArrayList<>();
-        adapter = new FiltersAdapter(getContext(), filters);
-        rvFilters = view.findViewById(R.id.rvFilters); // rv for testing
-        rvFilters.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvFilters.setAdapter(adapter);
+        // Init the list of businesses
+        businesses = new ArrayList<>();
+        // Init adapter to bind data
+        adapter = new CardStackAdapter(getContext(), businesses);
 
-        tvFoundBusinesses = view.findViewById(R.id.tvFoundBusinesses); // tv to display number of found businesses
-        // Populate filters with info from ViewModel
-        filtersViewModel.getFilters().getValue().forEach((key, value) -> filters.add(new Pair<String,String>(key, value)));
-        adapter.notifyDataSetChanged();
+        // ------ CARD STACK SETUP ------ //
+        manager = new CardStackLayoutManager(getContext(), new CardStackListener() {
+            @Override
+            public void onCardDragging(Direction direction, float ratio) { }
+
+            @Override
+            public void onCardSwiped(Direction direction) {
+                Log.d(TAG, "onCardSwiped: p=" + manager.getTopPosition() + "d=" + direction);
+                // Handle swipe direction
+                if(direction == Direction.Right) {
+                    Toast.makeText(getContext(), "Direction Right", Toast.LENGTH_SHORT).show();
+                }
+                else if(direction == Direction.Left) {
+                    Toast.makeText(getContext(), "Direction Left", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCardRewound() { }
+
+            @Override
+            public void onCardCanceled() { }
+
+            @Override
+            public void onCardAppeared(View view, int position) { }
+
+            @Override
+            public void onCardDisappeared(View view, int position) { }
+        });
+
+        // Manager settings
+        manager.setStackFrom(StackFrom.None); // no stack shown
+        manager.setSwipeThreshold(0.3f); // threshold to consider item as selected
+        manager.setMaxDegree(20.0f); // degree of card rotation when dragged
+        manager.setDirections(Direction.HORIZONTAL); // only allow horizontal swipes
+        manager.setCanScrollHorizontal(true);
+        manager.setCanScrollVertical(false);
+        manager.setSwipeableMethod(SwipeableMethod.Manual);
+        manager.setOverlayInterpolator(new LinearInterpolator()); // interpolator to show overlay when dragged
+
+        // Set CardStackView
+        cardStackView = view.findViewById(R.id.card_stack_view);
+        cardStackView.setLayoutManager(manager);
+        cardStackView.setAdapter(adapter);
+        cardStackView.setItemAnimator(new DefaultItemAnimator());
 
         // Request to get businesses that match the current filters
         yelpClient.getMatchingBusinesses(new JsonHttpResponseHandler() {
@@ -100,12 +141,17 @@ public class ExploreFragment extends Fragment {
                 try {
                     // Get list of businesses
                     JSONArray jsonArray = response.getJSONArray("businesses");
-                    Log.i(TAG, jsonArray.toString());
                     // Use static methods to create array of businesses (these businesses are only stored locally, not in Parse)
                     businesses = Business.fromJsonArray(jsonArray);
-                    // Set test TV text
-                    tvFoundBusinesses.setText("Businesses found: " + String.valueOf(businesses.size()));
-                    Log.i(TAG, String.valueOf(businesses.size()));
+                    // Add new businesses to adapter
+                    adapter.clear();
+                    adapter.addAll(businesses);
+                    // Log messages to see functionality
+                    Log.i(TAG, "NEW REQUEST - " + String.valueOf(businesses.size()) + " businesses found for filters:");
+                    filtersViewModel.getFilters().getValue().forEach((key, value) -> Log.i(TAG, key + ": " + value));
+                    Log.i(TAG, "FOUND BUSINESSES:");
+                    Log.i(TAG, jsonArray.toString());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

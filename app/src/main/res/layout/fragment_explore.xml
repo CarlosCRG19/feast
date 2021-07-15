@@ -18,33 +18,40 @@
         android:layout_height="wrap_content"
         android:text="Filters" />
 
-    <TextView
-        android:id="@+id/tvFoundBusinesses"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnCompare"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="40dp"
-        android:textSize="30sp"
-        tools:text="Businesses found: 50" />
-
-    <TextView
-        android:id="@+id/tvFiltersUsed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvFoundBusinesses"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="40dp"
-        android:textSize="30sp"
-        android:text="Filters used:" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFilters"
+    <com.yuyakaido.android.cardstackview.CardStackView
+        android:id="@+id/card_stack_view"
+        android:layout_below="@+id/btnFilters"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/tvFiltersUsed"
-        android:padding="10dp" />
+        android:clipToPadding="false" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvFoundBusinesses"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/btnCompare"-->
+<!--        android:layout_marginTop="40dp"-->
+<!--        android:layout_marginStart="40dp"-->
+<!--        android:textSize="30sp"-->
+<!--        tools:text="Businesses found: 50" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvFiltersUsed"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/tvFoundBusinesses"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginStart="40dp"-->
+<!--        android:textSize="30sp"-->
+<!--        android:text="Filters used:" />-->
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rvFilters"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_below="@+id/tvFiltersUsed"-->
+<!--        android:padding="10dp" />-->
 
 
 </RelativeLayout>
