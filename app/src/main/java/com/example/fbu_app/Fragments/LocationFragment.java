@@ -67,7 +67,7 @@ public class LocationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Set value for ViewModel
         filtersViewModel = ViewModelProviders.of(getActivity()).get(FiltersViewModel.class);
-        // Initialize the filters array
+        // Initialize the filters map
         filtersViewModel.initializeFilters();
     }
 
@@ -129,8 +129,8 @@ public class LocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Add latitude and longitude filters to view model
-                filtersViewModel.addFilter(new Pair<String, String>("latitude", String.valueOf(latitude)));
-                filtersViewModel.addFilter(new Pair<String, String>("longitude", String.valueOf(longitude)));
+                filtersViewModel.addFilter("latitude", String.valueOf(latitude));
+                filtersViewModel.addFilter("longitude", String.valueOf(longitude));
 //                // Create new fragment
                 ExploreFragment exploreFragment = new ExploreFragment();
                 // Use activity's fragment manager to change fragment

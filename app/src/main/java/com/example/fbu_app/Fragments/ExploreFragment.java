@@ -88,7 +88,7 @@ public class ExploreFragment extends Fragment {
 
         tvFoundBusinesses = view.findViewById(R.id.tvFoundBusinesses); // tv to display number of found businesses
         // Populate filters with info from ViewModel
-        filters.addAll(filtersViewModel.getFilters().getValue());
+        filtersViewModel.getFilters().getValue().forEach((key, value) -> filters.add(new Pair<String,String>(key, value)));
         adapter.notifyDataSetChanged();
 
         // Request to get businesses that match the current filters
@@ -116,7 +116,7 @@ public class ExploreFragment extends Fragment {
                 // Display log message
                 Log.i(TAG, "Failure doing request: " + response, throwable);
             }
-        }, filters);
+        }, filtersViewModel.getFilters().getValue());
 
         // Navigation button to launch FiltersFragment
         btnFilters = view.findViewById(R.id.btnFilters);

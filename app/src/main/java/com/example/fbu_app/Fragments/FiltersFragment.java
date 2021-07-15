@@ -61,10 +61,10 @@ public class FiltersFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Add filters to ViewModel
-                filtersViewModel.addFilter(new Pair<String, String>("rating", etRating.getText().toString()));
-                filtersViewModel.addFilter(new Pair<String, String>("price", etPrice.getText().toString()));
-                filtersViewModel.addFilter(new Pair<String, String>("distance", etDistance.getText().toString()));
-                filtersViewModel.addFilter(new Pair<String, String>("categories", etCategories.getText().toString()));
+                filtersViewModel.addFilter("rating", etRating.getText().toString());
+                filtersViewModel.addFilter("price", etPrice.getText().toString());
+                filtersViewModel.addFilter("distance", etDistance.getText().toString());
+                filtersViewModel.addFilter("categories", etCategories.getText().toString());
                 // Return to ExploreFragment
                 getActivity().onBackPressed(); // since this transaction was made with addToBackStack, when backpressed, the user returns to previous fragment
             }

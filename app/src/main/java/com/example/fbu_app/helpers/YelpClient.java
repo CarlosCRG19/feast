@@ -8,6 +8,7 @@ import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_app.BuildConfig;
 
+import java.util.HashMap;
 import java.util.List;
 
 /*
@@ -21,7 +22,7 @@ public class YelpClient extends AsyncHttpClient {
     public static final String DETAILS_END_POINT = "https://api.yelp.com/v3/businesses/"; // This endpoint returns detailed business content like telephone, open hours and more photos
 
     // Gets businesses according to the criteria specified by the user
-    public void getMatchingBusinesses(JsonHttpResponseHandler handler, List<Pair<String, String>> filters) {
+    public void getMatchingBusinesses(JsonHttpResponseHandler handler, HashMap<String, String> filtersMap) {
 
         // Set Authorization header with the API Key
         RequestHeaders headers = new RequestHeaders();
@@ -31,9 +32,7 @@ public class YelpClient extends AsyncHttpClient {
         RequestParams params = new RequestParams();
 
         // Get params from varargs
-        for (Pair <String, String> filter : filters) {
-            params.put(filter.first, filter.second);
-        }
+        filtersMap.forEach((key, value) -> params.put(key, value));
 
         // Set request limit to 50 businesses
         params.put("limit", 50);
