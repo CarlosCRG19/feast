@@ -1,27 +1,17 @@
 package com.example.fbu_app.Fragments;
 
 import com.example.fbu_app.BuildConfig;
-import com.example.fbu_app.MainActivity;
-import com.google.android.gms.common.api.ApiException;
+import com.example.fbu_app.models.FiltersViewModel;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +23,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fbu_app.R;
 import com.google.android.libraries.places.api.Places;
@@ -44,7 +37,6 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -56,14 +48,28 @@ public class LocationFragment extends Fragment {
     public static final String TAG = "LocationFragment"; // tag for log messages
     public static final int AUTOCOMPLETE_REQUEST_CODE = 42;
 
+    FiltersViewModel filtersViewModel; // Communication object between fragments
+
     // VIEWS
     DatePickerDialog datePickerDialog; // Date picking
     Button btnDate, btnSelectLocation;
     EditText etPlaces; // Location selection
     TextView tvLocation, tvLatLng;
 
+    // Latitude and Longitude values for selected location
+    double latitude, longitude;
+
     // Required empty constructor
     public LocationFragment() {};
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Set value for ViewModel
+        filtersViewModel = ViewModelProviders.of(getActivity()).get(FiltersViewModel.class);
+        // Initialize the filters array
+        filtersViewModel.initializeFilters();
+    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -122,7 +128,10 @@ public class LocationFragment extends Fragment {
         btnSelectLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create new fragment
+                // Add latitude and longitude filters to view model
+                filtersViewModel.addFilter(new Pair<String, String>("latitude", String.valueOf(latitude)));
+                filtersViewModel.addFilter(new Pair<String, String>("longitude", String.valueOf(longitude)));
+//                // Create new fragment
                 ExploreFragment exploreFragment = new ExploreFragment();
                 // Use activity's fragment manager to change fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
@@ -146,6 +155,9 @@ public class LocationFragment extends Fragment {
             etPlaces.setText(place.getAddress());
             tvLocation.setText("Locality Name: " + place.getName());
             tvLatLng.setText(String.valueOf(place.getLatLng()));
+            // Save latitude and longitude values
+            latitude = place.getLatLng().latitude;
+            longitude = place.getLatLng().longitude;
         }
         // Check if there has been an error
         else if (resultCode == AutocompleteActivity.RESULT_ERROR) {

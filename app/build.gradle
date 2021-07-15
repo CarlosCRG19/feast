@@ -54,6 +54,10 @@ dependencies {
     // Database dependency
     implementation "com.github.parse-community.Parse-SDK-Android:parse:1.18.5"
 
+    // Parcel
+    implementation 'org.parceler:parceler-api:1.1.12'
+    annotationProcessor 'org.parceler:parceler:1.1.12'
+
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.+'

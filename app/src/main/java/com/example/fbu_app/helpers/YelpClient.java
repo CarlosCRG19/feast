@@ -8,6 +8,8 @@ import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_app.BuildConfig;
 
+import java.util.List;
+
 /*
  * Lightweight asynchronous HTTP client that inherits from Codepath's AsyncHttpClient:
  * https://guides.codepath.org/android/Using-Codepath-Async-Http-Client
@@ -19,7 +21,7 @@ public class YelpClient extends AsyncHttpClient {
     public static final String DETAILS_END_POINT = "https://api.yelp.com/v3/businesses/"; // This endpoint returns detailed business content like telephone, open hours and more photos
 
     // Gets businesses according to the criteria specified by the user
-    public void getMatchingBusinesses(JsonHttpResponseHandler handler, Pair<String, String>... filters) {
+    public void getMatchingBusinesses(JsonHttpResponseHandler handler, List<Pair<String, String>> filters) {
 
         // Set Authorization header with the API Key
         RequestHeaders headers = new RequestHeaders();

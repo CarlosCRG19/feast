@@ -3,10 +3,90 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnFilter"
+    <TextView
+        android:id="@+id/tvRating"
+        android:layout_below="@+id/btnFilter"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:text="Rating: " />
+
+    <EditText
+        android:id="@+id/etRating"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tvRating"
+        android:layout_alignTop="@+id/tvRating"
+        android:hint="From 0 to 5" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_below="@+id/tvRating"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:text="Price: " />
+
+    <EditText
+        android:id="@+id/etPrice"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tvPrice"
+        android:layout_alignTop="@+id/tvPrice"
+        android:hint="From 0 to 5" />
+
+
+    <TextView
+        android:id="@+id/tvDistance"
+        android:layout_below="@+id/tvPrice"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:text="Distance: " />
+
+    <EditText
+        android:id="@+id/etDistance"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tvDistance"
+        android:layout_alignTop="@+id/tvDistance"
+        android:hint="From 0 to 15 mi." />
+
+    <TextView
+        android:id="@+id/tvCategories"
+        android:layout_below="@+id/tvDistance"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:text="Categories: " />
+
+    <EditText
+        android:id="@+id/etCategories"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tvCategories"
+        android:layout_alignTop="@+id/tvCategories"
+        android:hint="e.g. Sushi" />
+
+    <Button
+        android:id="@+id/btnFilter"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
         android:text="Apply filters" />
 
 </RelativeLayout>
