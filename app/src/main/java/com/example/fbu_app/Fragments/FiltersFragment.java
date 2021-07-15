@@ -1,7 +1,6 @@
 package com.example.fbu_app.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +9,17 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fbu_app.R;
-import com.example.fbu_app.models.FiltersViewModel;
+import com.example.fbu_app.models.VisitViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class FiltersFragment extends Fragment {
 
-    FiltersViewModel filtersViewModel; // object to communicate data between fragments
+    VisitViewModel visitViewModel; // object to communicate data between fragments
 
     // VIEWS
     Button btnFilter; // Apply filters button
@@ -47,7 +42,7 @@ public class FiltersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Assign value for ViewModel
-        filtersViewModel = ViewModelProviders.of(getActivity()).get(FiltersViewModel.class);
+        visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
 
         // Get TEST views
         etRating = view.findViewById(R.id.etRating);
@@ -61,10 +56,10 @@ public class FiltersFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Add filters to ViewModel
-                filtersViewModel.addFilter("rating", etRating.getText().toString());
-                filtersViewModel.addFilter("price", etPrice.getText().toString());
-                filtersViewModel.addFilter("distance", etDistance.getText().toString());
-                filtersViewModel.addFilter("categories", etCategories.getText().toString());
+                visitViewModel.addFilter("rating", etRating.getText().toString());
+                visitViewModel.addFilter("price", etPrice.getText().toString());
+                visitViewModel.addFilter("distance", etDistance.getText().toString());
+                visitViewModel.addFilter("categories", etCategories.getText().toString());
                 // Return to ExploreFragment
                 getActivity().onBackPressed(); // since this transaction was made with addToBackStack, when backpressed, the user returns to previous fragment
             }

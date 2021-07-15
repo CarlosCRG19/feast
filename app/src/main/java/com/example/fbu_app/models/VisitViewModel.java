@@ -6,11 +6,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 // ViewModel object to pass data between fragments, this is attached to the Activity lifecycle, so it persist between fragment transactions)
-public class FiltersViewModel extends ViewModel {
+public class VisitViewModel extends ViewModel {
+
+    // Date of visit
+    private final MutableLiveData<Date> visitDate = new MutableLiveData<>();
+    private final MutableLiveData<String> visitDateStr = new MutableLiveData<>();
 
     // List of filters as mutable data
     private final MutableLiveData<HashMap<String, String>> filtersMap = new MutableLiveData<>();
@@ -28,6 +33,22 @@ public class FiltersViewModel extends ViewModel {
     // Returns LiveData that contains the list. Must use getValue() to access the list
     public LiveData<HashMap<String, String>> getFilters() {
         return filtersMap;
+    }
+
+    public void setVisitDate(Date date) {
+        visitDate.setValue(date);
+    }
+
+    public void setVisitDateStr(String dateStr) {
+        visitDateStr.setValue(dateStr);
+    }
+
+    public LiveData<Date> getVisitDate() {
+        return visitDate;
+    }
+
+    public LiveData<String> getVisitDateStr() {
+        return visitDateStr;
     }
 
 

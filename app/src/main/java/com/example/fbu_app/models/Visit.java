@@ -11,6 +11,8 @@ public class Visit extends ParseObject {
 
     // SETTERS
 
+    public void setDateStr(String dateStr) { put("dateStr", dateStr); }
+
     public void setDate(Date date) { // Scheduled date for the visit
         put("date", date);
     }
@@ -24,6 +26,8 @@ public class Visit extends ParseObject {
     }
 
     // GETTERS
+
+    public String getDateStr() { return (String) get("dateStr"); }
 
     public Date getDate() {
         return getDate("date");

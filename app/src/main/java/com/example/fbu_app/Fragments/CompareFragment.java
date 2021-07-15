@@ -9,16 +9,32 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fbu_app.BusinessAdapter;
 import com.example.fbu_app.R;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.fbu_app.models.Business;
+import com.example.fbu_app.models.VisitViewModel;
+import com.example.fbu_app.models.SelectedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
+import java.util.List;
+
 public class CompareFragment extends Fragment {
 
-    Button btnExplore, btnGo;
+    SelectedViewModel selectedViewModel;
+    VisitViewModel visitViewModel;
+
+    List<Business> selectedBusinesses;
+
+    RecyclerView rvBusinesses;
+    BusinessAdapter adapter;
+
+    Button btnExplore;
 
     public CompareFragment() {};
 
@@ -34,27 +50,28 @@ public class CompareFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // From visit view model, get the visitDate and visitDateStr
+        visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
+        Date visitDate = visitViewModel.getVisitDate().getValue();
+        String visitDateStr = visitViewModel.getVisitDateStr().getValue();
+
+        // Get selected businesses from ViewModel
+        selectedViewModel = ViewModelProviders.of(getActivity()).get(SelectedViewModel.class);
+        selectedBusinesses = selectedViewModel.getSelectedBusinesses().getValue();
+
+        // Setup adapter with businesses and visitDates
+        adapter = new BusinessAdapter(getContext(), selectedBusinesses, visitDateStr, visitDate);
+        // Setup RV
+        rvBusinesses = view.findViewById(R.id.rvBusinesses);
+        rvBusinesses.setAdapter(adapter);
+        rvBusinesses.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Setup return to ExploreFragment
         btnExplore = view.findViewById(R.id.btnExplore);
         btnExplore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExploreFragment exploreFragment = new ExploreFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.flContainer, exploreFragment)
-                        .commit();
-            }
-        });
-
-        btnGo = view.findViewById(R.id.btnGo);
-        btnGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NextVisitsFragment nextVisitsFragment = new NextVisitsFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.flContainer, nextVisitsFragment)
-                        .commit();
-                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigation);
-                bottomNavigationView.setSelectedItemId(R.id.action_history);
+                getActivity().onBackPressed(); // backpressed to return to explore fragment without starting it again
             }
         });
 

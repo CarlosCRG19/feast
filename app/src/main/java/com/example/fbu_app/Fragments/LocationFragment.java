@@ -1,17 +1,14 @@
 package com.example.fbu_app.Fragments;
 
 import com.example.fbu_app.BuildConfig;
-import com.example.fbu_app.models.FiltersViewModel;
+import com.example.fbu_app.models.VisitViewModel;
 import com.google.android.gms.common.api.Status;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fbu_app.R;
@@ -39,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 // User will be able to select a location and date for the visit. The first requests for Businesses will be made
@@ -48,7 +44,7 @@ public class LocationFragment extends Fragment {
     public static final String TAG = "LocationFragment"; // tag for log messages
     public static final int AUTOCOMPLETE_REQUEST_CODE = 42;
 
-    FiltersViewModel filtersViewModel; // Communication object between fragments
+    VisitViewModel visitViewModel; // Communication object between fragments
 
     // VIEWS
     DatePickerDialog datePickerDialog; // Date picking
@@ -66,9 +62,9 @@ public class LocationFragment extends Fragment {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set value for ViewModel
-        filtersViewModel = ViewModelProviders.of(getActivity()).get(FiltersViewModel.class);
+        visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
         // Initialize the filters map
-        filtersViewModel.initializeFilters();
+        visitViewModel.initializeFilters();
     }
 
     @Nullable
@@ -129,8 +125,8 @@ public class LocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Add latitude and longitude filters to view model
-                filtersViewModel.addFilter("latitude", String.valueOf(latitude));
-                filtersViewModel.addFilter("longitude", String.valueOf(longitude));
+                visitViewModel.addFilter("latitude", String.valueOf(latitude));
+                visitViewModel.addFilter("longitude", String.valueOf(longitude));
 //                // Create new fragment
                 ExploreFragment exploreFragment = new ExploreFragment();
                 // Use activity's fragment manager to change fragment
@@ -172,9 +168,14 @@ public class LocationFragment extends Fragment {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                // Save visit date to communication object
+                visitViewModel.setVisitDate(new Date(year - 1900, month, dayOfMonth));
+                // Create date string
                 month += 1; // months start with 0
                 // Format date
                 String date = makeDateString(dayOfMonth, month, year);
+                // Save date string in ViewModel
+                visitViewModel.setVisitDateStr(date);
                 // Populate view
                 btnDate.setText(date);
             }
@@ -198,12 +199,17 @@ public class LocationFragment extends Fragment {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
-        month += 1; // months starts with 0 for January
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        // Format date and return it
-        return makeDateString(day, month, year);
+        // Save visit date into ViewModel
+        visitViewModel.setVisitDate(new Date(year - 1900, month, day));
 
+        // Formate date as string
+        month += 1; // months starts with 0 for January
+        String date = makeDateString(day, month, year);
+        // Save date string
+        visitViewModel.setVisitDateStr(date);
+        return date;
     }
 
 

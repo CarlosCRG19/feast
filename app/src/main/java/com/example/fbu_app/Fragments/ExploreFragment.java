@@ -17,10 +17,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.fbu_app.CardStackAdapter;
 import com.example.fbu_app.R;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
-import com.example.fbu_app.models.FiltersViewModel;
+import com.example.fbu_app.models.VisitViewModel;
+import com.example.fbu_app.models.SelectedViewModel;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -44,7 +46,7 @@ public class ExploreFragment extends Fragment {
     public static final String TAG = "ExploreFragment"; // tag for log messages
 
     // Filters data
-    private FiltersViewModel filtersViewModel; // communication object between fragments
+    private VisitViewModel visitViewModel; // communication object between fragments
     List<Pair<String, String>> filters;
 
     // Navigation views
@@ -54,7 +56,10 @@ public class ExploreFragment extends Fragment {
     YelpClient yelpClient;
 
     // Model to store received businesses
-    List<Business> businesses;
+    List<Business> displayedBusinesses;
+
+    // ViewModel that stores the selected businesses
+    SelectedViewModel selectedViewModel;
 
     // CardStack tools
     CardStackAdapter adapter; // binds data to the cards
@@ -63,6 +68,15 @@ public class ExploreFragment extends Fragment {
 
     // Required empty constructor
     public ExploreFragment(){}
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Set value for ViewModel
+        selectedViewModel = ViewModelProviders.of(getActivity()).get(SelectedViewModel.class);
+        // Initialize the filters map
+        selectedViewModel.initializeSelectedBusinesses();
+    }
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -76,15 +90,15 @@ public class ExploreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get ViewModel, which stores the filters applied atm
-        filtersViewModel = ViewModelProviders.of(getActivity()).get(FiltersViewModel.class);
+        visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
 
         // Create instance of Client
         yelpClient = new YelpClient();
 
         // Init the list of businesses
-        businesses = new ArrayList<>();
+        displayedBusinesses = new ArrayList<>();
         // Init adapter to bind data
-        adapter = new CardStackAdapter(getContext(), businesses);
+        adapter = new CardStackAdapter(getContext(), displayedBusinesses);
 
         // ------ CARD STACK SETUP ------ //
         manager = new CardStackLayoutManager(getContext(), new CardStackListener() {
@@ -96,10 +110,10 @@ public class ExploreFragment extends Fragment {
                 Log.d(TAG, "onCardSwiped: p=" + manager.getTopPosition() + "d=" + direction);
                 // Handle swipe direction
                 if(direction == Direction.Right) {
-                    Toast.makeText(getContext(), "Direction Right", Toast.LENGTH_SHORT).show();
-                }
-                else if(direction == Direction.Left) {
-                    Toast.makeText(getContext(), "Direction Left", Toast.LENGTH_SHORT).show();
+                    int selectedPosition = manager.getTopPosition() - 1;
+                    selectedViewModel.addBusiness(displayedBusinesses.get(selectedPosition));
+                    Log.i(TAG, "Total Businesses selected: " + selectedViewModel.getSelectedBusinesses().getValue().size());
+                    Toast.makeText(getContext(), "Restaurant selected!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -142,13 +156,13 @@ public class ExploreFragment extends Fragment {
                     // Get list of businesses
                     JSONArray jsonArray = response.getJSONArray("businesses");
                     // Use static methods to create array of businesses (these businesses are only stored locally, not in Parse)
-                    businesses = Business.fromJsonArray(jsonArray);
+                    displayedBusinesses = Business.fromJsonArray(jsonArray);
                     // Add new businesses to adapter
                     adapter.clear();
-                    adapter.addAll(businesses);
+                    adapter.addAll(displayedBusinesses);
                     // Log messages to see functionality
-                    Log.i(TAG, "NEW REQUEST - " + String.valueOf(businesses.size()) + " businesses found for filters:");
-                    filtersViewModel.getFilters().getValue().forEach((key, value) -> Log.i(TAG, key + ": " + value));
+                    Log.i(TAG, "NEW REQUEST - " + String.valueOf(displayedBusinesses.size()) + " businesses found for filters:");
+                    visitViewModel.getFilters().getValue().forEach((key, value) -> Log.i(TAG, key + ": " + value));
                     Log.i(TAG, "FOUND BUSINESSES:");
                     Log.i(TAG, jsonArray.toString());
 
@@ -162,7 +176,7 @@ public class ExploreFragment extends Fragment {
                 // Display log message
                 Log.i(TAG, "Failure doing request: " + response, throwable);
             }
-        }, filtersViewModel.getFilters().getValue());
+        }, visitViewModel.getFilters().getValue());
 
         // Navigation button to launch FiltersFragment
         btnFilters = view.findViewById(R.id.btnFilters);
@@ -185,6 +199,7 @@ public class ExploreFragment extends Fragment {
                 CompareFragment compareFragment = new CompareFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.flContainer, compareFragment)
+                        .addToBackStack(null)
                         .commit();
             }
         });
