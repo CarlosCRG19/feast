@@ -1,4 +1,4 @@
-package com.example.fbu_app.Fragments;
+package com.example.fbu_app.fragments;
 
 import com.example.fbu_app.BuildConfig;
 import com.example.fbu_app.models.VisitViewModel;

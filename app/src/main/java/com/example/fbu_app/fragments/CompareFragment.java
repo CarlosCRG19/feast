@@ -1,4 +1,4 @@
-package com.example.fbu_app.Fragments;
+package com.example.fbu_app.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fbu_app.BusinessAdapter;
+import com.example.fbu_app.adapters.BusinessAdapter;
 import com.example.fbu_app.R;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.VisitViewModel;

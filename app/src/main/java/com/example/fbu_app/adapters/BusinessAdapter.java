@@ -1,4 +1,4 @@
-package com.example.fbu_app;
+package com.example.fbu_app.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,21 +11,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.fbu_app.Fragments.CompareFragment;
-import com.example.fbu_app.Fragments.NextVisitsFragment;
+import com.example.fbu_app.MainActivity;
+import com.example.fbu_app.R;
+import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Comment;
 
 import java.util.Date;
 import java.util.List;

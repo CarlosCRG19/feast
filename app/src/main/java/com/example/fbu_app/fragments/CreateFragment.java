@@ -1,4 +1,4 @@
-package com.example.fbu_app.Fragments;
+package com.example.fbu_app.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,31 +14,31 @@ import com.example.fbu_app.R;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NextVisitsFragment extends Fragment {
+public class CreateFragment extends Fragment {
 
-    Button btnPastVisits;
+    Button btnCreate;
 
-    public NextVisitsFragment() {};
+    public CreateFragment() {};
 
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_next_visits, container, false);
+        return inflater.inflate(R.layout.fragment_create, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btnPastVisits = view.findViewById(R.id.btnPastVisits);
-        btnPastVisits.setOnClickListener(new View.OnClickListener() {
+        btnCreate = view.findViewById(R.id.btnCreate);
+        btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PastVisitsFragment pastVisitsFragment = new PastVisitsFragment();
+                LocationFragment locationFragment = new LocationFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.flContainer, pastVisitsFragment)
+                        .replace(R.id.flContainer, locationFragment)
                         .commit();
             }
         });

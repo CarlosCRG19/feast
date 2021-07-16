@@ -1,4 +1,4 @@
-package com.example.fbu_app.Fragments;
+package com.example.fbu_app.fragments;
 
 import android.os.Bundle;
 import android.util.Log;

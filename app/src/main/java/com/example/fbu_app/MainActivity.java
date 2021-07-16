@@ -2,37 +2,22 @@ package com.example.fbu_app;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.RequestHeaders;
-import com.codepath.asynchttpclient.RequestParams;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.fbu_app.Fragments.CreateFragment;
-import com.example.fbu_app.Fragments.ExploreFragment;
-import com.example.fbu_app.Fragments.NextVisitsFragment;
-import com.example.fbu_app.Fragments.ProfileFragment;
+import com.example.fbu_app.fragments.CreateFragment;
+import com.example.fbu_app.fragments.NextVisitsFragment;
+import com.example.fbu_app.fragments.ProfileFragment;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
-import com.example.fbu_app.models.Hour;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
-
-import okhttp3.Headers;
 
 public class MainActivity extends AppCompatActivity {
 
