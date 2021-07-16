@@ -1,6 +1,7 @@
 package com.example.fbu_app.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
+import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.fragments.DetailsFragment;
+import com.example.fbu_app.fragments.DetailsFragmentCreate;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
@@ -73,12 +77,14 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return visits.size();
     }
 
-    public class NextVisitsViewHolder extends RecyclerView.ViewHolder {
+    public class NextVisitsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         // VIEWS
         private ImageView ivBusinessImage;
         private ImageButton btnLike;
         private TextView tvName, tvRating, tvDate;
+
+        Business visitBusiness;
 
         // USER LIKE
         Like userLike;
@@ -91,11 +97,13 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             tvRating = itemView.findViewById(R.id.tvRating);
             tvDate = itemView.findViewById(R.id.tvDate);
             btnLike = itemView.findViewById(R.id.btnLike);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Visit visit) {
             // Unite info from visit
-            Business visitBusiness = visit.getBusiness();
+            visitBusiness = visit.getBusiness();
             Glide.with(context)
                     .load(visitBusiness.getImageUrl())
                     .into(ivBusinessImage);
@@ -197,6 +205,21 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
         }
 
+        @Override
+        public void onClick(View v) {
+            Log.i("CLICKED", "Row clicked!!");
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("business", visitBusiness);
+
+            DetailsFragmentCreate detailsFragmentCreate = new DetailsFragmentCreate();
+            detailsFragmentCreate.setArguments(bundle);
+
+            ((MainActivity) context).getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.flContainer, detailsFragmentCreate)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.fbu_app.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.R;
+import com.example.fbu_app.fragments.DetailsFragment;
+import com.example.fbu_app.fragments.DetailsFragmentCreate;
 import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
@@ -92,7 +95,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return businesses.size();
     }
 
-    public class CompareViewHolder extends RecyclerView.ViewHolder {
+    public class CompareViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // VIEWS
         private Business business;
@@ -108,6 +111,9 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvName = itemView.findViewById(R.id.tvName);
             tvRating = itemView.findViewById(R.id.tvRating);
             btnGo = itemView.findViewById(R.id.btnGo);
+
+            itemView.setOnClickListener(this);
+
         }
 
         public void bind(Business businessToBind) {
@@ -169,9 +175,24 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
         }
+
+        @Override
+        public void onClick(View v) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("business", business);
+
+            DetailsFragment detailsFragment = new DetailsFragment();
+            detailsFragment.setArguments(bundle);
+
+            ((MainActivity) context).getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.flContainer, detailsFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
-    public class LikedViewHolder extends RecyclerView.ViewHolder {
+    public class LikedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // VIEWS
         private Business business;
@@ -184,6 +205,9 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
             tvName = itemView.findViewById(R.id.tvName);
             tvRating = itemView.findViewById(R.id.tvRating);
+
+            itemView.setOnClickListener(this);
+
         }
 
         public void bind(Business businessToBind) {
@@ -211,6 +235,21 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvName.setText(business.getName());
             tvRating.setText("Rating: " + business.getRating());
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("business", business);
+
+            DetailsFragmentCreate detailsFragmentCreate = new DetailsFragmentCreate();
+            detailsFragmentCreate.setArguments(bundle);
+
+            ((MainActivity) context).getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.flContainer, detailsFragmentCreate)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 }

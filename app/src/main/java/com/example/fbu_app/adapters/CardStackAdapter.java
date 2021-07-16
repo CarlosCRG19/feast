@@ -100,6 +100,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             tvRating = itemView.findViewById(R.id.tvRating);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             btnInfo = itemView.findViewById(R.id.btnInfo);
+
         }
 
         public void bind(Business business) {

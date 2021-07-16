@@ -1,11 +1,17 @@
 package com.example.fbu_app.fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.fbu_app.BuildConfig;
 import com.example.fbu_app.R;
 import com.example.fbu_app.adapters.HoursAdapter;
 import com.example.fbu_app.helpers.YelpClient;
@@ -27,6 +34,12 @@ import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Hour;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -37,18 +50,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Headers;
 
-public class DetailsFragment extends Fragment {
+public class DetailsFragmentCreate extends Fragment {
 
     Business business;
-    VisitViewModel visitViewModel;
 
     ImageView ivBusinessImage;
     TextView tvName, tvRating, tvPrice, tvTelephone;
-    Button btnGo;
+    Button btnDate, btnCreateVisit;
 
     HoursAdapter adapter;
     List<Hour> hours;
@@ -56,23 +71,27 @@ public class DetailsFragment extends Fragment {
 
     YelpClient yelpClient;
 
-    public DetailsFragment(){}
+    Date visitDate;
+    String visitDateStr;
+
+    DatePickerDialog datePickerDialog;
+
+    public DetailsFragmentCreate(){}
 
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_details, container, false);
+        return inflater.inflate(R.layout.fragment_details_create, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        yelpClient = new YelpClient();
 
-        visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
+        yelpClient = new YelpClient();
 
         business = getArguments().getParcelable("business");
 
@@ -88,14 +107,27 @@ public class DetailsFragment extends Fragment {
         tvRating.setText("Rating: " + business.getRating() + "/5");
         tvTelephone.setText("Telephone: " + business.getTelephone());
 
+        // Initialize the datePicker listener and set current date
+        initDatePicker();
+
         Glide.with(getContext())
                 .load(business.getImageUrl())
                 .centerCrop()
                 .into(ivBusinessImage);
 
+        // Assign Views
+        btnDate = view.findViewById(R.id.btnDate); // Date selection
+        // Button date setup
+        btnDate.setText(getTodaysDate());
+        btnDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerDialog.show();
+            }
+        });
 
-        btnGo = view.findViewById(R.id.btnGo);
-        btnGo.setOnClickListener(new View.OnClickListener() {
+        btnCreateVisit = view.findViewById(R.id.btnCreateVisit);
+        btnCreateVisit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Create new visit
@@ -103,8 +135,8 @@ public class DetailsFragment extends Fragment {
                 newVisit.setBusiness(business);
                 // Add fields
                 newVisit.setUser(ParseUser.getCurrentUser());
-                newVisit.setDate(visitViewModel.getVisitDate().getValue());
-                newVisit.setDateStr(visitViewModel.getVisitDateStr().getValue());
+                newVisit.setDate(visitDate);
+                newVisit.setDateStr(visitDateStr);
                 // Save visit using background thread
                 newVisit.saveInBackground(new SaveCallback() {
                     @Override
@@ -157,4 +189,88 @@ public class DetailsFragment extends Fragment {
 
     }
 
+
+    // Sets a listener for the datePicker dialog and displays the selected date
+    private void initDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                // Save visit date to communication object
+                visitDate = new Date(year - 1900, month, dayOfMonth);
+                // Create date string
+                month += 1; // months start with 0
+                // Format date
+                visitDateStr = makeDateString(dayOfMonth, month, year);
+                // Populate view
+                btnDate.setText(visitDateStr);
+            }
+        };
+
+        // Initialize dialog with current date
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        // Set style for dialog
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        // Create datePickerDialog
+        datePickerDialog = new DatePickerDialog(getContext(), style, dateSetListener, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // set today's date as minimum date
+    }
+
+    // Returns todays date as a string
+    private String getTodaysDate() {
+        // Create calendar instance and get date for today
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        // Save visit date
+        visitDate = new Date(year - 1900, month, day);
+
+        // Formate date as string
+        month += 1; // months starts with 0 for January
+        String date = makeDateString(day, month, year);
+        visitDateStr = date;
+        return date;
+    }
+
+
+    // Gets date info as ints and returns a string in 'MONTH DD YYYY' format
+    private String makeDateString(int dayOfMonth, int month, int year) {
+        return getMonthFormat(month) + " " + dayOfMonth + " " + year;
+    }
+
+    // Returns the name from the month's number
+    private String getMonthFormat(int month) {
+        switch (month) {
+            case 1:
+                return "Jan";
+            case 2:
+                return "Feb";
+            case 3:
+                return "Mar";
+            case 4:
+                return "Apr";
+            case 5:
+                return "May";
+            case 6:
+                return "Jun";
+            case 7:
+                return "Jul";
+            case 8:
+                return "Aug";
+            case 9:
+                return "Sep";
+            case 10:
+                return "Oct";
+            case 11:
+                return "Nov";
+            case 12:
+                return "Dec";
+            default:
+                return "";
+        }
+    }
 }

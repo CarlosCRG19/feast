@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:fillViewport="true" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <!-- bunch of components here -->
+            <ImageView
+                android:id="@+id/ivBusinessImage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:adjustViewBounds="true"
+                tools:layout_editor_absoluteX="-2dp"
+                tools:layout_editor_absoluteY="-1dp"
+                android:transitionName="business_image"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivBusinessImage"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="sans-serif-black"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                tools:text="Restaurant name" />
+
+
+            <TextView
+                android:id="@+id/tvRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvName"
+                android:layout_alignStart="@+id/tvName"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="Rating"/>
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvRating"
+                android:layout_alignStart="@+id/tvRating"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="Price"/>
+
+            <TextView
+                android:id="@+id/tvTelephone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvPrice"
+                android:layout_alignStart="@+id/tvPrice"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="Telephone"/>
+
+            <TextView
+                android:id="@+id/tvHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTelephone"
+                android:layout_alignStart="@+id/tvTelephone"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="Open hours: "/>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHours"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/tvHours"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+
+            <LinearLayout
+                android:id="@+id/llCreateVisit"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="280dp">
+
+                <Button
+                    android:id="@+id/btnDate"
+                    style="?android:spinnerStyle"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_alignTop="@+id/tvDate"
+                    android:layout_toEndOf="@id/tvDate"
+                    android:text="13 JUL 2021"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/btnCreateVisit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create visit!" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
