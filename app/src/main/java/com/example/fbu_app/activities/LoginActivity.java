@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    // Uses intent to pass to return to LoginActivity
+    // Uses intent to go to Signup (used when user does not have an account yet)
     private void goSignupActivity() {
         Intent i = new Intent(this, SignupActivity.class);
         startActivity(i);

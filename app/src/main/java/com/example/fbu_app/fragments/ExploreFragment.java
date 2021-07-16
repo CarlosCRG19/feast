@@ -213,10 +213,18 @@ public class ExploreFragment extends Fragment {
         });
     }
 
+    // Checks whether the newly selected restaurant has previously been selected
     public boolean isInBusinesses(Business business) {
+        // Set boolean flag
         boolean result = false;
+        // Iterate through the selected businesses list (O(n))
         for (Business businessInList : selectedViewModel.getSelectedBusinesses().getValue()) {
-            if(businessInList.getYelpId().equals(business.getYelpId())) result = true;
+            // Compare businesses through yelpId
+            if(businessInList.getYelpId().equals(business.getYelpId())) {
+                // Change result and exit loop
+                result = true;
+                break;
+            }
         }
         return  result;
     }

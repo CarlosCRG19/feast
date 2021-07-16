@@ -14,8 +14,10 @@ import com.example.fbu_app.R;
 
 import org.jetbrains.annotations.NotNull;
 
+// Simple fragment to create a new visit
 public class CreateFragment extends Fragment {
 
+    // Views from layout
     Button btnCreate;
 
     public CreateFragment() {};
@@ -32,11 +34,14 @@ public class CreateFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Set listener for button
         btnCreate = view.findViewById(R.id.btnCreate);
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create new location fragment
                 LocationFragment locationFragment = new LocationFragment();
+                // Make fragment transaction
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.flContainer, locationFragment)
                         .commit();

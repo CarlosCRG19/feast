@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment {
 
         // Get current user
         profileUser = ParseUser.getCurrentUser();
-        // Init liked Businesses
+        // Init liked businesses list
         likedBusinesses = new ArrayList<>();
 
         // Set views from specified layout
@@ -116,12 +116,15 @@ public class ProfileFragment extends Fragment {
         rvBusinesses = view.findViewById(R.id.rvBusinesses);
     }
 
+    // Binds the views with the users data
     private void populateViews() {
+        // Set image
         ParseFile profileImage = (ParseFile) profileUser.get("profileImage");
         Glide.with(getContext())
                 .load(profileImage.getUrl())
                 .circleCrop()
                 .into(ivProfile);
+        // Fill TVs with username and email
         tvUsername.setText(profileUser.getUsername());
         tvEmail.setText((String) profileUser.get("email"));
     }
@@ -174,10 +177,13 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    // Adds businesses objects referenced in likes
     public void getBusinessesFromLikes(List<Like> likes) {
+        // For each like, add its respective business
         for (Like like : likes) {
             likedBusinesses.add(like.getBusiness());
         }
+        // Notify adapter of change
         adapter.notifyDataSetChanged();
     }
 
@@ -230,7 +236,6 @@ public class ProfileFragment extends Fragment {
             resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             // Transform to byte array
             byte[] byteArray = stream.toByteArray();
-
             // Create new parseFile to save image
             ParseFile newProfileImage = new ParseFile("profile.png", byteArray);
             // Set new image on profileUser object

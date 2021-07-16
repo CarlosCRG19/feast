@@ -15,6 +15,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+// Creates new account for the user
 public class SignupActivity extends AppCompatActivity {
 
     public static String TAG = "SignupActivity"; // TAG for log messages
@@ -28,11 +29,6 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_signup);
 
-        // Check whether user is already logged in
-        if (ParseUser.getCurrentSessionToken() != null) {
-            goMainActivity();
-        }
-
         // Get views from layout
         setViews();
         // Set click listener for btnSignup
@@ -45,10 +41,12 @@ public class SignupActivity extends AppCompatActivity {
 
     // Assign views on layout to variables
     private void setViews() {
+        // ETs
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         etEmail = findViewById(R.id.etEmail);
         btnSignup = findViewById(R.id.btnSignup);
+        // Buttons
         btnGoLogin = findViewById(R.id.btnGoLogin);
     }
 
@@ -58,11 +56,11 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Signup Button clicked");
-                // Get content on both EditTexts
+                // Get content of EditTexts
                 String username = etUsername.getText().toString();
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                // Signup user
+                // Try to sign up user
                 signupUser(username, email, password);
             }
         });
@@ -73,7 +71,9 @@ public class SignupActivity extends AppCompatActivity {
         btnGoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Display log message
                 Log.i(TAG, "Go login button clicked");
+                // Launch LoginActivity
                 goLoginActivity();
             }
         });

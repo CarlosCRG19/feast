@@ -61,6 +61,7 @@ public class PastVisitsFragment extends Fragment {
         rvVisits.setLayoutManager(new LinearLayoutManager(getContext()));
         rvVisits.setAdapter(adapter);
 
+        // Set up listener to return to next visits
         btnNextVisits = view.findViewById(R.id.btnNextVisits);
         btnNextVisits.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +77,7 @@ public class PastVisitsFragment extends Fragment {
         queryPastVisits();
     }
 
-    // Makes a query to parse DataBase and gets visits whose date is older than todays
+    // Makes a query to parse DataBase and gets visits whose date is older than today's
     private void queryPastVisits() {
         // Specify which class we want to query
         ParseQuery<Visit> query = ParseQuery.getQuery(Visit.class);

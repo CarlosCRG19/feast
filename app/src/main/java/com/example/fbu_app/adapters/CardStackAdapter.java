@@ -52,7 +52,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        // Bind tweet to Vh
+        // Bind business to Vh
         holder.bind(businesses.get(position));
     }
 
@@ -99,7 +99,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             // Set TVs with info from the business
             tvName.setText(business.getName());
             tvPrice.setText("Price: " + business.getPrice());
-            tvRating.setText("Rating: " + String.valueOf(business.getRating()));
+            tvRating.setText("Rating: " + business.getRating() + "/5");
 
         }
     }

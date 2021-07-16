@@ -26,14 +26,20 @@ import java.util.List;
 
 public class CompareFragment extends Fragment {
 
+    // MEMBER VARIABLES
+
+    // ViewModels for fragment communication
     SelectedViewModel selectedViewModel;
     VisitViewModel visitViewModel;
 
+    // Model to store businesses
     List<Business> selectedBusinesses;
 
+    // RV variables
     RecyclerView rvBusinesses;
     BusinessAdapter adapter;
 
+    // Button for Explore Screen
     Button btnExplore;
 
     public CompareFragment() {};

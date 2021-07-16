@@ -22,13 +22,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = "MainActivity";
-
-    public YelpClient yelpClient;
+    public static final String TAG = "MainActivity"; // TAG for log messages
 
     BottomNavigationView bottomNavigationView;
-
-    List<Business> businessList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,63 +61,5 @@ public class MainActivity extends AppCompatActivity {
         });
         // Set home option as default
         bottomNavigationView.setSelectedItemId(R.id.action_explore);
-
-//        yelpClient = new YelpClient();
-//
-//        Pair<String, String> location = new Pair<>("location", "Seattle");
-//        Log.i(TAG, "New query with params: " + location.first + " -> " + location.second);
-//        yelpClient.getMatchingBusinesses(new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Headers headers, JSON json) {
-//                JSONObject response = json.jsonObject;
-//                try {
-//                    JSONArray jsonArray = response.getJSONArray("businesses");
-//                    Log.i(TAG, jsonArray.toString());
-//                    businessList = Business.fromJsonArray(jsonArray);
-//                    Log.i(TAG, "List of Businesses created with size of: " + String.valueOf(businessList.size()));
-//
-//                    // Test details
-//                    Business business = businessList.get(0);
-//                    Log.i(TAG, "EXAMPLE BUSINESS");
-//                    Log.i(TAG, "YelpID: " + business.getYelpId());
-//                    Log.i(TAG, "Name: " + business.getName());
-//                    Log.i(TAG, "Address: " + business.getAddress());
-//                    Log.i(TAG, "City: " + business.getCity());
-//                    Log.i(TAG, "Country: " + business.getCountry());
-//                    Log.i(TAG, "Rating: " + String.valueOf(business.getRating()));
-//                    business.saveInBackground();
-//
-//                    String testId = business.getYelpId();
-//                    yelpClient.getBusinessDetails(testId, new JsonHttpResponseHandler() {
-//                        @Override
-//                        public void onSuccess(int statusCode, Headers headers, JSON json) {
-//                            try {
-//                                JSONObject hours = json.jsonObject.getJSONArray("hours").getJSONObject(0);
-//                                List<Hour> hoursList = Hour.fromJsonArray(hours.getJSONArray("open"), business);
-//                                hoursList.get(0).saveInBackground();
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-//
-//                        }
-//                    });
-//
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-//
-//            }
-//        }, location);
-
     }
 }

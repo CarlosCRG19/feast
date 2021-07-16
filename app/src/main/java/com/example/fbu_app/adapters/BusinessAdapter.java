@@ -133,7 +133,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .load(business.getImageUrl())
                     .into(ivBusinessImage);
             tvName.setText(business.getName());
-            tvRating.setText("Rating: " + business.getRating());
+            tvRating.setText("Rating: " + business.getRating() + "/5");
 
             // Button to create a new visit
             btnGo.setOnClickListener(new View.OnClickListener() {
