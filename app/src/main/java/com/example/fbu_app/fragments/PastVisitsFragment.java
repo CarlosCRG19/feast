@@ -1,6 +1,7 @@
 package com.example.fbu_app.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +10,32 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fbu_app.R;
+import com.example.fbu_app.adapters.VisitsAdapter;
+import com.example.fbu_app.models.Visit;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 public class PastVisitsFragment extends Fragment {
 
-    Button btnNextVisits;
+    // VIEWS
+    RecyclerView rvVisits; // RV to display visits
+    Button btnNextVisits; // Button to go to next visits
+
+    // Model to store visits data
+    List<Visit> visits;
+    // Adapter for RecyclerView
+    VisitsAdapter adapter;
 
     public PastVisitsFragment() {};
 
@@ -32,6 +51,15 @@ public class PastVisitsFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Init visits list and adapter
+        visits = new ArrayList<>();
+        adapter = new VisitsAdapter(getContext(), visits, 1);
+
+        // Setup RecyclerView
+        rvVisits = view.findViewById(R.id.rvPastVisits);
+        rvVisits.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvVisits.setAdapter(adapter);
+
         btnNextVisits = view.findViewById(R.id.btnNextVisits);
         btnNextVisits.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,5 +71,39 @@ public class PastVisitsFragment extends Fragment {
             }
         });
 
+        // Make query for NextVisits
+        queryPastVisits();
     }
+
+    // Makes a query to parse DataBase and gets visits whose date is older than todays
+    private void queryPastVisits() {
+        // Specify which class we want to query
+        ParseQuery<Visit> query = ParseQuery.getQuery(Visit.class);
+        // Include business object in query
+        query.include("business");
+        // Set max date as today
+        query.whereLessThan("date", Calendar.getInstance().getTime());
+        // order posts by date
+        query.addDescendingOrder("date");
+        // Make query using background thread
+        query.findInBackground(new FindCallback<Visit>() {
+            @Override
+            public void done(List<Visit> visitsList, ParseException e) {
+                // Check for errors
+                if (e != null) {
+                    Log.e("NextVisitsFragment", "Issue getting visits", e);
+                    return;
+                }
+                // Clear list
+                visits.clear();
+                // Add values to visits
+                visits.addAll(visitsList);
+                // Notify adapter
+                adapter.notifyDataSetChanged();
+                return;
+            }
+        });
+    }
+
 }
+

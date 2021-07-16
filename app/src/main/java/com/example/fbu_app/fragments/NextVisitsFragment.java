@@ -53,7 +53,7 @@ public class NextVisitsFragment extends Fragment {
 
         // Init visits list and adapter
         visits = new ArrayList<>();
-        adapter = new VisitsAdapter(getContext(), visits);
+        adapter = new VisitsAdapter(getContext(), visits, 0);
 
         // Setup RecyclerView
         rvVisits = view.findViewById(R.id.rvNextVisits);
@@ -85,6 +85,8 @@ public class NextVisitsFragment extends Fragment {
         query.include("business");
         // Set max date as today
         query.whereGreaterThanOrEqualTo("date", Calendar.getInstance().getTime());
+        // order posts by date
+        query.addDescendingOrder("date");
         // Make query using background thread
         query.findInBackground(new FindCallback<Visit>() {
             @Override

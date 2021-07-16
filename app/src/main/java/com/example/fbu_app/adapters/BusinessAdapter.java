@@ -20,7 +20,9 @@ import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import org.jetbrains.annotations.NotNull;
@@ -65,6 +67,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         // VIEWS
+        private Business business;
         private ImageView ivBusinessImage;
         private TextView tvName, tvRating;
         private Button btnGo;
@@ -79,7 +82,24 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             btnGo = itemView.findViewById(R.id.btnGo);
         }
 
-        public void bind(Business business) {
+        public void bind(Business businessToBind) {
+            // TODO: FIND A BETTER WAY TO VERIFY IF BUSINESS IS ALREADY IN DATABASE
+            // assign value to business
+            business = businessToBind;
+            // Query Business
+            ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+            query.whereEqualTo("yelpId", business.getYelpId());
+            query.getFirstInBackground(new GetCallback<Business>() {
+                @Override
+                public void done(Business object, ParseException e) {
+                    if(e != null) {
+                        return;
+                    }
+                    if (object != null) {
+                        business = object;
+                    }
+                }
+            });
             // Bind data to views
             Glide.with(context)
                     .load(business.getImageUrl())

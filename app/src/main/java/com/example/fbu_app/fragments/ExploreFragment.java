@@ -110,10 +110,18 @@ public class ExploreFragment extends Fragment {
                 Log.d(TAG, "onCardSwiped: p=" + manager.getTopPosition() + "d=" + direction);
                 // Handle swipe direction
                 if(direction == Direction.Right) {
+                    // Get position of manager
                     int selectedPosition = manager.getTopPosition() - 1;
-                    selectedViewModel.addBusiness(displayedBusinesses.get(selectedPosition));
-                    Log.i(TAG, "Total Businesses selected: " + selectedViewModel.getSelectedBusinesses().getValue().size());
-                    Toast.makeText(getContext(), "Restaurant selected!", Toast.LENGTH_SHORT).show();
+                    // Get business from position
+                    Business selectedBusiness = displayedBusinesses.get(selectedPosition);
+                    // Check if business is already in selectedBusinesses
+                    if (!isInBusinesses(selectedBusiness)){
+                        // Save business into ViewModel
+                        selectedViewModel.addBusiness(selectedBusiness);
+                        // Display log and toast messages
+                        Log.i(TAG, "Total Businesses selected: " + selectedViewModel.getSelectedBusinesses().getValue().size());
+                        Toast.makeText(getContext(), "Restaurant selected!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -204,4 +212,14 @@ public class ExploreFragment extends Fragment {
             }
         });
     }
+
+    public boolean isInBusinesses(Business business) {
+        boolean result = false;
+        for (Business businessInList : selectedViewModel.getSelectedBusinesses().getValue()) {
+            if(businessInList.getYelpId().equals(business.getYelpId())) result = true;
+        }
+        return  result;
+    }
 }
+
+
