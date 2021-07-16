@@ -1,4 +1,4 @@
-package com.example.fbu_app;
+package com.example.fbu_app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,17 +10,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fbu_app.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static String TAG = "LoginActivity"; // TAG for log messages
 
     // VIEWS
-    Button btnLogin, btnSignup;
+    Button btnLogin, btnGoSignup;
     EditText etUsername,  etPassword;
 
 
@@ -38,8 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         setViews();
         // Set click listener for btnLogin
         setLoginListener();
-        // Set click listener for btnSignup
-        setSignUpListener();
+        // Set listener to go to account creation
+        setGoSignupListener();
     }
 
     // VIEWS METHODS
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        btnSignup = findViewById(R.id.btnSignup);
+        btnGoSignup = findViewById(R.id.btnGoSignup);
     }
 
     // Set click listener for login
@@ -67,21 +67,16 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // Set click listener for login
-    private void setSignUpListener(){
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+    // Set click listener to return to login
+    private void setGoSignupListener(){
+        btnGoSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Signup Button clicked");
-                // Get content on both EditTexts
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
-                // Login user
-                signupUser(username, password);
+                Log.i(TAG, "Go signup button clicked");
+                goSignupActivity();
             }
         });
     }
-
 
     // Tries to login user with username and password
     private void loginUser(String username, String password) {
@@ -97,30 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 // If login was successful go to main activity
-                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                goMainActivity();
-            }
-        });
-    }
-
-    // Register new user with new credentials
-    private void signupUser(String username, String password) {
-        // Create new user instance
-        ParseUser newUser = new ParseUser();
-        newUser.put("username", username);
-        newUser.put("password", password);
-        // Execute login async call
-        newUser.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                // Check for errors
-                if(e != null) {
-                    Log.e(TAG, "Issue trying to sign up user", e);
-                    Toast.makeText(LoginActivity.this, "Issue with signing up!", Toast.LENGTH_LONG ).show();
-                    return;
-                }
-                // If signup was successful go to main activity
-                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
                 goMainActivity();
             }
         });
@@ -129,6 +101,13 @@ public class LoginActivity extends AppCompatActivity {
     // Uses intent to pass to MainActivity and ends LoginActivity
     private void goMainActivity() {
         Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    // Uses intent to pass to return to LoginActivity
+    private void goSignupActivity() {
+        Intent i = new Intent(this, SignupActivity.class);
         startActivity(i);
         finish();
     }

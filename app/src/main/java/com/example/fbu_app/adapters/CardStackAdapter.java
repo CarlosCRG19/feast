@@ -98,8 +98,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
 
             // Set TVs with info from the business
             tvName.setText(business.getName());
-            tvPrice.setText(business.getPrice());
-            tvRating.setText(String.valueOf(business.getRating()));
+            tvPrice.setText("Price: " + business.getPrice());
+            tvRating.setText("Rating: " + String.valueOf(business.getRating()));
 
         }
     }

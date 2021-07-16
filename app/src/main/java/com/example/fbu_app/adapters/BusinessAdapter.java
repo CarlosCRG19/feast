@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.fbu_app.MainActivity;
+import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.R;
 import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.models.Business;

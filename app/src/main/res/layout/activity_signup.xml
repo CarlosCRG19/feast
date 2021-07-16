@@ -10,13 +10,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        android:id="@+id/tvLogin"
+        android:id="@+id/tvSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="40sp"
-        android:text="Log in" />
+        android:text="Sign Up" />
 
     <EditText
         android:id="@+id/etUsername"
@@ -33,6 +33,20 @@
 
 
     <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/black"
+        android:layout_weight="1"
+        android:background="@drawable/edittextround"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:padding="10dp" />
+
+
+    <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,24 +59,26 @@
         android:inputType="textPassword"
         android:padding="10dp" />
 
+
+
+
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnSignup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_weight="1"
+        android:backgroundTint="@color/green"
         android:textColor="@color/white"
-        android:backgroundTint="@color/blue"
-        android:text="Log In"
+        android:text="Sign up"
         android:textAllCaps="false"
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/btnGoSignup"
+        android:id="@+id/btnGoLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="I don't have an account"
+        android:text="I have an account"
         android:textAllCaps="false"
         android:textSize="20sp" />
 
