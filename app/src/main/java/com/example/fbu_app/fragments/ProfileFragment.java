@@ -20,11 +20,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
+import com.example.fbu_app.adapters.BusinessAdapter;
 import com.example.fbu_app.helpers.BitmapScaler;
+import com.example.fbu_app.models.Business;
+import com.example.fbu_app.models.Like;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -38,6 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
@@ -55,6 +61,8 @@ public class ProfileFragment extends Fragment {
     Button btnUpload, btnLogout;
     RecyclerView rvBusinesses; // View group to display user's favorited restaurants
 
+    BusinessAdapter adapter;
+    List<Business> likedBusinesses;
 
     // Required empty public constructor
     public ProfileFragment() {}
@@ -74,12 +82,23 @@ public class ProfileFragment extends Fragment {
 
         // Get current user
         profileUser = ParseUser.getCurrentUser();
+        // Init liked Businesses
+        likedBusinesses = new ArrayList<>();
+
         // Set views from specified layout
         setViews(view);
         // Bind profile info
         populateViews();
         // Set listeners for upload and logout buttons
         setClickListeners();
+
+        // Setup RV
+        adapter = new BusinessAdapter(getContext(), likedBusinesses, 1);
+        rvBusinesses.setAdapter(adapter);
+        rvBusinesses.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Get liked businesses
+        queryLikedBusinesses();
 
     }
 
@@ -131,7 +150,36 @@ public class ProfileFragment extends Fragment {
     }
 
     // QUERY METHODS
+    public void queryLikedBusinesses() {
+        // Specify what type of data we want to query - Comment.class
+        ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+        // Limit query to latest 20 items and include the user
+        query.include("business");
+        // Limit query to only those comments that belong to this post
+        query.whereEqualTo("user", profileUser);
+        // Start async call for comments
+        query.findInBackground(new FindCallback<Like>() {
+            @Override
+            public void done(List<Like> likes, ParseException e) {
+                // Check for errors
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting comments", e);
+                    return;
+                }
+                // Clear the list of liked businesses
+                likedBusinesses.clear();
+                // Get businesses from like objects
+                getBusinessesFromLikes(likes);
+            }
+        });
+    }
 
+    public void getBusinessesFromLikes(List<Like> likes) {
+        for (Like like : likes) {
+            likedBusinesses.add(like.getBusiness());
+        }
+        adapter.notifyDataSetChanged();
+    }
 
     // MEDIA METHODS
 

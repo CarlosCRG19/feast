@@ -60,7 +60,7 @@ public class CompareFragment extends Fragment {
         selectedBusinesses = selectedViewModel.getSelectedBusinesses().getValue();
 
         // Setup adapter with businesses and visitDates
-        adapter = new BusinessAdapter(getContext(), selectedBusinesses, visitDateStr, visitDate);
+        adapter = new BusinessAdapter(getContext(), selectedBusinesses, visitDateStr, visitDate, 0);
         // Setup RV
         rvBusinesses = view.findViewById(R.id.rvBusinesses);
         rvBusinesses.setAdapter(adapter);
