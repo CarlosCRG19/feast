@@ -19,6 +19,7 @@ import com.example.fbu_app.models.Visit;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -85,6 +86,8 @@ public class NextVisitsFragment extends Fragment {
         query.include("business");
         // Set max date as today
         query.whereGreaterThanOrEqualTo("date", Calendar.getInstance().getTime());
+        // Set user to current user
+        query.whereEqualTo("user", ParseUser.getCurrentUser());
         // order posts by date
         query.addDescendingOrder("date");
         // Make query using background thread

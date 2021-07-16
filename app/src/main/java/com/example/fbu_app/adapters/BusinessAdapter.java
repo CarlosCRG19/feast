@@ -23,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.jetbrains.annotations.NotNull;
@@ -115,6 +116,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
                     Visit newVisit = new Visit();
                     newVisit.setBusiness(business);
                     // Add fields
+                    newVisit.setUser(ParseUser.getCurrentUser());
                     newVisit.setDate(visitDate);
                     newVisit.setDateStr(visitDateStr);
                     // Save visit using background thread
