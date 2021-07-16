@@ -1,4 +1,4 @@
-package com.example.fbu_app;
+package com.example.fbu_app.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.fbu_app.R;
 import com.example.fbu_app.models.Business;
 
 import org.jetbrains.annotations.NotNull;

@@ -41,14 +41,12 @@
         android:layout_marginEnd="20dp"
         android:text="25 AUG 2929" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDate"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignEnd="@+id/tvDate"
-        android:text="Like"/>
-
-
+        android:layout_below="@+id/tvDate"
+        android:background="@drawable/heart_icon_stroke"/>
 
 </RelativeLayout>

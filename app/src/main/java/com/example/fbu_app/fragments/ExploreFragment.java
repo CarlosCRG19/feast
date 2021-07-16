@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.fbu_app.CardStackAdapter;
+import com.example.fbu_app.adapters.CardStackAdapter;
 import com.example.fbu_app.R;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
