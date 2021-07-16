@@ -27,7 +27,7 @@ public class Business extends ParseObject{
         Business business = new Business();
 
         // Business info
-        business.setYelpId(jsonObject.optString("id").substring(0, 10));
+        business.setYelpId(jsonObject.optString("id"));
         business.setName(jsonObject.optString("name"));
         business.setImageUrl(jsonObject.optString("image_url"));
         business.setTelephone(jsonObject.optString("display_phone"));

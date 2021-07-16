@@ -1,17 +1,27 @@
 package com.example.fbu_app.adapters;
 
 import android.content.Context;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.transition.AutoTransition;
+import android.transition.ChangeBounds;
+import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Fade;
+import androidx.transition.TransitionInflater;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
+import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.fragments.DetailsFragment;
 import com.example.fbu_app.models.Business;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,6 +89,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         // Layout views as member variables
         ImageView ivBusinessImage;
         TextView tvName, tvRating, tvPrice;
+        Button btnInfo;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -88,6 +99,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             tvName = itemView.findViewById(R.id.tvName);
             tvRating = itemView.findViewById(R.id.tvRating);
             tvPrice = itemView.findViewById(R.id.tvPrice);
+            btnInfo = itemView.findViewById(R.id.btnInfo);
         }
 
         public void bind(Business business) {
@@ -100,6 +112,30 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             tvName.setText(business.getName());
             tvPrice.setText("Price: " + business.getPrice());
             tvRating.setText("Rating: " + business.getRating() + "/5");
+
+            ivBusinessImage.setTransitionName("business_image");
+            tvName.setTransitionName("business_name");
+            tvRating.setTransitionName("business_rating");
+            tvPrice.setTransitionName("business_price");
+
+            btnInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("business", business);
+
+                    DetailsFragment detailsFragment = new DetailsFragment();
+                    detailsFragment.setArguments(bundle);
+
+                    ((MainActivity) context).getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.flContainer, detailsFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+
 
         }
     }

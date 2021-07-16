@@ -103,7 +103,11 @@ public class ExploreFragment extends Fragment {
         // ------ CARD STACK SETUP ------ //
         manager = new CardStackLayoutManager(getContext(), new CardStackListener() {
             @Override
-            public void onCardDragging(Direction direction, float ratio) { }
+            public void onCardDragging(Direction direction, float ratio) {
+                if(direction == Direction.Top) {
+                    Log.i(TAG, "onCardDragged: direction " + direction );
+                }
+            }
 
             @Override
             public void onCardSwiped(Direction direction) {
