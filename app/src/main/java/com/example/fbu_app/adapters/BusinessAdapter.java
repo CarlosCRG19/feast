@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.R;
-import com.example.fbu_app.fragments.DetailsFragment;
-import com.example.fbu_app.fragments.DetailsFragmentCreate;
+import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
+import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentGo;
 import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
@@ -42,10 +42,10 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static  final  int CODE_LIKED = 1;
 
     // FIELDS
-    Context context;
-    List<Business> businesses;
-    String visitDateStr;
-    Date visitDate;
+    private Context context;
+    private List<Business> businesses; //
+    private String visitDateStr; // Date values for visit creation
+    private Date visitDate;
     int viewType;
 
     public BusinessAdapter(Context context, List<Business> businesses, int viewType) {
@@ -181,12 +181,12 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Bundle bundle = new Bundle();
             bundle.putParcelable("business", business);
 
-            DetailsFragment detailsFragment = new DetailsFragment();
-            detailsFragment.setArguments(bundle);
+            DetailsFragmentGo detailsFragmentGo = new DetailsFragmentGo();
+            detailsFragmentGo.setArguments(bundle);
 
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.flContainer, detailsFragment)
+                    .replace(R.id.flContainer, detailsFragmentGo)
                     .addToBackStack(null)
                     .commit();
         }
@@ -247,7 +247,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.flContainer, detailsFragmentCreate)
+                    .replace(R.id.flContainer, detailsFragmentCreate)
                     .addToBackStack(null)
                     .commit();
         }

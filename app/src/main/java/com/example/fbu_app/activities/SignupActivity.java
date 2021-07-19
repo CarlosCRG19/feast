@@ -37,8 +37,6 @@ public class SignupActivity extends AppCompatActivity {
         setGoLoginListener();
     }
 
-    // VIEWS METHODS
-
     // Assign views on layout to variables
     private void setViews() {
         // ETs

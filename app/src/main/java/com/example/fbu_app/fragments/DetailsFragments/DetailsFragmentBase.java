@@ -1,11 +1,14 @@
-package com.example.fbu_app.fragments;
+package com.example.fbu_app.fragments.DetailsFragments;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,18 +40,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Headers;
 
-public class DetailsFragment extends Fragment {
+public class DetailsFragmentBase extends Fragment {
 
-    Business business;
-    VisitViewModel visitViewModel;
+    protected Business business;
 
+    // Views
     ImageView ivBusinessImage;
     TextView tvName, tvRating, tvPrice, tvTelephone;
-    Button btnGo;
 
     HoursAdapter adapter;
     List<Hour> hours;
@@ -56,14 +60,13 @@ public class DetailsFragment extends Fragment {
 
     YelpClient yelpClient;
 
-    public DetailsFragment(){}
+    public DetailsFragmentBase(){}
 
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-//        return super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_details, container, false);
+       return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -71,8 +74,6 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         yelpClient = new YelpClient();
-
-        visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
 
         business = getArguments().getParcelable("business");
 
@@ -92,42 +93,6 @@ public class DetailsFragment extends Fragment {
                 .load(business.getImageUrl())
                 .centerCrop()
                 .into(ivBusinessImage);
-
-
-        btnGo = view.findViewById(R.id.btnGo);
-        btnGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create new visit
-                Visit newVisit = new Visit();
-                newVisit.setBusiness(business);
-                // Add fields
-                newVisit.setUser(ParseUser.getCurrentUser());
-                newVisit.setDate(visitViewModel.getVisitDate().getValue());
-                newVisit.setDateStr(visitViewModel.getVisitDateStr().getValue());
-                // Save visit using background thread
-                newVisit.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e != null) {
-                            Log.i("ParseSave", "Failed to save visit", e);
-                            return;
-                        }
-                        // Display success message
-                        Toast.makeText(getContext(), "Succesfully created visit!", Toast.LENGTH_SHORT).show();
-                        // Transaction to new fragment
-                        NextVisitsFragment nextVisitsFragment = new NextVisitsFragment();
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.flContainer, nextVisitsFragment)
-                                .commit();
-                        // Change selected item in bottom nav bar
-                        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigation);
-                        bottomNavigationView.setSelectedItemId(R.id.action_history);
-                    }
-                });
-
-            }
-        });
 
         hours = new ArrayList<>();
         adapter = new HoursAdapter(getContext(), hours);
@@ -151,10 +116,13 @@ public class DetailsFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.i("DetailsFragment", "Failure getting details: " + response, throwable);
+                Log.i("DetailsFragmentBase", "Failure getting details: " + response, throwable);
             }
         });
 
     }
 
 }
+
+
+

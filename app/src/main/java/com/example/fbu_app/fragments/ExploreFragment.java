@@ -1,6 +1,7 @@
 package com.example.fbu_app.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,10 +113,10 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onCardSwiped(Direction direction) {
                 Log.d(TAG, "onCardSwiped: p=" + manager.getTopPosition() + "d=" + direction);
+                // Get position of manager
+                int selectedPosition = manager.getTopPosition() - 1;
                 // Handle swipe direction
                 if(direction == Direction.Right) {
-                    // Get position of manager
-                    int selectedPosition = manager.getTopPosition() - 1;
                     // Get business from position
                     Business selectedBusiness = displayedBusinesses.get(selectedPosition);
                     // Check if business is already in selectedBusinesses
@@ -127,6 +128,7 @@ public class ExploreFragment extends Fragment {
                         Toast.makeText(getContext(), "Restaurant selected!", Toast.LENGTH_SHORT).show();
                     }
                 }
+                displayedBusinesses.remove(selectedPosition);
             }
 
             @Override
@@ -157,6 +159,33 @@ public class ExploreFragment extends Fragment {
         cardStackView.setLayoutManager(manager);
         cardStackView.setAdapter(adapter);
         cardStackView.setItemAnimator(new DefaultItemAnimator());
+
+        // Navigation button to launch FiltersFragment
+        btnFilters = view.findViewById(R.id.btnFilters);
+        btnFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FiltersFragment filtersFragment = new FiltersFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.flContainer, filtersFragment)
+                        .addToBackStack(null) // replace transaction is saved to the back stack so user can return to this fragment
+                        .commit();
+            }
+        });
+
+        // Navigation button to launch CompareFragment
+        btnCompare = view.findViewById(R.id.btnCompare);
+        btnCompare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CompareFragment compareFragment = new CompareFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.flContainer, compareFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
 
         // Request to get businesses that match the current filters
         yelpClient.getMatchingBusinesses(new JsonHttpResponseHandler() {
@@ -190,31 +219,6 @@ public class ExploreFragment extends Fragment {
             }
         }, visitViewModel.getFilters().getValue());
 
-        // Navigation button to launch FiltersFragment
-        btnFilters = view.findViewById(R.id.btnFilters);
-        btnFilters.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FiltersFragment filtersFragment = new FiltersFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.flContainer, filtersFragment)
-                        .addToBackStack(null) // replace transaction is saved to the back stack so user can return to this fragment
-                        .commit();
-            }
-        });
-
-        // Navigation button to launch CompareFragment
-        btnCompare = view.findViewById(R.id.btnCompare);
-        btnCompare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CompareFragment compareFragment = new CompareFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.flContainer, compareFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
     }
 
     // Checks whether the newly selected restaurant has previously been selected

@@ -1,11 +1,7 @@
 package com.example.fbu_app.adapters;
 
 import android.content.Context;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.transition.AutoTransition;
-import android.transition.ChangeBounds;
-import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +11,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Fade;
-import androidx.transition.TransitionInflater;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
-import com.example.fbu_app.fragments.DetailsFragment;
+import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentGo;
 import com.example.fbu_app.models.Business;
 
 import org.jetbrains.annotations.NotNull;
@@ -126,12 +120,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("business", business);
 
-                    DetailsFragment detailsFragment = new DetailsFragment();
-                    detailsFragment.setArguments(bundle);
+                    DetailsFragmentGo detailsFragmentGo = new DetailsFragmentGo();
+                    detailsFragmentGo.setArguments(bundle);
 
                     ((MainActivity) context).getSupportFragmentManager()
                             .beginTransaction()
-                            .add(R.id.flContainer, detailsFragment)
+                            .add(R.id.flContainer, detailsFragmentGo)
                             .addToBackStack(null)
                             .commit();
                 }
