@@ -38,9 +38,28 @@
         android:layout_marginTop="40dp"
         android:layout_marginStart="20dp" />
 
+    <Button
+        android:id="@+id/btnCurrentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSelectLocation"
+        android:layout_alignStart="@+id/tvSelectLocation"
+        android:textSize="10sp"
+        android:text="Use current location" />
+
+    <Button
+        android:id="@+id/btnSearchLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSelectLocation"
+        android:layout_toEndOf="@+id/btnCurrentLocation"
+        android:layout_marginStart="10dp"
+        android:textSize="10sp"
+        android:text="Search location" />
+
     <EditText
         android:id="@+id/etPlaces"
-        android:layout_below="@+id/tvSelectLocation"
+        android:layout_below="@+id/btnSearchLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="  Enter address"
@@ -58,17 +77,17 @@
         android:layout_height="match_parent"
         android:layout_below="@id/etPlaces"
         android:layout_marginTop="20dp"
-        android:layout_above="@+id/btnSelectLocation"
+        android:layout_above="@+id/btnConfirmLocation"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <Button
-        android:id="@+id/btnSelectLocation"
+        android:id="@+id/btnConfirmLocation"
         android:layout_alignParentEnd="true"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_height="40dp"
         android:textColor="@color/white"
-        android:text="Select location"/>
+        android:text="Confirm location"/>
 
 
 

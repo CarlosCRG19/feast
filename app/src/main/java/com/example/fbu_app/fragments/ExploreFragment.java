@@ -129,7 +129,7 @@ public class ExploreFragment extends Fragment {
                         Toast.makeText(getContext(), "Restaurant selected!", Toast.LENGTH_SHORT).show();
                     }
                 }
-                displayedBusinesses.remove(selectedPosition);
+//                displayedBusinesses.remove(selectedPosition);
             }
 
             @Override

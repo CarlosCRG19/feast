@@ -1,35 +1,51 @@
 package com.example.fbu_app.fragments;
 
 import com.example.fbu_app.BuildConfig;
+import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.models.VisitViewModel;
 import com.google.android.gms.common.api.Status;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fbu_app.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -49,12 +65,14 @@ public class LocationFragment extends Fragment {
 
     public static final String TAG = "LocationFragment"; // tag for log messages
     public static final int AUTOCOMPLETE_REQUEST_CODE = 42;
+    public static final int REQUEST_LOCATION_PERMISSIONS_CODE = 100;
+
 
     VisitViewModel visitViewModel; // Communication object between fragments
 
     // VIEWS
     DatePickerDialog datePickerDialog; // Date picking
-    Button btnDate, btnSelectLocation;
+    Button btnDate, btnCurrentLocation, btnConfirmLocation;
     EditText etPlaces; // Location selection
 
     // Latitude and Longitude values for selected location
@@ -62,6 +80,9 @@ public class LocationFragment extends Fragment {
 
     // Google map
     GoogleMap googleMap;
+
+    // Location Provider
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     // Required empty constructor
     public LocationFragment() {};
@@ -81,7 +102,6 @@ public class LocationFragment extends Fragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_location, container, false);
-
         // Setup Map
         setUpMap();
 
@@ -95,9 +115,12 @@ public class LocationFragment extends Fragment {
         // Initialize the datePicker listener and set current date
         initDatePicker();
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
         // Assign Views
         btnDate = view.findViewById(R.id.btnDate); // Date selection
-        btnSelectLocation = view.findViewById(R.id.btnSelectLocation); // Location selection
+        btnCurrentLocation = view.findViewById(R.id.btnCurrentLocation); // get current location
+        btnConfirmLocation = view.findViewById(R.id.btnConfirmLocation); // Location selection
         etPlaces = view.findViewById(R.id.etPlaces);
         // Button date setup
         btnDate.setText(getTodaysDate());
@@ -129,8 +152,31 @@ public class LocationFragment extends Fragment {
             }
         });
 
+        // Setup get current location listner
+        btnCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if required permissions are granted
+                if(ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                    // Call method to get user's current location
+                    getCurrentLocation();
+
+                } else {
+                    // When permission is not granted
+                    ActivityCompat.requestPermissions(getActivity()
+                            , new String[]{Manifest.permission.ACCESS_FINE_LOCATION
+                                    ,Manifest.permission.ACCESS_COARSE_LOCATION}
+                            ,REQUEST_LOCATION_PERMISSIONS_CODE);
+                }
+            }
+        });
+
         // Button to finish this activity and send the data to the next fragment
-        btnSelectLocation.setOnClickListener(new View.OnClickListener() {
+        btnConfirmLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Add latitude and longitude filters to view model
@@ -261,6 +307,80 @@ public class LocationFragment extends Fragment {
         }
     }
 
+    // CURRENT LOCATION METHODS
+
+    // Handle the result of permission request
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Use requested code for launched activity and determine whether request was approved
+        if (requestCode == REQUEST_LOCATION_PERMISSIONS_CODE
+                && grantResults.length > 0 && (grantResults[0] + grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+            // If permissions are granted, get user's location
+            getCurrentLocation();
+        } else {
+            // When permissions are denied, display a toas
+            Toast.makeText(getContext(), "Permission denied.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getCurrentLocation() {
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(
+                Context.LOCATION_SERVICE
+        );
+
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @SuppressLint("MissingPermission")
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    //Initialize locaiton
+                    Location location = task.getResult();
+                    // Check condition if a location has been received
+                    if(location != null){
+                        //When location result is not null, save latitude and longitude
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                        // Create a marker on specified location using pointLocation
+                        LatLng locationLatLng = new LatLng(latitude, longitude);
+                        pointLocation(locationLatLng);
+                    } else {
+                        // When location result is null initialize location request
+                        LocationRequest locationRequest = new LocationRequest()
+                                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                                .setInterval(10000)
+                                .setFastestInterval(1000)
+                                .setNumUpdates(1);
+                        // Initialize location callback
+                        LocationCallback locationCallback = new LocationCallback() {
+                            @Override
+                            public void onLocationResult(@NonNull LocationResult locationResult) {
+                                Location newLocation = locationResult.getLastLocation();
+                                //When location result is not null, save latitude and longitude
+                                latitude = newLocation.getLatitude();
+                                longitude = newLocation.getLongitude();
+                                // Create a marker on specified location using pointLocation
+                                LatLng locationLatLng = new LatLng(latitude, longitude);
+                                pointLocation(locationLatLng);
+                            }
+                        };
+                        // Request location updates
+                        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
+                    }
+
+                }
+            });
+        } else {
+            // When location service is not enabled, open location settings
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
+
+    }
+
+
+
     // MAP METHODS
 
     // Assigns the map component of the app. Which is represented as a child fragment inside LocationFragment
@@ -269,14 +389,16 @@ public class LocationFragment extends Fragment {
         if (googleMap == null) {
             // Get map from layout
             SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragmentMap);
-           // Setup on ready callback
-            supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(@NonNull @NotNull GoogleMap map) {
-                    // assign map to member variable once it is ready
-                    googleMap = map;
-                }
-            });
+           // Check if we were successful on getting the map
+            if (supportMapFragment != null) {
+                supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(@NonNull @NotNull GoogleMap map) {
+                        // assign map to member variable once it is ready
+                        googleMap = map;
+                    }
+                });
+            }
         }
     }
 

@@ -40,6 +40,7 @@ public class Business extends ParseObject{
         // Metrics
         business.setRating(jsonObject.optInt("rating"));
         business.setPrice(jsonObject.optString("price"));
+        business.setPriceInt(jsonObject.optString("price"));
 
         // Coordinates
         JSONObject coordinates = jsonObject.optJSONObject("coordinates");
@@ -103,6 +104,10 @@ public class Business extends ParseObject{
         put("price", price);
     }
 
+    public void setPriceInt(String price) { // Price level of the business. Value is one of $, $$, $$$ and $$$$.
+        put("priceInt", formatPriceToInt(price));
+    }
+
     public void setTelephone(String telephone) { // Phone number of the business formatted nicely to be displayed to users.
         put("telephone", telephone);
     }
@@ -154,6 +159,10 @@ public class Business extends ParseObject{
         return getString("price");
     }
 
+    public int getPriceInt() {
+        return getInt("priceInt");
+    }
+
     public String getTelephone() {
         return getString("telephone");
     }
@@ -181,4 +190,9 @@ public class Business extends ParseObject{
     public List<String> getCategories() {
         return getList("categories");
     }
+
+    private int formatPriceToInt(String price) {
+        return price.length();
+    }
+
 }
