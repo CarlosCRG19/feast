@@ -52,33 +52,19 @@
         android:gravity="center_vertical"
         android:background="@android:drawable/editbox_background" />
 
-    <TextView
-        android:id="@+id/tvLocation"
-        android:layout_below="@+id/etPlaces"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:fontFamily="monospace"
-        android:padding="14dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="32dp" />
-
-    <TextView
-        android:id="@+id/tvLatLng"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLocation"
-        android:layout_marginStart="20dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="12dp"
-        android:layout_marginTop="16dp"/>
+    <fragment
+        android:id="@+id/fragmentMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/etPlaces"
+        android:layout_marginTop="20dp"
+        android:layout_above="@+id/btnSelectLocation"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <Button
         android:id="@+id/btnSelectLocation"
         android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_height="40dp"
         android:textColor="@color/white"

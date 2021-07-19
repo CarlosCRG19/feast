@@ -93,7 +93,7 @@ public class ProfileFragment extends Fragment {
         setClickListeners();
 
         // Setup RV
-        adapter = new BusinessAdapter(getContext(), likedBusinesses, 1);
+        adapter = new BusinessAdapter(getContext(), likedBusinesses);
         rvBusinesses.setAdapter(adapter);
         rvBusinesses.setLayoutManager(new LinearLayoutManager(getContext()));
 

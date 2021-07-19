@@ -35,59 +35,32 @@ import java.util.Date;
 import java.util.List;
 
 // Class to bind data to compare recyclerview
-public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
-    // CODES FOR DIFFERENT LAYOUTS
-    public static final int CODE_COMPARE = 0;
-    public static  final  int CODE_LIKED = 1;
+public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHolder>{
 
     // FIELDS
-    private Context context;
-    private List<Business> businesses; //
-    private String visitDateStr; // Date values for visit creation
-    private Date visitDate;
-    int viewType;
+    protected Context context;
+    protected List<Business> businesses; // list that contains businesses to be displayed
 
-    public BusinessAdapter(Context context, List<Business> businesses, int viewType) {
+    // CONSTRUCTOR
+    public BusinessAdapter(Context context, List<Business> businesses) {
         this.context = context;
         this.businesses = businesses;
-        this.viewType = viewType;
     }
 
-    public BusinessAdapter(Context context, List<Business> businesses, String visitDateStr, Date visitDate, int viewType) {
-        this.context = context;
-        this.businesses = businesses;
-        this.visitDateStr = visitDateStr; // visit info required to create new visit
-        this.visitDate = visitDate;
-        this.viewType = viewType;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return this.viewType;
-    }
+    // MANDATORY METHODS
 
     @NonNull
     @NotNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        if (viewType == CODE_COMPARE) {
-            View view = LayoutInflater.from(context).inflate(R.layout.businesses_compare_layout, parent, false);
-            return new CompareViewHolder(view);
-        } else {
-            View view = LayoutInflater.from(context).inflate(R.layout.businesses_favorite_layout, parent, false);
-            return new LikedViewHolder(view);
-        }
+    public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.businesses_favorite_layout, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder holder, int position) {
-        if (viewType == CODE_COMPARE) {
-            ((CompareViewHolder) holder).bind(businesses.get(position));
-        } else {
-            ((LikedViewHolder) holder).bind(businesses.get(position));
-        }
-
+    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+        // Call inner class method to bind business data with the views
+        holder.bind(businesses.get(position));
     }
 
     @Override
@@ -95,139 +68,37 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return businesses.size();
     }
 
-    public class CompareViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    // Class responsible of binding each business data with their respective row
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        protected static final String BUSINESS_TAG = "business"; // identifier for business when using bundle
 
         // VIEWS
-        private Business business;
-        private ImageView ivBusinessImage;
-        private TextView tvName, tvRating;
-        private Button btnGo;
+        protected Business business;
+        protected ImageView ivBusinessImage;
+        protected TextView tvName, tvRating;
 
-
-        public CompareViewHolder(@NonNull @NotNull View itemView) {
+        // Constructor
+        public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             // Get views from layout
             ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
             tvName = itemView.findViewById(R.id.tvName);
             tvRating = itemView.findViewById(R.id.tvRating);
-            btnGo = itemView.findViewById(R.id.btnGo);
-
+            // Set an onClick listener
             itemView.setOnClickListener(this);
 
         }
 
+        // Populates the views with business data
         public void bind(Business businessToBind) {
-            // TODO: FIND A BETTER WAY TO VERIFY IF BUSINESS IS ALREADY IN DATABASE
             // assign value to business
             business = businessToBind;
-            // Query Business
-            ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
-            query.whereEqualTo("yelpId", business.getYelpId());
-            query.getFirstInBackground(new GetCallback<Business>() {
-                @Override
-                public void done(Business object, ParseException e) {
-                    if(e != null) {
-                        return;
-                    }
-                    if (object != null) {
-                        business = object;
-                    }
-                }
-            });
-            // Bind data to views
-            Glide.with(context)
-                    .load(business.getImageUrl())
-                    .into(ivBusinessImage);
-            tvName.setText(business.getName());
-            tvRating.setText("Rating: " + business.getRating() + "/5");
 
-            // Button to create a new visit
-            btnGo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Create new visit
-                    Visit newVisit = new Visit();
-                    newVisit.setBusiness(business);
-                    // Add fields
-                    newVisit.setUser(ParseUser.getCurrentUser());
-                    newVisit.setDate(visitDate);
-                    newVisit.setDateStr(visitDateStr);
-                    // Save visit using background thread
-                    newVisit.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if(e != null) {
-                                Log.i("ParseSave", "Failed to save visit", e);
-                                return;
-                            }
-                            // Display success message
-                            Toast.makeText(context, "Succesfully created visit!", Toast.LENGTH_SHORT).show();
-                            // Transaction to new fragment
-                            NextVisitsFragment nextVisitsFragment = new NextVisitsFragment();
-                            ((MainActivity) context).getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.flContainer, nextVisitsFragment)
-                                    .commit();
-                            // Change selected item in bottom nav bar
-                            BottomNavigationView bottomNavigationView = ((MainActivity) context).findViewById(R.id.bottomNavigation);
-                            bottomNavigationView.setSelectedItemId(R.id.action_history);
-                        }
-                    });
-                }
-            });
-        }
+            // Check if passed business already exists in database
+            verifyBusinessExists();
 
-        @Override
-        public void onClick(View v) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("business", business);
-
-            DetailsFragmentGo detailsFragmentGo = new DetailsFragmentGo();
-            detailsFragmentGo.setArguments(bundle);
-
-            ((MainActivity) context).getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.flContainer, detailsFragmentGo)
-                    .addToBackStack(null)
-                    .commit();
-        }
-    }
-
-    public class LikedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        // VIEWS
-        private Business business;
-        private ImageView ivBusinessImage;
-        private TextView tvName, tvRating;
-
-        public LikedViewHolder(@NonNull @NotNull View itemView) {
-            super(itemView);
-            // Get views from layout
-            ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvRating = itemView.findViewById(R.id.tvRating);
-
-            itemView.setOnClickListener(this);
-
-        }
-
-        public void bind(Business businessToBind) {
-            // TODO: FIND A BETTER WAY TO VERIFY IF BUSINESS IS ALREADY IN DATABASE
-            // assign value to business
-            business = businessToBind;
-            // Query Business
-            ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
-            query.whereEqualTo("yelpId", business.getYelpId());
-            query.getFirstInBackground(new GetCallback<Business>() {
-                @Override
-                public void done(Business object, ParseException e) {
-                    if(e != null) {
-                        return;
-                    }
-                    if (object != null) {
-                        business = object;
-                    }
-                }
-            });
             // Bind data to views
             Glide.with(context)
                     .load(business.getImageUrl())
@@ -237,19 +108,45 @@ public class BusinessAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         }
 
+        // If a row is clicked, a new fragment displays more information about that business
         @Override
         public void onClick(View v) {
+            // Create bundle to pass busines as argument
             Bundle bundle = new Bundle();
-            bundle.putParcelable("business", business);
+            bundle.putParcelable(BUSINESS_TAG, business);
 
+            // Create new detailsFragmentCreate instance
             DetailsFragmentCreate detailsFragmentCreate = new DetailsFragmentCreate();
+            // Pass bundle as args
             detailsFragmentCreate.setArguments(bundle);
 
+            // Make fragment transaction adding to back stack to return when back clicked
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.flContainer, detailsFragmentCreate)
                     .addToBackStack(null)
                     .commit();
         }
+
+        private void verifyBusinessExists() {
+            // Specify type of query
+            ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+            // Search for business in database based on yelpId
+            query.whereEqualTo("yelpId", business.getYelpId());
+            // Use getFirstInBackground to finish the search if it has found one matching business
+            query.getFirstInBackground(new GetCallback<Business>() {
+                @Override
+                public void done(Business object, ParseException e) {
+                    if(e != null) {
+                        return;
+                    }
+                    // if the business exists, change value of member variable
+                    if (object != null) {
+                        business = object;
+                    }
+                }
+            });
+        }
+
     }
 }

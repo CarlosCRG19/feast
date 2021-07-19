@@ -80,14 +80,15 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     // Inner ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        public static final String BUSINESS_TAG  = "business"; // identifier for passing busines with bundle
+
         // Layout views as member variables
-        ImageView ivBusinessImage;
-        TextView tvName, tvRating, tvPrice;
-        Button btnInfo;
+        private ImageView ivBusinessImage;
+        private TextView tvName, tvRating, tvPrice;
+        private Button btnInfo;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-
             // View assignments
             ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
             tvName = itemView.findViewById(R.id.tvName);
@@ -108,21 +109,19 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             tvPrice.setText("Price: " + business.getPrice());
             tvRating.setText("Rating: " + business.getRating() + "/5");
 
-            ivBusinessImage.setTransitionName("business_image");
-            tvName.setTransitionName("business_name");
-            tvRating.setTransitionName("business_rating");
-            tvPrice.setTransitionName("business_price");
-
+            // Set button listener for details screen
             btnInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    // Create new bundle
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("business", business);
+                    bundle.putParcelable(BUSINESS_TAG, business);
 
+                    // Create new instance for detailsFragmentGo
                     DetailsFragmentGo detailsFragmentGo = new DetailsFragmentGo();
                     detailsFragmentGo.setArguments(bundle);
 
+                    // Make fragment transaction adding to back stack to return when back clicked
                     ((MainActivity) context).getSupportFragmentManager()
                             .beginTransaction()
                             .add(R.id.flContainer, detailsFragmentGo)
@@ -132,6 +131,9 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             });
 
 
+
         }
+
+
     }
 }

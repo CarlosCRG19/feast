@@ -24,6 +24,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fbu_app.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -50,10 +56,12 @@ public class LocationFragment extends Fragment {
     DatePickerDialog datePickerDialog; // Date picking
     Button btnDate, btnSelectLocation;
     EditText etPlaces; // Location selection
-    TextView tvLocation, tvLatLng;
 
     // Latitude and Longitude values for selected location
     double latitude, longitude;
+
+    // Google map
+    GoogleMap googleMap;
 
     // Required empty constructor
     public LocationFragment() {};
@@ -72,7 +80,12 @@ public class LocationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_location, container, false);
+        View view = inflater.inflate(R.layout.fragment_location, container, false);
+
+        // Setup Map
+        setUpMap();
+
+        return view;
     }
 
     @Override
@@ -84,12 +97,8 @@ public class LocationFragment extends Fragment {
 
         // Assign Views
         btnDate = view.findViewById(R.id.btnDate); // Date selection
-
         btnSelectLocation = view.findViewById(R.id.btnSelectLocation); // Location selection
         etPlaces = view.findViewById(R.id.etPlaces);
-        tvLocation = view.findViewById(R.id.tvLocation);
-        tvLatLng = view.findViewById(R.id.tvLatLng);
-
         // Button date setup
         btnDate.setText(getTodaysDate());
         btnDate.setOnClickListener(new View.OnClickListener() {
@@ -149,8 +158,8 @@ public class LocationFragment extends Fragment {
             Place place = Autocomplete.getPlaceFromIntent(data);
             // Set views with place info
             etPlaces.setText(place.getAddress());
-            tvLocation.setText("Locality Name: " + place.getName());
-            tvLatLng.setText(String.valueOf(place.getLatLng()));
+            // Point location on map
+            pointLocation(place.getLatLng());
             // Save latitude and longitude values
             latitude = place.getLatLng().latitude;
             longitude = place.getLatLng().longitude;
@@ -162,6 +171,8 @@ public class LocationFragment extends Fragment {
             Toast.makeText(getContext().getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    // DATEPICKER METHODS
 
     // Sets a listener for the datePicker dialog and displays the selected date
     private void initDatePicker() {
@@ -249,4 +260,39 @@ public class LocationFragment extends Fragment {
                 return "";
         }
     }
+
+    // MAP METHODS
+
+    // Assigns the map component of the app. Which is represented as a child fragment inside LocationFragment
+    private void setUpMap() {
+        // Check if map is null
+        if (googleMap == null) {
+            // Get map from layout
+            SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragmentMap);
+           // Setup on ready callback
+            supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(@NonNull @NotNull GoogleMap map) {
+                    // assign map to member variable once it is ready
+                    googleMap = map;
+                }
+            });
+        }
+    }
+
+    // Creates a new marker on the map and erases previous locations
+    private void pointLocation(@NonNull LatLng latLng) {
+        // Create new marker
+        MarkerOptions markerOptions = new MarkerOptions();
+        // Assign position to marker
+        markerOptions.position(latLng);
+        // Clear all markers
+        googleMap.clear();
+        // Make animation for camera movement
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+        // Add new marker
+        googleMap.addMarker(markerOptions);
+    }
+
+
 }

@@ -2,7 +2,6 @@ package com.example.fbu_app.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,41 +32,40 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 // Adapter for both visits screen (NextVisits and PastVisits)
-public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder>{
 
-    public static final String TAG = "VisitsAdapter";
-
+    // Fragment's identifier
     public static final int NEXT_VISITS_CODE = 0;
     public static final int PAST_VISITS_CODE = 1;
 
     // FIELDS
-    Context context;
-    List<Visit> visits;
-    int fragmentCode; // NextVisits = 0, PastVisits = 1;
+    private Context context;
+    private List<Visit> visits; //
+    private int fragmentCode;
 
     // Current user
-    ParseUser currentUser;
+    private ParseUser currentUser;
 
     // Constructor
     public VisitsAdapter(Context context, List<Visit> visits, int fragmentCode) {
         this.context = context;
         this.visits = visits;
         this.fragmentCode = fragmentCode;
+        // Assign currentUser value with getMethod
+        this.currentUser = ParseUser.getCurrentUser();
     }
 
     @NonNull
     @NotNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        currentUser = ParseUser.getCurrentUser();
+    public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.visits_layout, parent, false);
-        return new NextVisitsViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder holder, int position) {
-        ((NextVisitsViewHolder) holder).bind(visits.get(position));
-        return;
+    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+        holder.bind(visits.get(position));
     }
 
     @Override
@@ -75,19 +73,22 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return visits.size();
     }
 
-    public class NextVisitsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        public static final String BUSINESS_TAG  = "business"; // identifier for passing busines with bundle
 
         // VIEWS
         private ImageView ivBusinessImage;
         private ImageButton btnLike;
         private TextView tvName, tvRating, tvDate;
 
-        Business visitBusiness;
+        // Business for this visit
+        private Business visitBusiness;
 
-        // USER LIKE
-        Like userLike;
+        // Object to retreive like from database or create a new like
+        private Like userLike;
 
-        public NextVisitsViewHolder(@NonNull @NotNull View itemView) {
+        public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             // Get views from layout
             ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
@@ -95,7 +96,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             tvRating = itemView.findViewById(R.id.tvRating);
             tvDate = itemView.findViewById(R.id.tvDate);
             btnLike = itemView.findViewById(R.id.btnLike);
-
+            // Set listener
             itemView.setOnClickListener(this);
         }
 
@@ -109,23 +110,28 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             tvRating.setText("Rating: " + visitBusiness.getRating());
             tvDate.setText(visit.getDateStr());
 
+            // Change like button visibility depending on the specific fragment
             if (fragmentCode == NEXT_VISITS_CODE) {
+                // if the current fragment is for next visits, hide like button
                 btnLike.setVisibility(View.GONE);
             } else {
+                // check if user has previously liked the business
                 verifyUserLiked(visitBusiness, currentUser);
+                // set listener for like button
                 btnLike.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // if user has previously liked the business, unlike it
                         if (userLike != null) {
                             saveUnlike(visitBusiness, currentUser);
                         } else {
+                            // create new like if business has not been liked before
                             saveLike(visitBusiness, currentUser);
                         }
                     }
                 });
             }
         }
-
 
         // SAVE (POST) METHODS
 
@@ -142,12 +148,11 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void done(ParseException e) {
                     // Check for errors
                     if(e != null) {
-                        Log.e(TAG, "Error while saving", e);
                         Toast.makeText(context, "Error liking business!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
-                    Toast.makeText(context, "Business liked!" , Toast.LENGTH_SHORT).show(); // displays a success message
+                    // Display success message
+                    Toast.makeText(context, "Business liked!" , Toast.LENGTH_SHORT).show();
 
                     // Change button background
                     btnLike.setBackgroundResource(R.drawable.heart_icon);
@@ -166,11 +171,11 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void done(ParseException e) {
                     // Check for errors
                     if(e != null) {
-                        Log.e(TAG, "Error while saving", e);
                         Toast.makeText(context, "Error unliking business!", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
+                    // Display success message
                     Toast.makeText(context, "Business unliked!" , Toast.LENGTH_SHORT).show();
 
                     // Change button background
@@ -203,15 +208,20 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
         }
 
+        // LISTENERS
+
+        // Launches details screen when a row is clicked
         @Override
         public void onClick(View v) {
-            Log.i("CLICKED", "Row clicked!!");
+            // Create new bundle to pass args
             Bundle bundle = new Bundle();
-            bundle.putParcelable("business", visitBusiness);
+            bundle.putParcelable(BUSINESS_TAG, visitBusiness);
 
+            // Create new instance of detailsFragment (the user can create a new visit from this details screen)
             DetailsFragmentCreate detailsFragmentCreate = new DetailsFragmentCreate();
             detailsFragmentCreate.setArguments(bundle);
 
+            // Make fragment transaction adding to back stack
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.flContainer, detailsFragmentCreate)
@@ -221,6 +231,8 @@ public class VisitsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
 }
+
+
 
 
 

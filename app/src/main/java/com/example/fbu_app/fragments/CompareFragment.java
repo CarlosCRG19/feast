@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fbu_app.adapters.BusinessAdapter;
 import com.example.fbu_app.R;
+import com.example.fbu_app.adapters.BusinessAdapterGo;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.VisitViewModel;
 import com.example.fbu_app.models.SelectedViewModel;
@@ -35,9 +35,14 @@ public class CompareFragment extends Fragment {
     // Model to store businesses
     List<Business> selectedBusinesses;
 
+    // Date variables for visit creation
+    Date visitDate;
+    String visitDateStr;
+
+
     // RV variables
     RecyclerView rvBusinesses;
-    BusinessAdapter adapter;
+    BusinessAdapterGo adapter;
 
     // Button for Explore Screen
     Button btnExplore;
@@ -58,15 +63,15 @@ public class CompareFragment extends Fragment {
 
         // From visit view model, get the visitDate and visitDateStr
         visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
-        Date visitDate = visitViewModel.getVisitDate().getValue();
-        String visitDateStr = visitViewModel.getVisitDateStr().getValue();
+        visitDate = visitViewModel.getVisitDate().getValue();
+        visitDateStr = visitViewModel.getVisitDateStr().getValue();
 
         // Get selected businesses from ViewModel
         selectedViewModel = ViewModelProviders.of(getActivity()).get(SelectedViewModel.class);
         selectedBusinesses = selectedViewModel.getSelectedBusinesses().getValue();
 
         // Setup adapter with businesses and visitDates
-        adapter = new BusinessAdapter(getContext(), selectedBusinesses, visitDateStr, visitDate, 0);
+        adapter = new BusinessAdapterGo(getContext(), selectedBusinesses, visitDateStr, visitDate);
         // Setup RV
         rvBusinesses = view.findViewById(R.id.rvBusinesses);
         rvBusinesses.setAdapter(adapter);

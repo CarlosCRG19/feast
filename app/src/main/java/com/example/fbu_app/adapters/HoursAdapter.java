@@ -21,12 +21,14 @@ import org.w3c.dom.Comment;
 
 import java.util.List;
 
+// Class populate the opening hours list in details screen
 public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> {
 
     // FIELDS
     private Context context;
     private List<Hour> hours;
 
+    // CONSTRUCTOR
     public HoursAdapter(Context context, List<Hour> hours) {
         this.context = context;
         this.hours = hours;

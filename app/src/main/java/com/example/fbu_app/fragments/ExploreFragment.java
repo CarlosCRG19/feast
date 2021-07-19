@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Headers;
 
@@ -165,7 +166,9 @@ public class ExploreFragment extends Fragment {
         btnFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create new instance of filters fragment
                 FiltersFragment filtersFragment = new FiltersFragment();
+                // Make transaction
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.flContainer, filtersFragment)
                         .addToBackStack(null) // replace transaction is saved to the back stack so user can return to this fragment
@@ -201,6 +204,7 @@ public class ExploreFragment extends Fragment {
                     // Add new businesses to adapter
                     adapter.clear();
                     adapter.addAll(displayedBusinesses);
+
                     // Log messages to see functionality
                     Log.i(TAG, "NEW REQUEST - " + String.valueOf(displayedBusinesses.size()) + " businesses found for filters:");
                     visitViewModel.getFilters().getValue().forEach((key, value) -> Log.i(TAG, key + ": " + value));
@@ -217,7 +221,7 @@ public class ExploreFragment extends Fragment {
                 // Display log message
                 Log.i(TAG, "Failure doing request: " + response, throwable);
             }
-        }, visitViewModel.getFilters().getValue());
+        }, Objects.requireNonNull(visitViewModel.getFilters().getValue()));
 
     }
 
