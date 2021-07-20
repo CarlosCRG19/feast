@@ -136,17 +136,6 @@ _Part 2_
 | price | String | Price level of the business. Value is one of $, $$, $$$ and $$$$. |  
 | categories | Array | list of strings that represent the categories that the restaurant match | 
 
-### Model: Location
-
-| Property | Type | Description |
-| --- | --- | --- |
-| objectID | String | Unique identifier for the location (default field) |
-| address | String | Street address of this business. | 
-| city | String | City of this business. | 
-| country | String | ISO 3166-1 alpha-2 country code of this business. | 
-| latitude | float | The latitude of this business. | 
-| longitude | float | The longitude of this business. | 
-| restaurant | Pointer to Restaurant | Reference to restaurant object for this location | 
 
 ### Model: Hour
 
@@ -183,3 +172,7 @@ _Part 2_
 | user | Pointer to User | user that liked the restaurant |
 | restaurant | Pointer to Restaurant | restaurant that has been selected |
 
+# Sprints walkthroughs
+
+## Sprint 1
+<img src='sprint1_walkthrough.gif' title='Sprint 1 walkthrough' width='' alt='Sprint 1 walkthrough' />
