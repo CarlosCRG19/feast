@@ -3,17 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnExplore"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/llMenu"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Explore"/>
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnExplore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:text="Explore"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Compare" />
+    </LinearLayout>
+
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnExplore"/>
+        android:layout_below="@+id/llMenu"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBusinesses"

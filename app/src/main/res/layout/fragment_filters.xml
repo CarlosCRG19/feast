@@ -1,31 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tvRating"
-        android:layout_below="@+id/btnFilter"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:text="Rating: " />
-
-    <EditText
-        android:id="@+id/etRating"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/tvRating"
-        android:layout_alignTop="@+id/tvRating"
-        android:hint="From 0 to 5" />
-
+    <!--    Price Selection views -->
     <TextView
         android:id="@+id/tvPrice"
-        android:layout_below="@+id/tvRating"
-        android:layout_marginTop="50dp"
+        android:layout_below="@+id/btnFilter"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,19 +16,94 @@
         android:textColor="@color/black"
         android:text="Price: " />
 
-    <EditText
-        android:id="@+id/etPrice"
-        android:layout_width="150dp"
+    <RadioGroup
+        android:id="@+id/rgPrice"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/tvPrice"
-        android:layout_alignTop="@+id/tvPrice"
-        android:hint="From 0 to 5" />
+        android:orientation="horizontal"
+        android:layout_below="@+id/tvPrice"
+        android:layout_centerHorizontal="true"
+        android:checkedButton="@id/rbPAll" >
+        <RadioButton
+            android:id="@+id/rbP1"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
 
+        <RadioButton
+            android:id="@+id/rbP2"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="$$"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+        <RadioButton
+            android:id="@+id/rbP3"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="$$$"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+        <RadioButton
+            android:id="@+id/rbP4"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="$$$$"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+        <RadioButton
+            android:id="@+id/rbP5"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="$$$$$"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+        <RadioButton
+            android:id="@+id/rbPAll"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="All"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+    </RadioGroup>
+
+    <!--    Distance selection views-->
 
     <TextView
         android:id="@+id/tvDistance"
-        android:layout_below="@+id/tvPrice"
-        android:layout_marginTop="50dp"
+        android:layout_below="@+id/rgPrice"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,18 +111,70 @@
         android:textColor="@color/black"
         android:text="Distance: " />
 
-    <EditText
-        android:id="@+id/etDistance"
-        android:layout_width="150dp"
+    <RadioGroup
+        android:id="@+id/rgDistance"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/tvDistance"
-        android:layout_alignTop="@+id/tvDistance"
-        android:hint="From 0 to 15 mi." />
+        android:orientation="horizontal"
+        android:layout_below="@+id/tvDistance"
+        android:layout_centerHorizontal="true"
+        android:checkedButton="@id/rbD20" >
+        <RadioButton
+            android:id="@+id/rbD5"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="5km"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+        <RadioButton
+            android:id="@+id/rbD10"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="10 km"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+        <RadioButton
+            android:id="@+id/rbD15"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="15 km"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+        <RadioButton
+            android:id="@+id/rbD20"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="20 km"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:button="@android:color/transparent"
+            android:background="@drawable/radio_selector"
+            tools:ignore="UsingOnClickInXml" />
+
+    </RadioGroup>
+
+    <!--    Categories selections views -->
 
     <TextView
         android:id="@+id/tvCategories"
-        android:layout_below="@+id/tvDistance"
-        android:layout_marginTop="50dp"
+        android:layout_below="@+id/rgDistance"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,13 +182,55 @@
         android:textColor="@color/black"
         android:text="Categories: " />
 
-    <EditText
-        android:id="@+id/etCategories"
-        android:layout_width="150dp"
+
+    <CheckBox android:id="@+id/cbAll"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/tvCategories"
-        android:layout_alignTop="@+id/tvCategories"
-        android:hint="e.g. Sushi" />
+        android:layout_below="@id/tvCategories"
+        android:layout_alignStart="@+id/tvCategories"
+        android:layout_marginStart="20dp"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:textStyle="bold"
+        android:text="All categories" />
+    <LinearLayout
+        android:id="@+id/llCheckboxes"
+        android:layout_alignStart="@+id/cbAll"
+        android:layout_below="@+id/cbAll"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <CheckBox android:id="@+id/cbPizza"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="Pizza" />
+        <CheckBox android:id="@+id/cbPasta"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="Pasta" />
+        <CheckBox android:id="@+id/cbBurger"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="Burger" />
+        <CheckBox android:id="@+id/cbSushi"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="Sushi" />
+        <CheckBox android:id="@+id/cbMexican"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="Mexican" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnFilter"

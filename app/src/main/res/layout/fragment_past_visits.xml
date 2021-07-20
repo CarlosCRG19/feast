@@ -5,19 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvPastVisits"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/llMenu"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:textSize="30dp"
-        android:text="PastVisits" />
+        android:gravity="center">
 
-    <Button
-        android:id="@+id/btnNextVisits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next Visits" />
+        <Button
+            android:id="@+id/btnNextVisits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:text="Next Visits"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Past Visits" />
+    </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView

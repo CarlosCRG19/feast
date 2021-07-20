@@ -35,6 +35,8 @@ public class VisitViewModel extends ViewModel {
         return filtersMap;
     }
 
+    public String getFilterValue(String key) { return filtersMap.getValue().get(key); }
+
     public void setVisitDate(Date date) {
         visitDate.setValue(date);
     }

@@ -49,7 +49,6 @@ public class ExploreFragment extends Fragment {
 
     // Filters data
     private VisitViewModel visitViewModel; // communication object between fragments
-    List<Pair<String, String>> filters;
 
     // Navigation views
     Button btnFilters, btnCompare;
@@ -188,7 +187,6 @@ public class ExploreFragment extends Fragment {
                         .commit();
             }
         });
-
 
         // Request to get businesses that match the current filters
         yelpClient.getMatchingBusinesses(new JsonHttpResponseHandler() {
