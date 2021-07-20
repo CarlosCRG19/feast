@@ -4,11 +4,20 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <Button
+        android:id="@+id/btnFilter"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="30dp"
+        android:text="Apply filters" />
+
     <!--    Price Selection views -->
     <TextView
         android:id="@+id/tvPrice"
         android:layout_below="@+id/btnFilter"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -231,14 +240,5 @@
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
             android:text="Mexican" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btnFilter"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="40dp"
-        android:text="Apply filters" />
 
 </RelativeLayout>

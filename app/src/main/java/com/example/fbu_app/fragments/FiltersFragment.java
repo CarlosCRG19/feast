@@ -1,7 +1,6 @@
 package com.example.fbu_app.fragments;
 
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RatingBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +23,8 @@ import com.example.fbu_app.models.VisitViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FiltersFragment extends Fragment {
 
@@ -33,9 +32,6 @@ public class FiltersFragment extends Fragment {
 
     // VIEWS
     Button btnFilter; // Apply filters button
-
-    // Test views
-    EditText etPrice, etDistance;
 
     // Distance selection views
     RadioGroup rgDistance;
@@ -50,7 +46,7 @@ public class FiltersFragment extends Fragment {
     CheckBox cbAll, cbPizza, cbPasta, cbBurger, cbSushi, cbMexican;
 
     // Filters values
-    String price, distance, categories;
+    String price, radius, categories;
 
     // Views dictionary
     HashMap<RadioButton, String> distanceMap;
@@ -73,6 +69,8 @@ public class FiltersFragment extends Fragment {
 
         // Assign value for ViewModel
         visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
+        // Get member vars values from viewmodel
+        getFiltersValues();
 
         // Distance selection setup
 
@@ -124,16 +122,34 @@ public class FiltersFragment extends Fragment {
             }
         });
 
+        // Initialize hashmaps for values
+        initializePriceMap();
+        initializeDistanceMap();
+        initializeCategoriesMap();
+
+        // Change state of views and check if they have been selected
+        setFilterViewsState();
+
         // Apply button setup
         btnFilter = view.findViewById(R.id.btnFilter);
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Set values for member variables
+                // This values are obtained from the views
+                setSelectedPrice();
+                setSelectedDistance();
+                setCategories();
                 // Add filters to ViewModel
-                visitViewModel.addFilter("price", String.valueOf(getSelectedPrice()));
-                visitViewModel.addFilter("distance", etDistance.getText().toString());
-                // Get categories from checkboxes
-                visitViewModel.addFilter("categories", getCategories());
+
+                // Check if price is All (to search all prices we need to remove the price attribute from the call)
+                if (price == "All")
+                    visitViewModel.removeFilter("price");
+                else
+                    visitViewModel.addFilter("price", price);
+                // Add rest of filters
+                visitViewModel.addFilter("radius", radius);
+                visitViewModel.addFilter("categories", categories);
                 // Return to ExploreFragment
                 getActivity().onBackPressed(); // since this transaction was made with addToBackStack, when backpressed, the user returns to previous fragment
             }
@@ -143,26 +159,32 @@ public class FiltersFragment extends Fragment {
 
     private void getFiltersValues() {
         price = visitViewModel.getFilterValue("price");
-        distance = visitViewModel.getFilterValue("distance");
+        radius = visitViewModel.getFilterValue("radius");
         categories = visitViewModel.getFilterValue("categories");
     }
 
     private void setFilterViewsState() {
         // PRICE SETTINGS
-        if (price == null) rbPAll.setChecked(true);
+        if (price == null)
+            rbPAll.setChecked(true);
+        else
+            getRbFromMap(priceMap, price).setChecked(true);
+        // DISTANCE SETTINGS
+        getRbFromMap(distanceMap, radius).setChecked(true);
+        // CATEGORIES SETUP
+        if (categories == null || categories == "All")
+            cbAll.setChecked(true);
         else {
-            // Get position of selected price
-            int selectedPricePosition = Integer.parseInt(price) - 1; // price goes from 1 to 5
-            // Set radio button at that position as checked
-            ((RadioButton) rgPrice.getChildAt(selectedPricePosition)).setChecked(true);
-        }
+            String[] categoriesList = categories.split(",");
+            for(String category : categoriesList) {
+                getCbFromMap(categoriesMap, category).setChecked(true);
+            }
 
+        }
     }
 
     // Returns the price selected with the radiogroup
-    private String getSelectedPrice() {
-        // Create new price variable
-        String price = "";
+    private void setSelectedPrice() {
         // Check each RadioButton and verify if it has been checked
         for (int i = 0; i < rgPrice.getChildCount(); i++) {
             // Verify is radio group child at that position is a radio button
@@ -171,48 +193,38 @@ public class FiltersFragment extends Fragment {
                 RadioButton radioButton = (RadioButton) rgPrice.getChildAt(i);
                 // Check if it has been selected
                 if (radioButton.isChecked()) {
-                    // Create new integer with the price value
-                    int priceInt = radioButton.getText().length(); // $ = 1, $$ = 2, $$$ = 3
-                    // Set price value with string value of price Int
-                    price = String.valueOf(priceInt);
+                    // Get price from hashmap
+                    price = priceMap.get(radioButton);
                     // Stop loop
                     break;
                 }
             }
         }
-        return price;
     }
 
     // Returns the price selected with the radiogroup
-    private String getSelectedDistance() {
+    private void setSelectedDistance() {
         for (int i = 0; i < rgDistance.getChildCount(); i++) {
             if (rgDistance.getChildAt(i) instanceof RadioButton) {
                 RadioButton radioButton = (RadioButton) rgDistance.getChildAt(i);
                 if (radioButton.isChecked()) {
-                    switch (radioButton.getId()) {
-                        case R.id.rbD5:
-                            return "5000";
-                        case R.id.rbD10:
-                            return "10000";
-                        case R.id.rbD15:
-                            return "15000";
-                        case R.id.rbD20:
-                            return "20000";
-                    }
+                    // Get distance from hashmap
+                    radius = distanceMap.get(radioButton);
+                    // Break loop
                     break;
                 }
             }
         }
-        return "";
     }
 
+
     // Returns the string of categories to search
-    private String getCategories() {
+    private void setCategories() {
         // Check ig SELECT ALL option is selected
-        if(cbAll.isChecked()) return "All";
+        if(cbAll.isChecked()) categories = "All";
         else {
             // Create empty string for categories
-            String categories = "";
+            categories = "";
             // Check each checkboxes with a for loop
             for(int i=0 ; i < llCheckboxes.getChildCount(); i++) {
                 // Verify that view is an instance of checkbox
@@ -221,37 +233,23 @@ public class FiltersFragment extends Fragment {
                     CheckBox checkBox = (CheckBox) llCheckboxes.getChildAt(i);
                     // Check if current checkbox if selected
                     if (checkBox.isChecked()) {
-                        // Handle selected checkboxes with switch
-                        switch (checkBox.getId()) {
-                            case R.id.cbPizza:
-                                categories += "pizza,";
-                                break;
-                            case R.id.cbPasta:
-                                categories += "italian,";
-                                break;
-                            case R.id.cbBurger:
-                                categories += "burgers,";
-                                break;
-                            case R.id.cbSushi:
-                                categories += "sushi,";
-                                break;
-                            case R.id.cbMexican:
-                                categories += "mexican,";
-                                break;
-                        }
+                        // Get category from hashmap
+                        String newCategory = categoriesMap.get(checkBox);
+                        // add new category
+                        categories += newCategory + ",";
                     }
                 }
             }
             // If none of the checkboxes are selected, return All categories
-            if (categories.equals("")) return "All";
-            // Return string without the last element, which would be a comma
-            else return categories.substring(0, categories.length() - 1);
-
+            if (categories.equals("")) categories = "All";
+            // Delete last element, which would be a comma
+            categories = categories.substring(0, categories.length() - 1);
         }
     }
 
     // UTILITY METHODS TO FILL HASHMAPS
     private void initializeDistanceMap() {
+        distanceMap = new HashMap<>();
         distanceMap.put(rbD5, "5000");
         distanceMap.put(rbD10, "10000");
         distanceMap.put(rbD15, "15000");
@@ -259,6 +257,7 @@ public class FiltersFragment extends Fragment {
     }
 
     private void initializePriceMap() {
+        priceMap = new HashMap<>();
         priceMap.put(rbP1, "1");
         priceMap.put(rbP2, "2");
         priceMap.put(rbP3, "3");
@@ -269,10 +268,28 @@ public class FiltersFragment extends Fragment {
     }
 
     private void initializeCategoriesMap() {
+        categoriesMap = new HashMap<>();
         categoriesMap.put(cbPizza, "pizza");
-        categoriesMap.put(cbPasta, "pasta");
+        categoriesMap.put(cbPasta, "italian");
         categoriesMap.put(cbBurger, "burgers");
         categoriesMap.put(cbSushi, "sushi");
         categoriesMap.put(cbMexican, "mexican");
     }
+
+    private RadioButton getRbFromMap(HashMap<RadioButton, String> map, String searchValue) {
+        for(Map.Entry<RadioButton,String> entry : map.entrySet()) {
+            if(entry.getValue().equals(searchValue))
+                return entry.getKey();
+        }
+        return null;
+    }
+
+    private CheckBox getCbFromMap(HashMap<CheckBox, String> map, String searchValue) {
+        for(Map.Entry<CheckBox,String> entry : map.entrySet()) {
+            if(entry.getValue().equals(searchValue))
+                return entry.getKey();
+        }
+        return null;
+    }
+
 }

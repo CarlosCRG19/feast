@@ -30,6 +30,8 @@ public class VisitViewModel extends ViewModel {
         filtersMap.getValue().put(filter, value);
     }
 
+    public void removeFilter(String filter){ filtersMap.getValue().remove(filter); }
+
     // Returns LiveData that contains the list. Must use getValue() to access the list
     public LiveData<HashMap<String, String>> getFilters() {
         return filtersMap;

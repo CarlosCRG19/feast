@@ -74,7 +74,7 @@ public class BusinessAdapterGo extends BusinessAdapter{
             super.bind(businessToBind);
             // Set texts
             tvPrice.setText("Price: " + businessToBind.getPrice());
-            tvDistance.setText("Distance: " + (int)businessToBind.getDistance() + " mi.");
+            tvDistance.setText("Distance: " + (int)businessToBind.getDistance() + " m.");
             // Add listener to btnGo for visit creation
             btnGo.setOnClickListener(new View.OnClickListener() {
                 @Override
