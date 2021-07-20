@@ -46,9 +46,7 @@ public class Hour extends ParseObject{
             // Add new object to the list
             hours.add(hour);
         }
-
         return  hours;
-
     }
 
     // SETTERS

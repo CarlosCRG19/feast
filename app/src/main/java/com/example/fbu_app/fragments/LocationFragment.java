@@ -54,6 +54,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -145,6 +146,7 @@ public class LocationFragment extends Fragment {
 
                 // Create intent to launch autocomplete feature
                 Intent i = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
+                        .setCountries(Arrays.asList("MX", "US"))
                         .build(getContext());
 
                 // Launch autocomplete

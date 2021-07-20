@@ -18,6 +18,17 @@ import java.util.List;
 @ParseClassName("Business")
 public class Business extends ParseObject{
 
+    // DISTANCE TEMPORAL FIELD
+    private int distance;
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
     // STATIC METHODS FOR OBJECT CONSTRUCTION
 
     // Creates a new Business directly from a JSON object and returns it
@@ -41,6 +52,7 @@ public class Business extends ParseObject{
         business.setRating(jsonObject.optInt("rating"));
         business.setPrice(jsonObject.optString("price"));
         business.setPriceInt(jsonObject.optString("price"));
+        business.setDistance((int) jsonObject.optDouble("distance"));
 
         // Coordinates
         JSONObject coordinates = jsonObject.optJSONObject("coordinates");

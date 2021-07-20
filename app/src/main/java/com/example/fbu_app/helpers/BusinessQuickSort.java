@@ -1,11 +1,13 @@
 package com.example.fbu_app.helpers;
 
+import android.util.Log;
+
 import com.example.fbu_app.models.Business;
 
+import java.util.Collections;
 import java.util.List;
 
 public class BusinessQuickSort {
-
 
     // UTILITY FUNCTIONS
     private  static void swap(List<Business> businessesList, int i, int j) {
@@ -15,19 +17,24 @@ public class BusinessQuickSort {
     }
 
     private static int partition(List<Business> businessList, String attribute, int low, int high) {
-        int pivot = (int) businessList.get(high).get(attribute);
+
+        Business pivotBusiness = businessList.get(high);
+        int pivotVal = businessAttrSwitch(pivotBusiness, attribute);
 
         int i = low - 1;
 
         for (int j=low; j <= high - 1; j++) {
 
-            if( (int) businessList.get(j).get(attribute) < pivot ) {
-                i++;
-                swap(businessList, i, j);
-            }
+            Business compareBusiness = businessList.get(j);
 
+            int compareVal = businessAttrSwitch(compareBusiness, attribute);
+
+            if( compareVal < pivotVal ) {
+                i++;
+                Collections.swap(businessList, i, j);
+            }
         }
-        swap(businessList, i+1, high);
+        Collections.swap(businessList, i+1, high);
         return i+1;
     }
 
@@ -40,6 +47,16 @@ public class BusinessQuickSort {
         }
     }
 
+    public static int businessAttrSwitch(Business business, String attribute) {
+        switch(attribute) {
+            case "distance":
+                return business.getDistance();
+            case "price":
+                return business.getPriceInt();
+            default:
+                return business.getRating();
+        }
+    }
 
 
 }

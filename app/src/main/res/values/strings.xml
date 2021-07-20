@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">FBU-App</string>
+
+    <string-array name="attributes">
+        <item>rating</item>
+        <item>distance</item>
+        <item>price</item>
+    </string-array>
+
 </resources>

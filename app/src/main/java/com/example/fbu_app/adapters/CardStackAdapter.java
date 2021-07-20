@@ -129,11 +129,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                             .commit();
                 }
             });
-
-
-
         }
-
-
     }
 }

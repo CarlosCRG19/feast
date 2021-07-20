@@ -1,10 +1,14 @@
 package com.example.fbu_app.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fbu_app.R;
 import com.example.fbu_app.adapters.BusinessAdapterGo;
+import com.example.fbu_app.helpers.BusinessQuickSort;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.VisitViewModel;
 import com.example.fbu_app.models.SelectedViewModel;
@@ -24,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 import java.util.List;
 
-public class CompareFragment extends Fragment {
+public class CompareFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     // MEMBER VARIABLES
 
@@ -46,6 +51,8 @@ public class CompareFragment extends Fragment {
 
     // Button for Explore Screen
     Button btnExplore;
+
+    Spinner attributeSpinner;
 
     public CompareFragment() {};
 
@@ -85,6 +92,25 @@ public class CompareFragment extends Fragment {
                 getActivity().onBackPressed(); // backpressed to return to explore fragment without starting it again
             }
         });
+
+        // Set up spinner
+        attributeSpinner = view.findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.attributes, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        attributeSpinner.setAdapter(spinnerAdapter);
+        attributeSpinner.setOnItemSelectedListener(this);
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String attribute = parent.getItemAtPosition(position).toString();
+        BusinessQuickSort.quickSort(selectedBusinesses, attribute, 0, selectedBusinesses.size() - 1);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

@@ -33,6 +33,26 @@
         android:textSize="12sp"
         tools:text="Rating" />
 
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/tvRating"
+        android:layout_toEndOf="@id/ivBusinessImage"
+        android:textSize="12sp"
+        tools:text="Price" />
+
+    <TextView
+        android:id="@+id/tvDistance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/tvPrice"
+        android:layout_toEndOf="@id/ivBusinessImage"
+        android:textSize="12sp"
+        tools:text="Distance" />
+
     <Button
         android:id="@+id/btnGo"
         android:layout_width="wrap_content"
