@@ -172,3 +172,7 @@ _Part 2_
 | user | Pointer to User | user that liked the restaurant |
 | restaurant | Pointer to Restaurant | restaurant that has been selected |
 
+# Sprints walkthroughs
+
+## Sprint 1
+<img src='sprint1_walkthrough.gif' title='Sprint 1 walkthrough' width='' alt='Sprint 1 walkthrough' />
