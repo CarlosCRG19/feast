@@ -2,9 +2,9 @@
     <string name="app_name">FBU-App</string>
 
     <string-array name="attributes">
-        <item>rating</item>
-        <item>distance</item>
-        <item>price</item>
+        <item>Highest Rating</item>
+        <item>Nearest</item>
+        <item>Lowest Prices</item>
     </string-array>
 
 </resources>

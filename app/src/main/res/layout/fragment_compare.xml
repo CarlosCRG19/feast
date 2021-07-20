@@ -28,17 +28,36 @@
             android:text="Compare" />
     </LinearLayout>
 
-
-    <Spinner
-        android:id="@+id/spinner"
+    <LinearLayout
+        android:id="@+id/llSort"
+        android:layout_below="@+id/llMenu"
+        android:layout_marginStart="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/llMenu"/>
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp"
+        android:background="@drawable/radio_normal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Sorted by: " />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBusinesses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/spinner" />
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/llSort" />
 
 </RelativeLayout>

@@ -26,6 +26,7 @@ import com.example.fbu_app.models.SelectedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -105,8 +106,21 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String attribute = parent.getItemAtPosition(position).toString();
-        BusinessQuickSort.quickSort(selectedBusinesses, attribute, 0, selectedBusinesses.size() - 1);
-        adapter.notifyDataSetChanged();
+        switch (attribute) {
+            case "Highest Rating":
+                BusinessQuickSort.quickSort(selectedBusinesses, "rating", 0, selectedBusinesses.size() - 1);
+                Collections.reverse(selectedBusinesses);
+                adapter.notifyDataSetChanged();
+                break;
+            case "Nearest":
+                BusinessQuickSort.quickSort(selectedBusinesses, "distance", 0, selectedBusinesses.size() - 1);
+                adapter.notifyDataSetChanged();
+                break;
+            case "Lowest Prices":
+                BusinessQuickSort.quickSort(selectedBusinesses, "price", 0, selectedBusinesses.size() - 1);
+                adapter.notifyDataSetChanged();
+                break;
+        }
     }
 
     @Override
