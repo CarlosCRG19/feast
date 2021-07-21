@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fbu_app.R;
+import com.example.fbu_app.fragments.ConfirmationFragment;
 import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
@@ -24,6 +25,8 @@ import com.parse.SaveCallback;
 import org.jetbrains.annotations.NotNull;
 
 public class DetailsFragmentGo extends DetailsFragmentBase {
+
+    public static final String VISIT_TAG = "visit";
 
     VisitViewModel visitViewModel;
     Button btnGo;
@@ -66,14 +69,16 @@ public class DetailsFragmentGo extends DetailsFragmentBase {
                         }
                         // Display success message
                         Toast.makeText(getContext(), "Succesfully created visit!", Toast.LENGTH_SHORT).show();
+                        // Create bundle to pass busines as argument
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(VISIT_TAG, newVisit);
                         // Transaction to new fragment
-                        NextVisitsFragment nextVisitsFragment = new NextVisitsFragment();
+                        ConfirmationFragment confirmationFragment = new ConfirmationFragment();
+                        confirmationFragment.setArguments(bundle);
+                        // Make fragment transaction
                         getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.flContainer, nextVisitsFragment)
+                                .replace(R.id.flContainer, confirmationFragment)
                                 .commit();
-                        // Change selected item in bottom nav bar
-                        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigation);
-                        bottomNavigationView.setSelectedItemId(R.id.action_history);
                     }
                 });
 

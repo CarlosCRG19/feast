@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.fragments.ConfirmationFragment;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentGo;
 import com.example.fbu_app.fragments.NextVisitsFragment;
@@ -31,6 +32,8 @@ import java.util.List;
 
 // Adapter for businesses in the Compare Screen (includes a Go! button to instantly create a visit)
 public class BusinessAdapterGo extends BusinessAdapter{
+
+    public static final String VISIT_TAG = "visit";
 
     // FIELDS
     private String visitDateStr; // Date values for visit creation
@@ -96,14 +99,17 @@ public class BusinessAdapterGo extends BusinessAdapter{
                             }
                             // Display success message
                             Toast.makeText(context, "Succesfully created visit!", Toast.LENGTH_SHORT).show();
+                            // Create bundle to pass busines as argument
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable(VISIT_TAG, newVisit);
                             // Transaction to new fragment
-                            NextVisitsFragment nextVisitsFragment = new NextVisitsFragment();
+                            ConfirmationFragment confirmationFragment = new ConfirmationFragment();
+                            confirmationFragment.setArguments(bundle);
+                            // Make fragment transaction
                             ((MainActivity) context).getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.flContainer, nextVisitsFragment)
+                                    .replace(R.id.flContainer, confirmationFragment)
                                     .commit();
-                            // Change selected item in bottom nav bar
-                            BottomNavigationView bottomNavigationView = ((MainActivity) context).findViewById(R.id.bottomNavigation);
-                            bottomNavigationView.setSelectedItemId(R.id.action_history);
+
                         }
                     });
                 }
