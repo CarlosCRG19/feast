@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
+import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentInvitation;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
@@ -74,11 +75,15 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public static final String BUSINESS_TAG  = "business"; // identifier for passing busines with bundle
+        public static final String INVITATION_TAG = "invitation"; // Simple tag to send invitation with bundle
 
         // VIEWS
         private ImageView ivBusinessImage;
-        private Button btnAccept;
+        private Button btnAccept, btnDecline;
         private TextView tvName, tvInvitedBy, tvDate;
+
+        // Invitation object
+        VisitInvitation invitation;
 
         // Fields of invitation
         Visit visit;
@@ -92,11 +97,14 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             tvInvitedBy = itemView.findViewById(R.id.tvInvitedBy);
             tvDate = itemView.findViewById(R.id.tvDate);
             btnAccept = itemView.findViewById(R.id.btnAccept);
+            btnDecline = itemView.findViewById(R.id.btnDecline);
             // Set listener
             itemView.setOnClickListener(this);
         }
 
-        public void bind(VisitInvitation invitation) {
+        public void bind(VisitInvitation visitInvitation) {
+            // Set invitation value
+            invitation = visitInvitation;
             // Get visit and fromUser fields
             visit = invitation.getVisit();
             fromUser = invitation.getFromUser();
@@ -113,11 +121,27 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                 @Override
                 public void onClick(View v) {
                     // Display a message of acceptance
-                    Toast.makeText(context, "Accepted invitation!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Invitation accepted!", Toast.LENGTH_SHORT).show();
                     // Change invitation status to accepted
                     invitation.setStatus("accepted");
                     // Save confirmation
                     saveConfirmation(visit, currentUser);
+                    // Save invitation with new changes
+                    invitation.saveInBackground();
+                    // Remove row
+                    invitations.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+                }
+            });
+
+            // Button to decline an invitation
+            btnDecline.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Display a message of success
+                    Toast.makeText(context, "Invitation declined!", Toast.LENGTH_SHORT).show();
+                    // Change invitation status to declined
+                    invitation.setStatus("declined");
                     // Save invitation with new changes
                     invitation.saveInBackground();
                     // Remove row
@@ -146,15 +170,16 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             // Create new bundle to pass args
             Bundle bundle = new Bundle();
             bundle.putParcelable(BUSINESS_TAG, visit.getBusiness());
+            bundle.putParcelable(INVITATION_TAG, invitation);
 
             // Create new instance of detailsFragment (the user can create a new visit from this details screen)
-            DetailsFragmentCreate detailsFragmentCreate = new DetailsFragmentCreate();
-            detailsFragmentCreate.setArguments(bundle);
+            DetailsFragmentInvitation detailsFragmentInvitation = new DetailsFragmentInvitation();
+            detailsFragmentInvitation.setArguments(bundle);
 
             // Make fragment transaction adding to back stack
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.flContainer, detailsFragmentCreate)
+                    .replace(R.id.flContainer, detailsFragmentInvitation)
                     .addToBackStack(null)
                     .commit();
         }

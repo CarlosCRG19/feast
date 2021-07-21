@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/ivBusinessImage"
+        android:layout_marginStart="10dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/ivBusinessImage"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="13sp"
+        tools:text="Business restaurant" />
+
+    <TextView
+        android:id="@+id/tvInvitedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_below="@+id/tvName"
+        android:layout_toEndOf="@id/ivBusinessImage"
+        android:textSize="12sp"
+        tools:text="Rating" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:text="25 AUG 2929" />
+
+    <Button
+        android:id="@+id/btnDecline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tvDate"
+        android:layout_below="@+id/tvInvitedBy"
+        android:text="Decline"/>
+
+    <Button
+        android:id="@+id/btnAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/btnDecline"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvInvitedBy"
+        android:text="Accept"/>
+
+</RelativeLayout>

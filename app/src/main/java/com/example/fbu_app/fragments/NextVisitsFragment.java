@@ -157,6 +157,7 @@ public class NextVisitsFragment extends Fragment {
                     return;
                 }
                 if(invitationList.size() > 0) {
+                    tvInvitations.setVisibility(View.VISIBLE);
                     tvInvitations.setText("Your Invitations!");
                     // Clear list
                     invitations.clear();

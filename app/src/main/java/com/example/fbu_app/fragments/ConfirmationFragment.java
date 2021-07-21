@@ -70,7 +70,6 @@ public class ConfirmationFragment extends Fragment {
         etUsername = view.findViewById(R.id.etUsername);
         btnInvite = view.findViewById(R.id.btnInvite);
 
-
         tvName.setText(visitBusiness.getName());
         tvDate.setText(visit.getDateStr());
 
@@ -105,7 +104,6 @@ public class ConfirmationFragment extends Fragment {
 
     }
 
-
     private void searchUserAndSendInvitation(String username) {
         // Specify type of query
         ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -117,10 +115,12 @@ public class ConfirmationFragment extends Fragment {
             public void done(ParseUser object, ParseException e) {
                 if (object != null) {
                     // Check if searched user is not the same as current user
-                    if (object == ParseUser.getCurrentUser())
+                    if (object.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
                         Toast.makeText(getContext(), "You can't send an invitation to yourself.", Toast.LENGTH_SHORT).show();
-                    else
+                    }
+                    else {
                         sendInvitation(object);
+                    }
                     return;
                 }
                 Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();

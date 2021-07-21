@@ -34,8 +34,6 @@ import java.util.Date;
 
 public class DetailsFragmentCreate extends DetailsFragmentBase {
 
-    public static final String VISIT_TAG = "visit";
-
     Button btnDate, btnCreateVisit;
 
     Date visitDate;
@@ -76,38 +74,8 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
         btnCreateVisit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Verify if business exists
-                verifyBusinessExists();
-                // Create new visit
-                Visit newVisit = new Visit();
-                newVisit.setBusiness(business);
-                // Add fields
-                newVisit.setUser(ParseUser.getCurrentUser());
-                newVisit.addAttendee(ParseUser.getCurrentUser());
-                newVisit.setDate(visitDate);
-                newVisit.setDateStr(visitDateStr);
-                // Save visit using background thread
-                newVisit.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e != null) {
-                            Log.i("ParseSave", "Failed to save visit", e);
-                            return;
-                        }
-                        // Display success message
-                        Toast.makeText(getContext(), "Succesfully created visit!", Toast.LENGTH_SHORT).show();
-                        // Create bundle to pass busines as argument
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(VISIT_TAG, newVisit);
-                        // Transaction to new fragment
-                        ConfirmationFragment confirmationFragment = new ConfirmationFragment();
-                        confirmationFragment.setArguments(bundle);
-                        // Make fragment transaction
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.flContainer, confirmationFragment)
-                                .commit();
-                    }
-                });
+                // Verify if business exists and pass date info to create visit
+                verifyBusinessExistsAndCreateVisit(visitDate, visitDateStr);
             }
         });
     }

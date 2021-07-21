@@ -24,7 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_app.R;
+import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.adapters.HoursAdapter;
+import com.example.fbu_app.fragments.ConfirmationFragment;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Hour;
@@ -49,6 +51,8 @@ import java.util.List;
 import okhttp3.Headers;
 
 public class DetailsFragmentBase extends Fragment {
+
+    public static final String VISIT_TAG = "visit"; // Simple tag to save objects in Parse
 
     protected Business business;
 
@@ -124,7 +128,9 @@ public class DetailsFragmentBase extends Fragment {
 
     }
 
-    protected void verifyBusinessExists() {
+    // Checks if local business is already in database, if it is, the value of business is changed to match that one
+    // after that, it creates a new visit
+    protected void verifyBusinessExistsAndCreateVisit(Date visitDate, String visitDateStr) {
         // Specify type of query
         ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
         // Search for business in database based on yelpId
@@ -133,13 +139,51 @@ public class DetailsFragmentBase extends Fragment {
         query.getFirstInBackground(new GetCallback<Business>() {
             @Override
             public void done(Business object, ParseException e) {
-                if (e != null) {
+                if(e != null) {
+                    Log.i("ParseSave", "Search for user", e);
                     return;
                 }
-                // if the business exists, change value of member variable
+                // if the business exists, change value of member variable and create the new visit
                 if (object != null) {
                     business = object;
                 }
+                createVisit(visitDate, visitDateStr);
+            }
+        });
+
+    }
+
+    // Creates a visit with the specified business and visit date
+    protected void createVisit(Date visitDate, String visitDateStr) {
+        // Create new visit
+        Visit newVisit = new Visit();
+        newVisit.setBusiness(business);
+        // Add fields
+        newVisit.setUser(ParseUser.getCurrentUser());
+        newVisit.addAttendee(ParseUser.getCurrentUser());
+        newVisit.setDate(visitDate);
+        newVisit.setDateStr(visitDateStr);
+        // Save visit using background thread
+        newVisit.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.i("ParseSave", "Failed to save visit", e);
+                    return;
+                }
+                // Display success message
+                Toast.makeText(getContext(), "Succesfully created visit!", Toast.LENGTH_SHORT).show();
+                // Create bundle to pass busines as argument
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(VISIT_TAG, newVisit);
+                // Transaction to new fragment
+                ConfirmationFragment confirmationFragment = new ConfirmationFragment();
+                confirmationFragment.setArguments(bundle);
+                // Make fragment transaction
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.flContainer, confirmationFragment)
+                        .commit();
+
             }
         });
     }
