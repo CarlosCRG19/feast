@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,21 +22,27 @@ import com.example.fbu_app.R;
 import com.example.fbu_app.adapters.BusinessAdapterGo;
 import com.example.fbu_app.helpers.BusinessQuickSort;
 import com.example.fbu_app.models.Business;
+import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
-import com.example.fbu_app.models.SelectedViewModel;
+import com.example.fbu_app.models.BusinessesViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class CompareFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     // MEMBER VARIABLES
 
     // ViewModels for fragment communication
-    SelectedViewModel selectedViewModel;
+    BusinessesViewModel businessesViewModel;
     VisitViewModel visitViewModel;
 
     // Model to store businesses
@@ -51,7 +58,7 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
     BusinessAdapterGo adapter;
 
     // Button for Explore Screen
-    Button btnExplore;
+    Button btnExplore, btnRandomPick;
 
     Spinner attributeSpinner;
 
@@ -75,8 +82,8 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
         visitDateStr = visitViewModel.getVisitDateStr().getValue();
 
         // Get selected businesses from ViewModel
-        selectedViewModel = ViewModelProviders.of(getActivity()).get(SelectedViewModel.class);
-        selectedBusinesses = selectedViewModel.getSelectedBusinesses().getValue();
+        businessesViewModel = ViewModelProviders.of(getActivity()).get(BusinessesViewModel.class);
+        selectedBusinesses = businessesViewModel.getSelectedBusinesses().getValue();
 
         // Setup adapter with businesses and visitDates
         adapter = new BusinessAdapterGo(getContext(), selectedBusinesses, visitDateStr, visitDate);
@@ -84,6 +91,47 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
         rvBusinesses = view.findViewById(R.id.rvBusinesses);
         rvBusinesses.setAdapter(adapter);
         rvBusinesses.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Setup random pick button
+        btnRandomPick = view.findViewById(R.id.btnRandomPick);
+        // Listener to pick a random business from the list and create a visit
+        btnRandomPick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create new visit
+                Visit newVisit = new Visit();
+                // Get random number between the selectedBusiness size range
+                Random rand = new Random();
+                int randomNum = rand.nextInt(selectedBusinesses.size());
+                // Get business at specific position
+                Business randomBusiness = selectedBusinesses.get(randomNum);
+                newVisit.setBusiness(randomBusiness);
+                // Add fields
+                newVisit.setUser(ParseUser.getCurrentUser());
+                newVisit.setDate(visitDate);
+                newVisit.setDateStr(visitDateStr);
+                // Save visit using background thread
+                newVisit.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e != null) {
+                            Log.i("ParseSave", "Failed to save visit", e);
+                            return;
+                        }
+                        // Display success message
+                        Toast.makeText(getContext(), "Created random visit to " + randomBusiness.getName() + "!", Toast.LENGTH_SHORT).show();
+                        // Transaction to new fragment
+                        NextVisitsFragment nextVisitsFragment = new NextVisitsFragment();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.flContainer, nextVisitsFragment)
+                                .commit();
+                        // Change selected item in bottom nav bar
+                        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigation);
+                        bottomNavigationView.setSelectedItemId(R.id.action_history);
+                    }
+                });
+            }
+        });
 
         // Setup return to ExploreFragment
         btnExplore = view.findViewById(R.id.btnExplore);
@@ -94,26 +142,37 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
 
-        // Set up spinner
+        // Find spinner in layout
         attributeSpinner = view.findViewById(R.id.spinner);
+        // Create adapter using the attributes array on resources
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.attributes, android.R.layout.simple_spinner_item);
+        // Set dropdown style
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Assign adapter to spinner
         attributeSpinner.setAdapter(spinnerAdapter);
+        // Assign item listener
         attributeSpinner.setOnItemSelectedListener(this);
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // Get name of attribute from spinner
         String attribute = parent.getItemAtPosition(position).toString();
+        // Create switch to handle each option
         switch (attribute) {
             case "Highest Rating":
+                // Call static method QuickSort with the selected attribute
                 BusinessQuickSort.quickSort(selectedBusinesses, "rating", 0, selectedBusinesses.size() - 1);
+                // For rating, the user would want to first see the businesses with highest ratings, so we reverse the list
                 Collections.reverse(selectedBusinesses);
+                // Notify adapter
                 adapter.notifyDataSetChanged();
                 break;
             case "Nearest":
+                // Call static method QuickSort using distance as comparison attribute
                 BusinessQuickSort.quickSort(selectedBusinesses, "distance", 0, selectedBusinesses.size() - 1);
+                // Notify adapter of changes
                 adapter.notifyDataSetChanged();
                 break;
             case "Lowest Prices":

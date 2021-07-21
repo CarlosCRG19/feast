@@ -2,6 +2,7 @@ package com.example.fbu_app.fragments;
 
 import com.example.fbu_app.BuildConfig;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.models.BusinessesViewModel;
 import com.example.fbu_app.models.VisitViewModel;
 import com.google.android.gms.common.api.Status;
 
@@ -70,6 +71,7 @@ public class LocationFragment extends Fragment {
 
 
     VisitViewModel visitViewModel; // Communication object between fragments
+    BusinessesViewModel businessesViewModel;
 
     // VIEWS
     DatePickerDialog datePickerDialog; // Date picking
@@ -95,6 +97,9 @@ public class LocationFragment extends Fragment {
         visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
         // Initialize the filters map
         visitViewModel.initializeFilters();
+        //Get businesses view model
+        businessesViewModel = ViewModelProviders.of(getActivity()).get(BusinessesViewModel.class);
+        businessesViewModel.setMakeRequestFlag(true);
     }
 
     @Nullable

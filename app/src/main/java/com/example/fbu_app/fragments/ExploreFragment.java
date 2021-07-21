@@ -1,18 +1,17 @@
 package com.example.fbu_app.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -23,7 +22,7 @@ import com.example.fbu_app.R;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.VisitViewModel;
-import com.example.fbu_app.models.SelectedViewModel;
+import com.example.fbu_app.models.BusinessesViewModel;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -37,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,12 +60,15 @@ public class ExploreFragment extends Fragment {
     List<Business> displayedBusinesses;
 
     // ViewModel that stores the selected businesses
-    SelectedViewModel selectedViewModel;
+    BusinessesViewModel businessesViewModel;
 
     // CardStack tools
     CardStackAdapter adapter; // binds data to the cards
     CardStackLayoutManager manager; // general manager of the CardStack
     CardStackView cardStackView; // view from yuyakaido library
+
+    // Index of business from displayeBusinesses that is on screen
+    int displayIndex;
 
     // Required empty constructor
     public ExploreFragment(){}
@@ -74,9 +77,11 @@ public class ExploreFragment extends Fragment {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set value for ViewModel
-        selectedViewModel = ViewModelProviders.of(getActivity()).get(SelectedViewModel.class);
-        // Initialize the filters map
-        selectedViewModel.initializeSelectedBusinesses();
+        businessesViewModel = ViewModelProviders.of(getActivity()).get(BusinessesViewModel.class);
+        // Initialize the businesses to be selected
+        businessesViewModel.initializeSelectedBusinesses();
+        // Initialize the businesses to be displayed
+        businessesViewModel.initializeDisplayedBusinesses();
     }
 
     @Nullable
@@ -101,7 +106,57 @@ public class ExploreFragment extends Fragment {
         // Init adapter to bind data
         adapter = new CardStackAdapter(getContext(), displayedBusinesses);
 
+        // Check businessesViewModel to get displayedBusinesses
+        if (businessesViewModel.getMakeRequestFlag()) {
+            // If flag say, get businesses
+            // Request to get businesses that match the current filters
+            yelpClient.getMatchingBusinesses(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.i(TAG, "Success doing request");
+                            // Receive response
+                    JSONObject response = json.jsonObject;
+                    try {
+                        // Get list of businesses
+                        JSONArray jsonArray = response.getJSONArray("businesses");
+                        // Use static methods to create array of businesses (these businesses are only stored locally, not in Parse)
+                        displayedBusinesses = Business.fromJsonArray(jsonArray);
+                        // Add new businesses to adapter
+                        adapter.clear();
+                        adapter.addAll(displayedBusinesses);
+
+                        // Log messages to see functionality
+                        Log.i(TAG, "NEW REQUEST - " + String.valueOf(displayedBusinesses.size()) + " businesses found for filters:");
+                        visitViewModel.getFilters().getValue().forEach((key, value) -> Log.i(TAG, key + ": " + value));
+                        Log.i(TAG, "FOUND BUSINESSES:");
+                        Log.i(TAG, jsonArray.toString());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    // Display log message
+                    Log.i(TAG, "Failure doing request: " + response, throwable);
+                }
+            }, Objects.requireNonNull(visitViewModel.getFilters().getValue()));
+        } else {
+            Log.i(TAG, "Using view model!");
+            // Save new displayedBusiness from a copy of viewModel
+            displayedBusinesses = new ArrayList<>(businessesViewModel.getDisplayedBusinesses().getValue());
+            // Clear adapter
+            adapter.clear();
+            // Add new businesses
+            adapter.addAll(displayedBusinesses);
+        }
+
         // ------ CARD STACK SETUP ------ //
+
+        // Set index of the business that is being displayed
+        displayIndex = 0;
+
         manager = new CardStackLayoutManager(getContext(), new CardStackListener() {
             @Override
             public void onCardDragging(Direction direction, float ratio) {
@@ -122,13 +177,14 @@ public class ExploreFragment extends Fragment {
                     // Check if business is already in selectedBusinesses
                     if (!isInBusinesses(selectedBusiness)){
                         // Save business into ViewModel
-                        selectedViewModel.addBusiness(selectedBusiness);
+                        businessesViewModel.addSelectedBusiness(selectedBusiness);
                         // Display log and toast messages
-                        Log.i(TAG, "Total Businesses selected: " + selectedViewModel.getSelectedBusinesses().getValue().size());
+                        Log.i(TAG, "Total Businesses selected: " + businessesViewModel.getSelectedBusinesses().getValue().size());
                         Toast.makeText(getContext(), "Restaurant selected!", Toast.LENGTH_SHORT).show();
                     }
                 }
-//                displayedBusinesses.remove(selectedPosition);
+                // Change display index
+                displayIndex += 1;
             }
 
             @Override
@@ -165,6 +221,8 @@ public class ExploreFragment extends Fragment {
         btnFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Change flag for new businesses
+                businessesViewModel.setMakeRequestFlag(true);
                 // Create new instance of filters fragment
                 FiltersFragment filtersFragment = new FiltersFragment();
                 // Make transaction
@@ -180,6 +238,15 @@ public class ExploreFragment extends Fragment {
         btnCompare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Clear businesses stored in the view model
+                businessesViewModel.clearDisplayedBusinesses();
+                // Get the businesses that are currently being displayed
+                List<Business> currentDisplayedBusinesses = displayedBusinesses.subList(displayIndex, displayedBusinesses.size());
+                // Add new current businesses to ViewModel
+                businessesViewModel.addDisplayedBusinesses(currentDisplayedBusinesses);
+                // Change request flag
+                businessesViewModel.setMakeRequestFlag(false);
+                // Make fragment transaction
                 CompareFragment compareFragment = new CompareFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.flContainer, compareFragment)
@@ -188,38 +255,6 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        // Request to get businesses that match the current filters
-        yelpClient.getMatchingBusinesses(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                // Receive response
-                JSONObject response = json.jsonObject;
-                try {
-                    // Get list of businesses
-                    JSONArray jsonArray = response.getJSONArray("businesses");
-                    // Use static methods to create array of businesses (these businesses are only stored locally, not in Parse)
-                    displayedBusinesses = Business.fromJsonArray(jsonArray);
-                    // Add new businesses to adapter
-                    adapter.clear();
-                    adapter.addAll(displayedBusinesses);
-
-                    // Log messages to see functionality
-                    Log.i(TAG, "NEW REQUEST - " + String.valueOf(displayedBusinesses.size()) + " businesses found for filters:");
-                    visitViewModel.getFilters().getValue().forEach((key, value) -> Log.i(TAG, key + ": " + value));
-                    Log.i(TAG, "FOUND BUSINESSES:");
-                    Log.i(TAG, jsonArray.toString());
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                // Display log message
-                Log.i(TAG, "Failure doing request: " + response, throwable);
-            }
-        }, Objects.requireNonNull(visitViewModel.getFilters().getValue()));
 
     }
 
@@ -228,7 +263,7 @@ public class ExploreFragment extends Fragment {
         // Set boolean flag
         boolean result = false;
         // Iterate through the selected businesses list (O(n))
-        for (Business businessInList : selectedViewModel.getSelectedBusinesses().getValue()) {
+        for (Business businessInList : businessesViewModel.getSelectedBusinesses().getValue()) {
             // Compare businesses through yelpId
             if(businessInList.getYelpId().equals(business.getYelpId())) {
                 // Change result and exit loop

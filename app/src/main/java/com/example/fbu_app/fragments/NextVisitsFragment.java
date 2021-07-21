@@ -23,6 +23,8 @@ import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -85,7 +87,7 @@ public class NextVisitsFragment extends Fragment {
         // Include business object in query
         query.include("business");
         // Set max date as today
-        query.whereGreaterThanOrEqualTo("date", Calendar.getInstance().getTime());
+        query.whereGreaterThanOrEqualTo("date", Date.valueOf(LocalDate.now().toString()));
         // Set user to current user
         query.whereEqualTo("user", ParseUser.getCurrentUser());
         // order posts by date

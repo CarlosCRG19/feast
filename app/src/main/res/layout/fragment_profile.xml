@@ -57,10 +57,20 @@
         android:text="Logout"
         android:textAllCaps="false" />
 
+    <TextView
+        android:id="@+id/tvFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/ivProfile"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Favorite restaurants" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBusinesses"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/ivProfile"
+        android:layout_below="@+id/tvFavorites"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true" />
