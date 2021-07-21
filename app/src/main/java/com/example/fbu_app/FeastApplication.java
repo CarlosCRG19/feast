@@ -6,6 +6,7 @@ import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Hour;
 import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
+import com.example.fbu_app.models.VisitInvitation;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -22,6 +23,8 @@ public class FeastApplication extends Application {
         ParseObject.registerSubclass(Hour.class);
         ParseObject.registerSubclass(Like.class);
         ParseObject.registerSubclass(Visit.class);
+        ParseObject.registerSubclass(VisitInvitation.class);
+
 
         // Connect to database using secret keys
         Parse.initialize(new Parse.Configuration.Builder(this)

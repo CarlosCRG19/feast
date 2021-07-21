@@ -21,7 +21,9 @@ import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -66,6 +68,7 @@ public class BusinessAdapterGo extends BusinessAdapter{
         public ViewHolder(@NonNull @NotNull View itemView) {
             // Use super class method and assign button value
             super(itemView);
+            // Assign new views
             btnGo = itemView.findViewById(R.id.btnGo);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvDistance = itemView.findViewById(R.id.tvDistance);
@@ -82,36 +85,9 @@ public class BusinessAdapterGo extends BusinessAdapter{
             btnGo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Create new visit
-                    Visit newVisit = new Visit();
-                    newVisit.setBusiness(business);
-                    // Add fields
-                    newVisit.setUser(ParseUser.getCurrentUser());
-                    newVisit.setDate(visitDate);
-                    newVisit.setDateStr(visitDateStr);
-                    // Save visit using background thread
-                    newVisit.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if(e != null) {
-                                Log.i("ParseSave", "Failed to save visit", e);
-                                return;
-                            }
-                            // Display success message
-                            Toast.makeText(context, "Succesfully created visit!", Toast.LENGTH_SHORT).show();
-                            // Create bundle to pass busines as argument
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable(VISIT_TAG, newVisit);
-                            // Transaction to new fragment
-                            ConfirmationFragment confirmationFragment = new ConfirmationFragment();
-                            confirmationFragment.setArguments(bundle);
-                            // Make fragment transaction
-                            ((MainActivity) context).getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.flContainer, confirmationFragment)
-                                    .commit();
-
-                        }
-                    });
+                    // Verify if business already exists in database
+                    // and create visit with current info
+                    verifyBusinessExistsAndCreateVisit();
                 }
             });
         }
@@ -134,5 +110,65 @@ public class BusinessAdapterGo extends BusinessAdapter{
                     .addToBackStack(null)
                     .commit();
         }
+
+        // Checks if local business is already in database, if it is, the value of business is changed to match that one
+        // after that, it creates a new visit
+        private void verifyBusinessExistsAndCreateVisit() {
+            // Specify type of query
+            ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+            // Search for business in database based on yelpId
+            query.whereEqualTo("yelpId", business.getYelpId());
+            // Use getFirstInBackground to finish the search if it has found one matching business
+            query.getFirstInBackground(new GetCallback<Business>() {
+                @Override
+                public void done(Business object, ParseException e) {
+                    if(e != null) {
+                        return;
+                    }
+                    // if the business exists, change value of member variable and create the new visit
+                    if (object != null) {
+                        business = object;
+                        createVisit();
+                    }
+                }
+            });
+
+        }
+
+        // Creates a visit with the specified business and visit date
+        private void createVisit() {
+            // Create new visit
+            Visit newVisit = new Visit();
+            newVisit.setBusiness(business);
+            // Add fields
+            newVisit.setUser(ParseUser.getCurrentUser());
+            newVisit.addAttendee(ParseUser.getCurrentUser());
+            newVisit.setDate(visitDate);
+            newVisit.setDateStr(visitDateStr);
+            // Save visit using background thread
+            newVisit.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e != null) {
+                        Log.i("ParseSave", "Failed to save visit", e);
+                        return;
+                    }
+                    // Display success message
+                    Toast.makeText(context, "Succesfully created visit!", Toast.LENGTH_SHORT).show();
+                    // Create bundle to pass busines as argument
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(VISIT_TAG, newVisit);
+                    // Transaction to new fragment
+                    ConfirmationFragment confirmationFragment = new ConfirmationFragment();
+                    confirmationFragment.setArguments(bundle);
+                    // Make fragment transaction
+                    ((MainActivity) context).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.flContainer, confirmationFragment)
+                            .commit();
+
+                }
+            });
+        }
+
     }
 }

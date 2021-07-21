@@ -18,9 +18,12 @@ import androidx.annotation.Nullable;
 import com.example.fbu_app.R;
 import com.example.fbu_app.fragments.ConfirmationFragment;
 import com.example.fbu_app.fragments.NextVisitsFragment;
+import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -73,11 +76,14 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
         btnCreateVisit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Verify if business exists
+                verifyBusinessExists();
                 // Create new visit
                 Visit newVisit = new Visit();
                 newVisit.setBusiness(business);
                 // Add fields
                 newVisit.setUser(ParseUser.getCurrentUser());
+                newVisit.addAttendee(ParseUser.getCurrentUser());
                 newVisit.setDate(visitDate);
                 newVisit.setDateStr(visitDateStr);
                 // Save visit using background thread
@@ -102,7 +108,6 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
                                 .commit();
                     }
                 });
-
             }
         });
     }

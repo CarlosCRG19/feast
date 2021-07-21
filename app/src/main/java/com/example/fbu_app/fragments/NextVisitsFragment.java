@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,8 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fbu_app.R;
+import com.example.fbu_app.adapters.InvitationAdapter;
 import com.example.fbu_app.adapters.VisitsAdapter;
 import com.example.fbu_app.models.Visit;
+import com.example.fbu_app.models.VisitInvitation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -32,6 +35,7 @@ import java.util.List;
 public class NextVisitsFragment extends Fragment {
 
     // VIEWS
+    TextView tvInvitations;
     RecyclerView rvVisits; // RV to display visits
     Button btnPastVisits; // Button to go to past visits
 
@@ -39,6 +43,11 @@ public class NextVisitsFragment extends Fragment {
     List<Visit> visits;
     // Adapter for RecyclerView
     VisitsAdapter adapter;
+
+    // TEST INVITATION
+    InvitationAdapter invitationAdapter;
+    List<VisitInvitation> invitations;
+    RecyclerView rvInvitations;
 
     // Required empty constructor
     public NextVisitsFragment() {};
@@ -58,7 +67,19 @@ public class NextVisitsFragment extends Fragment {
         visits = new ArrayList<>();
         adapter = new VisitsAdapter(getContext(), visits, 0);
 
-        // Setup RecyclerView
+        // Init invitation list and adapter
+        invitations = new ArrayList<>();
+        invitationAdapter = new InvitationAdapter(getContext(), invitations);
+
+        // Find tv invitations
+        tvInvitations = view.findViewById(R.id.tvInvitations);
+
+        // Setup RecyclerView for invitations
+        rvInvitations = view.findViewById(R.id.rvVisitInvitations);
+        rvInvitations.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvInvitations.setAdapter(invitationAdapter);
+
+        // Setup RecyclerView for visits
         rvVisits = view.findViewById(R.id.rvNextVisits);
         rvVisits.setLayoutManager(new LinearLayoutManager(getContext()));
         rvVisits.setAdapter(adapter);
@@ -77,6 +98,7 @@ public class NextVisitsFragment extends Fragment {
 
         // Make query for NextVisits
         queryNextVisits();
+        queryInvitations();
 
     }
 
@@ -88,8 +110,8 @@ public class NextVisitsFragment extends Fragment {
         query.include("business");
         // Set max date as today
         query.whereGreaterThanOrEqualTo("date", Date.valueOf(LocalDate.now().toString()));
-        // Set user to current user
-        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        // Add new attendee
+        query.whereEqualTo("attendees", ParseUser.getCurrentUser());
         // order posts by date
         query.addDescendingOrder("date");
         // Make query using background thread
@@ -108,6 +130,42 @@ public class NextVisitsFragment extends Fragment {
                 // Notify adapter
                 adapter.notifyDataSetChanged();
                 return;
+            }
+        });
+    }
+
+    // Makes a query to parse DataBase and gets visits whos date is greater or equal than todays
+    private void queryInvitations() {
+        // Specify which class we want to query
+        ParseQuery<VisitInvitation> query = ParseQuery.getQuery(VisitInvitation.class);
+        // Include business object in query
+        query.include("visit");
+        query.include("visit.business");
+        query.include("status");
+        query.include("fromUser");
+        query.include("fromUser.username");
+        // Set max date as today
+        query.whereEqualTo("status", "pending");
+        query.whereEqualTo("toUser", ParseUser.getCurrentUser());
+        // Make query using background thread
+        query.findInBackground(new FindCallback<VisitInvitation>() {
+            @Override
+            public void done(List<VisitInvitation> invitationList, ParseException e) {
+                // Check for errors
+                if (e != null) {
+                    Log.e("NextVisitsFragment", "Issue getting invitations", e);
+                    return;
+                }
+                if(invitationList.size() > 0) {
+                    tvInvitations.setText("Your Invitations!");
+                    // Clear list
+                    invitations.clear();
+                    // Add values to invitations
+                    invitations.addAll(invitationList);
+                    // Notify adapter
+                    invitationAdapter.notifyDataSetChanged();
+                    return;
+                }
             }
         });
     }

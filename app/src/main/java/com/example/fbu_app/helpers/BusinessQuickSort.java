@@ -10,7 +10,7 @@ import java.util.List;
 public class BusinessQuickSort {
 
     // UTILITY FUNCTIONS
-    private  static void swap(List<Business> businessesList, int i, int j) {
+    private static void swap(List<Business> businessesList, int i, int j) {
         Business tempBusiness = businessesList.get(i);
         businessesList.set(i, businessesList.get(j));
         businessesList.set(j, tempBusiness);

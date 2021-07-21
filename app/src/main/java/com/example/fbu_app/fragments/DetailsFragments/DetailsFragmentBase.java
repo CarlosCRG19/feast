@@ -31,7 +31,9 @@ import com.example.fbu_app.models.Hour;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -120,6 +122,26 @@ public class DetailsFragmentBase extends Fragment {
             }
         });
 
+    }
+
+    protected void verifyBusinessExists() {
+        // Specify type of query
+        ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+        // Search for business in database based on yelpId
+        query.whereEqualTo("yelpId", business.getYelpId());
+        // Use getFirstInBackground to finish the search if it has found one matching business
+        query.getFirstInBackground(new GetCallback<Business>() {
+            @Override
+            public void done(Business object, ParseException e) {
+                if (e != null) {
+                    return;
+                }
+                // if the business exists, change value of member variable
+                if (object != null) {
+                    business = object;
+                }
+            }
+        });
     }
 
 }

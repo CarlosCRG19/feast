@@ -26,7 +26,9 @@ import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
 import com.example.fbu_app.models.BusinessesViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -63,6 +65,11 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
     Button btnExplore, btnRandomPick;
 
     Spinner attributeSpinner;
+
+    // Business object to store a random business in case random is picked
+    Business randomBusiness;
+
+    ParseUser tryUser;
 
     public CompareFragment() {};
 
@@ -106,8 +113,13 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
                 Random rand = new Random();
                 int randomNum = rand.nextInt(selectedBusinesses.size());
                 // Get business at specific position
-                Business randomBusiness = selectedBusinesses.get(randomNum);
+                randomBusiness = selectedBusinesses.get(randomNum);
+                // Verify if this business already exists
+                verifyBusinessExists();
+                // Set business to new visit
                 newVisit.setBusiness(randomBusiness);
+                // Add current user to attendees list
+                newVisit.addAttendee(ParseUser.getCurrentUser());
                 // Add fields
                 newVisit.setUser(ParseUser.getCurrentUser());
                 newVisit.setDate(visitDate);
@@ -189,5 +201,25 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private void verifyBusinessExists() {
+        // Specify type of query
+        ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+        // Search for business in database based on yelpId
+        query.whereEqualTo("yelpId", randomBusiness.getYelpId());
+        // Use getFirstInBackground to finish the search if it has found one matching business
+        query.getFirstInBackground(new GetCallback<Business>() {
+            @Override
+            public void done(Business object, ParseException e) {
+                if (e != null) {
+                    return;
+                }
+                // if the business exists, change value of member variable
+                if (object != null) {
+                    randomBusiness = object;
+                }
+            }
+        });
     }
 }

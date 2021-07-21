@@ -15,10 +15,13 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.fbu_app.R;
 import com.example.fbu_app.fragments.ConfirmationFragment;
 import com.example.fbu_app.fragments.NextVisitsFragment;
+import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -52,11 +55,14 @@ public class DetailsFragmentGo extends DetailsFragmentBase {
         btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Verify if business exists
+                verifyBusinessExists();
                 // Create new visit
                 Visit newVisit = new Visit();
                 newVisit.setBusiness(business);
                 // Add fields
                 newVisit.setUser(ParseUser.getCurrentUser());
+                newVisit.addAttendee(ParseUser.getCurrentUser());
                 newVisit.setDate(visitViewModel.getVisitDate().getValue());
                 newVisit.setDateStr(visitViewModel.getVisitDateStr().getValue());
                 // Save visit using background thread
@@ -85,5 +91,4 @@ public class DetailsFragmentGo extends DetailsFragmentBase {
             }
         });
     }
-
 }

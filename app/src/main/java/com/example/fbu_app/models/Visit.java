@@ -41,4 +41,7 @@ public class Visit extends ParseObject {
     public ParseUser getUser() {
         return getParseUser("user");
     }
+
+    public void addAttendee(ParseUser user) { add("attendees", user); }
+
 }
