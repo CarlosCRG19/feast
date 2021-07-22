@@ -3,6 +3,7 @@ package com.example.fbu_app;
 import android.app.Application;
 
 import com.example.fbu_app.models.Business;
+import com.example.fbu_app.models.FriendRequest;
 import com.example.fbu_app.models.Hour;
 import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
@@ -24,7 +25,7 @@ public class FeastApplication extends Application {
         ParseObject.registerSubclass(Like.class);
         ParseObject.registerSubclass(Visit.class);
         ParseObject.registerSubclass(VisitInvitation.class);
-
+        ParseObject.registerSubclass(FriendRequest.class);
 
         // Connect to database using secret keys
         Parse.initialize(new Parse.Configuration.Builder(this)

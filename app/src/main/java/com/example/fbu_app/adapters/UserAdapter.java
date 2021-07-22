@@ -12,13 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
-import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
-import com.example.fbu_app.fragments.ProfileFragment;
-import com.example.fbu_app.models.Hour;
-import com.parse.Parse;
+import com.example.fbu_app.fragments.ProfileFragments.OtherProfileFragment;
+import com.example.fbu_app.fragments.ProfileFragments.OwnProfileFragment;
+import com.example.fbu_app.fragments.ProfileFragments.ProfileFragment;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -115,9 +113,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             // Create new bundle to pass args
             Bundle bundle = new Bundle();
             bundle.putParcelable(USER_TAG, user);
-
-            // Create new instance of ProfileFragment
-            ProfileFragment profileFragment = new ProfileFragment();
+            // Create fragment
+            ProfileFragment profileFragment;
+            // Verify if user is current user
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            if(user.getObjectId().equals(currentUser.getObjectId())) {
+                // if this user and current user user are the same,
+                // launch OwnProfileFragment
+                profileFragment = new OwnProfileFragment();
+            } else {
+                // if they are different, launch OtherProfile
+                profileFragment = new OtherProfileFragment();
+            }
             // Set fragment arguments
             profileFragment.setArguments(bundle);
             // Make fragment transaction adding to back stack
@@ -127,5 +134,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     .addToBackStack(null)
                     .commit();
         }
+
+
+
+
     }
 }

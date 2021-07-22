@@ -11,15 +11,12 @@ import android.view.MenuItem;
 import com.example.fbu_app.R;
 import com.example.fbu_app.fragments.CreateFragment;
 import com.example.fbu_app.fragments.NextVisitsFragment;
-import com.example.fbu_app.fragments.ProfileFragment;
-import com.example.fbu_app.helpers.YelpClient;
-import com.example.fbu_app.models.Business;
+import com.example.fbu_app.fragments.ProfileFragments.OwnProfileFragment;
+import com.example.fbu_app.fragments.ProfileFragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(USER_TAG, ParseUser.getCurrentUser());
                         // Assign fragment with new args
-                        fragment = new ProfileFragment();
+                        fragment = new OwnProfileFragment();
                         // Add arguments to fragment
                         fragment.setArguments(bundle);
                         break;
