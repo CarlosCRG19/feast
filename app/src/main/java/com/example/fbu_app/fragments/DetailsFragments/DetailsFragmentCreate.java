@@ -3,6 +3,7 @@ package com.example.fbu_app.fragments.DetailsFragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -164,3 +165,4 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
         }
     }
 }
+

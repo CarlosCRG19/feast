@@ -5,12 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +28,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 // Simple fragment to create a new visit
 public class CreateFragment extends Fragment {
@@ -60,10 +65,17 @@ public class CreateFragment extends Fragment {
         userList = new ArrayList<>();
         adapter = new UserAdapter(getContext(), userList);
 
+        // Create LinearLayoutManager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+
         // Initialize RV
         rvSearch = view.findViewById(R.id.rvSearch);
-        rvSearch.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvSearch.setLayoutManager(linearLayoutManager);
         rvSearch.setAdapter(adapter);
+        // Set item decoration
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvSearch.getContext(),
+                linearLayoutManager.getOrientation());
+        rvSearch.addItemDecoration(dividerItemDecoration);
 
         // Set searchView
         svPeople = view.findViewById(R.id.svPeople);
@@ -81,6 +93,14 @@ public class CreateFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                 }
                 return false;
+            }
+        });
+
+        // Set complete SV click listener
+        svPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                svPeople.setIconified(false);
             }
         });
 
