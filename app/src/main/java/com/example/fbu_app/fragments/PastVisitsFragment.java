@@ -56,7 +56,7 @@ public class PastVisitsFragment extends Fragment {
 
         // Init visits list and adapter
         visits = new ArrayList<>();
-        adapter = new VisitsAdapter(getContext(), visits, 1);
+        adapter = new VisitsAdapter(getContext(), visits);
 
         // Setup RecyclerView
         rvVisits = view.findViewById(R.id.rvPastVisits);
@@ -85,6 +85,10 @@ public class PastVisitsFragment extends Fragment {
         ParseQuery<Visit> query = ParseQuery.getQuery(Visit.class);
         // Include business object in query
         query.include("business");
+        // Include visit creator
+        query.include("user");
+        // Include attendees list
+        query.include("attendees");
         // Set max date as today
         query.whereLessThan("date", Date.valueOf(LocalDate.now().toString()));
         // order posts by date

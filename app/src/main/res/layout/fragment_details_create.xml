@@ -29,6 +29,21 @@
                 android:transitionName="business_image"
                 tools:srcCompat="@tools:sample/avatars" />
 
+            <ImageButton
+                android:id="@+id/btnLike"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+
+                android:layout_alignTop="@+id/ivBusinessImage"
+                android:layout_alignEnd="@+id/ivBusinessImage"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+
+                android:elevation="9dp"
+
+                android:background="@drawable/rounded_button"
+                app:srcCompat="@drawable/ic_round_favorite" />
+
             <TextView
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"

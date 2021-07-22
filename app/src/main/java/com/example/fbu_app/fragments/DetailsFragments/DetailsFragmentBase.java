@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,9 +31,11 @@ import com.example.fbu_app.fragments.ConfirmationFragment;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Hour;
+import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -66,6 +69,15 @@ public class DetailsFragmentBase extends Fragment {
 
     YelpClient yelpClient;
 
+    // Like button
+    ImageButton btnLike;
+
+    // Object to retreive like from database or create a new like
+    private Like userLike;
+
+    // Current user from parse
+    ParseUser currentUser;
+
     public DetailsFragmentBase(){}
 
     @Nullable
@@ -79,6 +91,9 @@ public class DetailsFragmentBase extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get current user
+        currentUser = ParseUser.getCurrentUser();
+
         yelpClient = new YelpClient();
 
         business = getArguments().getParcelable("business");
@@ -88,6 +103,7 @@ public class DetailsFragmentBase extends Fragment {
         tvRating = view.findViewById(R.id.tvRating);
         tvPrice =view.findViewById(R.id.tvPrice);
         tvTelephone = view.findViewById(R.id.tvTelephone);
+        btnLike = view.findViewById(R.id.btnLike);
 
         // Set TVs with info from the business
         tvName.setText(business.getName());
@@ -106,6 +122,22 @@ public class DetailsFragmentBase extends Fragment {
         rvHours = view.findViewById(R.id.rvHours);
         rvHours.setAdapter(adapter);
         rvHours.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // check if user has previously liked the business
+        verifyUserLiked();
+        // set listener for like button
+        btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // if user has previously liked the business, unlike it
+                if (userLike != null) {
+                    saveUnlike();
+                } else {
+                    // create new like if business has not been liked before
+                    verifyBusinessExistsAndSaveLike();
+                }
+            }
+        });
 
         yelpClient.getBusinessDetails(business.getYelpId(), new JsonHttpResponseHandler() {
             @Override
@@ -140,7 +172,7 @@ public class DetailsFragmentBase extends Fragment {
             @Override
             public void done(Business object, ParseException e) {
                 if(e != null) {
-                    Log.i("ParseSave", "Search for user", e);
+                    Log.i("ParseSave", "Search for business", e);
                     return;
                 }
                 // if the business exists, change value of member variable and create the new visit
@@ -153,14 +185,39 @@ public class DetailsFragmentBase extends Fragment {
 
     }
 
+    // Same as previous method, but saves a like
+    protected void verifyBusinessExistsAndSaveLike() {
+        // Specify type of query
+        ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+        // Search for business in database based on yelpId
+        query.whereEqualTo("yelpId", business.getYelpId());
+        // Use getFirstInBackground to finish the search if it has found one matching business
+        query.getFirstInBackground(new GetCallback<Business>() {
+            @Override
+            public void done(Business object, ParseException e) {
+                if(e != null) {
+                    return;
+                }
+                // if the business exists, change value of member variable and create the new visit
+                if (object != null) {
+                    business = object;
+                }
+                // Save like
+                saveLike();
+            }
+        });
+    }
+
+    // SAVE (POST) METHODS
+
     // Creates a visit with the specified business and visit date
     protected void createVisit(Date visitDate, String visitDateStr) {
         // Create new visit
         Visit newVisit = new Visit();
         newVisit.setBusiness(business);
         // Add fields
-        newVisit.setUser(ParseUser.getCurrentUser());
-        newVisit.addAttendee(ParseUser.getCurrentUser());
+        newVisit.setUser(currentUser);
+        newVisit.addAttendee(currentUser);
         newVisit.setDate(visitDate);
         newVisit.setDateStr(visitDateStr);
         // Save visit using background thread
@@ -187,6 +244,86 @@ public class DetailsFragmentBase extends Fragment {
             }
         });
     }
+
+
+    // Posts a like, changes the button background and changes the count on databes
+    protected void saveLike() {
+        // Create new like
+        Like like = new Like();
+        // Set fields
+        like.setBusiness(business);
+        like.setUser(currentUser);
+        // Save like in database using background thread
+        like.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                // Check for errors
+                if(e != null) {
+                    Toast.makeText(getContext(), "Error liking business!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Display success message
+                Toast.makeText(getContext(), "Business liked!" , Toast.LENGTH_SHORT).show();
+
+                // Change button background
+                btnLike.setImageResource(R.drawable.ic_round_favorite_red);
+
+                // Change userLike (now it won't be null)
+                userLike = like;
+            }
+        });
+    }
+
+    // Takes current userLike object and deletes it from database
+    protected void saveUnlike() {
+        // Delete current like from database
+        userLike.deleteInBackground(new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                // Check for errors
+                if(e != null) {
+                    Toast.makeText(getContext(), "Error unliking business!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Display success message
+                Toast.makeText(getContext(), "Business unliked!" , Toast.LENGTH_SHORT).show();
+
+                // Change button background
+                btnLike.setImageResource(R.drawable.ic_round_favorite);
+
+                userLike = null; // Even though we delete the object on the database, that does not mean that our local variable has been deleted
+
+            }
+        });
+    }
+
+    // Checks whether the current user has liked the post. If that is the case, it changes the button background and userLike stays as null
+    private void verifyUserLiked() {
+        // Create query
+        ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+        // Include business object in query
+        query.include("business");
+        // Define attributes to look for (like is on this post and by this user)
+        query.whereEqualTo("business", business);
+        query.whereEqualTo("user", currentUser);
+        // Get the like object
+        query.getFirstInBackground(new GetCallback<Like>() { // getFirstInBackground ends the query when it has found the first object that matches the attributes (instead of going through every object)
+            @Override
+            public void done(Like foundLike, ParseException e) {
+                if(e != null) { // e == null when no matching object has been found
+                    btnLike.setImageResource(R.drawable.ic_round_favorite); // set button icon to just the stroke
+                    return;
+                }
+                // if the user has liked the business, change button and save that business
+                btnLike.setImageResource(R.drawable.ic_round_favorite_red); // change icon to filled heart
+                userLike = foundLike;
+                // Save that business
+                business = foundLike.getBusiness();
+            }
+        });
+    }
+
 
 }
 

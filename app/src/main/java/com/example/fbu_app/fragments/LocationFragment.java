@@ -75,7 +75,7 @@ public class LocationFragment extends Fragment {
 
     // VIEWS
     DatePickerDialog datePickerDialog; // Date picking
-    Button btnDate, btnCurrentLocation, btnConfirmLocation;
+    Button btnDate, btnConfirmLocation;
     EditText etPlaces; // Location selection
 
     // Latitude and Longitude values for selected location
@@ -108,15 +108,18 @@ public class LocationFragment extends Fragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_location, container, false);
-        // Setup Map
-        setUpMap();
-
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+        // Setup Searchbar
+        etPlaces = view.findViewById(R.id.etPlaces);
+        // Setup Map
+        setUpMap();
 
         // Initialize the datePicker listener and set current date
         initDatePicker();
@@ -125,9 +128,7 @@ public class LocationFragment extends Fragment {
 
         // Assign Views
         btnDate = view.findViewById(R.id.btnDate); // Date selection
-        btnCurrentLocation = view.findViewById(R.id.btnCurrentLocation); // get current location
         btnConfirmLocation = view.findViewById(R.id.btnConfirmLocation); // Location selection
-        etPlaces = view.findViewById(R.id.etPlaces);
         // Button date setup
         btnDate.setText(getTodaysDate());
         btnDate.setOnClickListener(new View.OnClickListener() {
@@ -156,29 +157,6 @@ public class LocationFragment extends Fragment {
 
                 // Launch autocomplete
                 startActivityForResult(i, AUTOCOMPLETE_REQUEST_CODE);
-            }
-        });
-
-        // Setup get current location listner
-        btnCurrentLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Check if required permissions are granted
-                if(ActivityCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                    // Call method to get user's current location
-                    getCurrentLocation();
-
-                } else {
-                    // When permission is not granted
-                    ActivityCompat.requestPermissions(getActivity()
-                            , new String[]{Manifest.permission.ACCESS_FINE_LOCATION
-                                    ,Manifest.permission.ACCESS_COARSE_LOCATION}
-                            ,REQUEST_LOCATION_PERMISSIONS_CODE);
-                }
             }
         });
 
@@ -333,6 +311,26 @@ public class LocationFragment extends Fragment {
         }
     }
 
+
+    private void verifyPermissionsAndGetLocation() {
+        // Check if required permissions are granted
+        if(ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            // Call method to get user's current location
+            getCurrentLocation();
+
+        } else {
+            // When permission is not granted
+            ActivityCompat.requestPermissions(getActivity()
+                    , new String[]{Manifest.permission.ACCESS_FINE_LOCATION
+                            ,Manifest.permission.ACCESS_COARSE_LOCATION}
+                    ,REQUEST_LOCATION_PERMISSIONS_CODE);
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(
@@ -355,6 +353,7 @@ public class LocationFragment extends Fragment {
                         // Create a marker on specified location using pointLocation
                         LatLng locationLatLng = new LatLng(latitude, longitude);
                         pointLocation(locationLatLng);
+                        etPlaces.setText("Your location");
                     } else {
                         // When location result is null initialize location request
                         LocationRequest locationRequest = new LocationRequest()
@@ -373,6 +372,8 @@ public class LocationFragment extends Fragment {
                                 // Create a marker on specified location using pointLocation
                                 LatLng locationLatLng = new LatLng(latitude, longitude);
                                 pointLocation(locationLatLng);
+                                // Change text in editText
+                                etPlaces.setText("Your location");
                             }
                         };
                         // Request location updates
@@ -405,6 +406,7 @@ public class LocationFragment extends Fragment {
                     public void onMapReady(@NonNull @NotNull GoogleMap map) {
                         // assign map to member variable once it is ready
                         googleMap = map;
+                        verifyPermissionsAndGetLocation();
                     }
                 });
             }

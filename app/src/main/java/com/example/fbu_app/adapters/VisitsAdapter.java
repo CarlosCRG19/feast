@@ -3,10 +3,12 @@ package com.example.fbu_app.adapters;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,25 +36,15 @@ import java.util.List;
 // Adapter for both visits screen (NextVisits and PastVisits)
 public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder>{
 
-    // Fragment's identifier
-    public static final int NEXT_VISITS_CODE = 0;
-    public static final int PAST_VISITS_CODE = 1;
-
     // FIELDS
     private Context context;
     private List<Visit> visits; //
-    private int fragmentCode;
-
-    // Current user
-    private ParseUser currentUser;
 
     // Constructor
-    public VisitsAdapter(Context context, List<Visit> visits, int fragmentCode) {
+    public VisitsAdapter(Context context, List<Visit> visits) {
         this.context = context;
         this.visits = visits;
-        this.fragmentCode = fragmentCode;
         // Assign currentUser value with getMethod
-        this.currentUser = ParseUser.getCurrentUser();
     }
 
     @NonNull
@@ -77,10 +69,13 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
 
         public static final String BUSINESS_TAG  = "business"; // identifier for passing busines with bundle
 
+        // Visit for this holder
+        Visit visit;
+
         // VIEWS
         private ImageView ivBusinessImage;
-        private ImageButton btnLike;
         private TextView tvName, tvRating, tvDate;
+        private TextView tvOptions; // tv to display cancel visit option
 
         // Business for this visit
         private Business visitBusiness;
@@ -95,12 +90,15 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
             tvName = itemView.findViewById(R.id.tvName);
             tvRating = itemView.findViewById(R.id.tvRating);
             tvDate = itemView.findViewById(R.id.tvDate);
-            btnLike = itemView.findViewById(R.id.btnLike);
-            // Set listener
+            // TV that serves as menu button
+            tvOptions = itemView.findViewById(R.id.tvOptions);
+                    // Set listener
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Visit visit) {
+        public void bind(Visit visitToBind) {
+            // Assign visit value
+            visit = visitToBind;
             // Unite info from visit
             visitBusiness = visit.getBusiness();
             Glide.with(context)
@@ -110,100 +108,12 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
             tvRating.setText("Rating: " + visitBusiness.getRating());
             tvDate.setText(visit.getDateStr());
 
-            // Change like button visibility depending on the specific fragment
-            if (fragmentCode == NEXT_VISITS_CODE) {
-                // if the current fragment is for next visits, hide like button
-                btnLike.setVisibility(View.GONE);
-            } else {
-                // check if user has previously liked the business
-                verifyUserLiked(visitBusiness, currentUser);
-                // set listener for like button
-                btnLike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // if user has previously liked the business, unlike it
-                        if (userLike != null) {
-                            saveUnlike(visitBusiness, currentUser);
-                        } else {
-                            // create new like if business has not been liked before
-                            saveLike(visitBusiness, currentUser);
-                        }
-                    }
-                });
-            }
-        }
-
-        // SAVE (POST) METHODS
-
-        // Posts a like, changes the button background and changes the count on databes
-        private void saveLike(Business business, ParseUser currentUser) {
-            // Create new like
-            Like like = new Like();
-            // Set fields
-            like.setBusiness(business);
-            like.setUser(currentUser);
-            // Save like in database using background thread
-            like.saveInBackground(new SaveCallback() {
+            // Set menu click listener
+            tvOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void done(ParseException e) {
-                    // Check for errors
-                    if(e != null) {
-                        Toast.makeText(context, "Error liking business!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    // Display success message
-                    Toast.makeText(context, "Business liked!" , Toast.LENGTH_SHORT).show();
-
-                    // Change button background
-                    btnLike.setBackgroundResource(R.drawable.heart_icon);
-
-                    // Change userLike (now it won't be null)
-                    userLike = like;
-                }
-            });
-        }
-
-        // Takes current userLike object and deletes it from database
-        private void saveUnlike(Business business, ParseUser currentUser) {
-            // Delete current like from database
-            userLike.deleteInBackground(new DeleteCallback() {
-                @Override
-                public void done(ParseException e) {
-                    // Check for errors
-                    if(e != null) {
-                        Toast.makeText(context, "Error unliking business!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // Display success message
-                    Toast.makeText(context, "Business unliked!" , Toast.LENGTH_SHORT).show();
-
-                    // Change button background
-                    btnLike.setBackgroundResource(R.drawable.heart_icon_stroke);
-
-                    userLike = null; // Even though we delete the object on the database, that does not mean that our local variable has been deleted
-
-                }
-            });
-        }
-
-        // Checks whether the current user has liked the post. If that is the case, it changes the button background and userLike stays as null
-        private void verifyUserLiked(Business business, ParseUser currentUser) {
-            // Create query
-            ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
-            // Define attributes to look for (like is on this post and by this user)
-            query.whereEqualTo("business", business);
-            query.whereEqualTo("user", currentUser);
-            // Get the like object
-            query.getFirstInBackground(new GetCallback<Like>() { // getFirstInBackground ends the query when it has found the first object that matches the attributes (instead of going through every object)
-                @Override
-                public void done(Like foundLike, ParseException e) {
-                    if(e != null) { // e == null when no matching object has been found
-                        btnLike.setBackgroundResource(R.drawable.heart_icon_stroke); // set button icon to just the stroke
-                        return;
-                    }
-                    btnLike.setBackgroundResource(R.drawable.heart_icon); // change icon to filled heart
-                    userLike = foundLike;
+                public void onClick(View v) {
+                    // Setup delete option
+                    enableDeleteMenu();
                 }
             });
         }
@@ -228,6 +138,68 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
                     .addToBackStack(null)
                     .commit();
         }
+
+        // Creates and sets up the delete menu
+        private void enableDeleteMenu() {
+            // Create popup menu
+            PopupMenu popupMenu = new PopupMenu(context, tvOptions);
+            // inflate menu from R.menu
+            popupMenu.inflate(R.menu.menu_delete_visit);
+            // add click listener
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getItemId() == R.id.cancel_visit) {
+                        // Call method to cancel visit
+                        cancelVisit();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            // display popup menu
+            popupMenu.show();
+        }
+
+        // Private method to cancel a visit
+        private void cancelVisit(){
+            // Get visit creator and current user
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            ParseUser visitCreator = visit.getUser();
+            // Check if current user is the creator of the visit
+            if(currentUser.getObjectId().equals(visitCreator.getObjectId())) {
+                // if current user is the creator, delete the visit
+                visit.deleteInBackground(new DeleteCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        // Check for errors
+                        if(e != null) {
+                            Toast.makeText(context, "Error deleting visit!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        // Display success message
+                        Toast.makeText(context, "Visit deleted!" , Toast.LENGTH_SHORT).show();
+                        // Eliminate row
+                        visits.remove(getAdapterPosition());
+                        // Notify item removed
+                        notifyItemRemoved(getAdapterPosition());
+                    }
+                });
+            } else {
+                // if current user is not the creator, just remove current user from attendees
+                visit.removeAttendee(currentUser);
+                // Save visit
+                visit.saveInBackground();
+                // Eliminate row
+                visits.remove(getAdapterPosition());
+                // Notify item removed
+                notifyItemRemoved(getAdapterPosition());
+                // Display success message
+                Toast.makeText(context, "You will not attend this visit" , Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
 }

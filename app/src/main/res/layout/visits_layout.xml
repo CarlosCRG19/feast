@@ -2,12 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:clickable="true"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/ivBusinessImage"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="70dp"
         android:layout_height="70dp"
         tools:srcCompat="@tools:sample/avatars" />
@@ -18,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/ivBusinessImage"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="13sp"
         tools:text="Business restaurant" />
@@ -37,16 +38,21 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
+        android:layout_toStartOf="@+id/tvOptions"
+        android:layout_marginTop="10dp"
         android:text="25 AUG 2929" />
 
-    <ImageButton
-        android:id="@+id/btnLike"
+    <TextView
+        android:id="@+id/tvOptions"
         android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignEnd="@+id/tvDate"
-        android:layout_below="@+id/tvDate"
-        android:background="@drawable/heart_icon_stroke"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        android:text="&#8942;"
+        android:textAppearance="?android:textAppearanceLarge" />
 
 </RelativeLayout>

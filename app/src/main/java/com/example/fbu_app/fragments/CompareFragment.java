@@ -107,45 +107,48 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
         btnRandomPick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create new visit
-                Visit newVisit = new Visit();
-                // Get random number between the selectedBusiness size range
-                Random rand = new Random();
-                int randomNum = rand.nextInt(selectedBusinesses.size());
-                // Get business at specific position
-                randomBusiness = selectedBusinesses.get(randomNum);
-                // Verify if this business already exists
-                verifyBusinessExists();
-                // Set business to new visit
-                newVisit.setBusiness(randomBusiness);
-                // Add current user to attendees list
-                newVisit.addAttendee(ParseUser.getCurrentUser());
-                // Add fields
-                newVisit.setUser(ParseUser.getCurrentUser());
-                newVisit.setDate(visitDate);
-                newVisit.setDateStr(visitDateStr);
-                // Save visit using background thread
-                newVisit.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e != null) {
-                            Log.i("ParseSave", "Failed to save visit", e);
-                            return;
+                // Check that there are selected businesses
+                if (selectedBusinesses.size() > 0) {
+                    // Create new visit
+                    Visit newVisit = new Visit();
+                    // Get random number between the selectedBusiness size range
+                    Random rand = new Random();
+                    int randomNum = rand.nextInt(selectedBusinesses.size());
+                    // Get business at specific position
+                    randomBusiness = selectedBusinesses.get(randomNum);
+                    // Verify if this business already exists
+                    verifyBusinessExists();
+                    // Set business to new visit
+                    newVisit.setBusiness(randomBusiness);
+                    // Add current user to attendees list
+                    newVisit.addAttendee(ParseUser.getCurrentUser());
+                    // Add fields
+                    newVisit.setUser(ParseUser.getCurrentUser());
+                    newVisit.setDate(visitDate);
+                    newVisit.setDateStr(visitDateStr);
+                    // Save visit using background thread
+                    newVisit.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e != null) {
+                                Log.i("ParseSave", "Failed to save visit", e);
+                                return;
+                            }
+                            // Display success message
+                            Toast.makeText(getContext(), "Created random visit to " + randomBusiness.getName() + "!", Toast.LENGTH_SHORT).show();
+                            // Create bundle to pass busines as argument
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable(VISIT_TAG, newVisit);
+                            // Transaction to new fragment
+                            ConfirmationFragment confirmationFragment = new ConfirmationFragment();
+                            confirmationFragment.setArguments(bundle);
+                            // Make fragment transaction
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.flContainer, confirmationFragment)
+                                    .commit();
                         }
-                        // Display success message
-                        Toast.makeText(getContext(), "Created random visit to " + randomBusiness.getName() + "!", Toast.LENGTH_SHORT).show();
-                        // Create bundle to pass busines as argument
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(VISIT_TAG, newVisit);
-                        // Transaction to new fragment
-                        ConfirmationFragment confirmationFragment = new ConfirmationFragment();
-                        confirmationFragment.setArguments(bundle);
-                        // Make fragment transaction
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.flContainer, confirmationFragment)
-                                .commit();
-                    }
-                });
+                    });
+                }
             }
         });
 

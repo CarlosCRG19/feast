@@ -5,6 +5,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.Arrays;
 import java.util.Date;
 
 @ParseClassName("Visit")
@@ -43,5 +44,7 @@ public class Visit extends ParseObject {
     }
 
     public void addAttendee(ParseUser user) { add("attendees", user); }
+
+    public void removeAttendee(ParseUser user) { removeAll("attendees", Arrays.asList(user)); }
 
 }

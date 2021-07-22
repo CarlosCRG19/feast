@@ -65,7 +65,7 @@ public class NextVisitsFragment extends Fragment {
 
         // Init visits list and adapter
         visits = new ArrayList<>();
-        adapter = new VisitsAdapter(getContext(), visits, 0);
+        adapter = new VisitsAdapter(getContext(), visits);
 
         // Init invitation list and adapter
         invitations = new ArrayList<>();
@@ -108,6 +108,10 @@ public class NextVisitsFragment extends Fragment {
         ParseQuery<Visit> query = ParseQuery.getQuery(Visit.class);
         // Include business object in query
         query.include("business");
+        // Include visit creator
+        query.include("user");
+        // Include attendees list
+        query.include("attendees");
         // Set max date as today
         query.whereGreaterThanOrEqualTo("date", Date.valueOf(LocalDate.now().toString()));
         // Add new attendee
