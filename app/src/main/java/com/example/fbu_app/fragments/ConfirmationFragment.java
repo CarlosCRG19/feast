@@ -85,8 +85,11 @@ public class ConfirmationFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.flContainer, nextVisitsFragment)
                         .commit();
-                // Change selected item in bottom nav bar
+                // Change navbar configuration
                 BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigation);
+                // Change visibility of toolbar
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                // Change selected item on toolbar
                 bottomNavigationView.setSelectedItemId(R.id.action_history);
             }
         });

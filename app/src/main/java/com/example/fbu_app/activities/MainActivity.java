@@ -15,6 +15,7 @@ import com.example.fbu_app.fragments.ProfileFragment;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity"; // TAG for log messages
+    public static final String USER_TAG = "user"; // tag to pass user
 
     BottomNavigationView bottomNavigationView;
 
@@ -47,8 +49,13 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new NextVisitsFragment();
                         break;
                     case R.id.action_profile: // Launch profile fragment (for current user)
+                        // Get current user and pass it to bundle
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(USER_TAG, ParseUser.getCurrentUser());
                         // Assign fragment with new args
                         fragment = new ProfileFragment();
+                        // Add arguments to fragment
+                        fragment.setArguments(bundle);
                         break;
                     default: // By default, go to main feed
                         fragment = new CreateFragment();

@@ -48,6 +48,7 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment"; // TAG for log messages
+    public static final String USER_TAG = "user"; // tag to pass user
 
     // Codes for GET_CONTENT action
     public final static int PICK_PHOTO_CODE = 1046;
@@ -72,6 +73,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Get profile user
+        profileUser = getArguments().getParcelable(USER_TAG);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -80,8 +83,6 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Get current user
-        profileUser = ParseUser.getCurrentUser();
         // Init liked businesses list
         likedBusinesses = new ArrayList<>();
 
@@ -91,6 +92,8 @@ public class ProfileFragment extends Fragment {
         populateViews();
         // Set listeners for upload and logout buttons
         setClickListeners();
+        // Check if profileUser is current user
+        verifyUser();
 
         // Setup RV
         adapter = new BusinessAdapter(getContext(), likedBusinesses);
@@ -127,6 +130,20 @@ public class ProfileFragment extends Fragment {
         // Fill TVs with username and email
         tvUsername.setText(profileUser.getUsername());
         tvEmail.setText((String) profileUser.get("email"));
+    }
+
+    // Checks if profileUser is the same as profile user (if it is not, hides logout and change photo buttons)
+    private void verifyUser() {
+        // Get profile user's id
+        String userId = profileUser.getObjectId();
+        // Get current user's id
+        String currentUserId = ParseUser.getCurrentUser().getObjectId();
+        // Compare users through their ids
+        if (!userId.equals(currentUserId)){
+            // If they are not the same, change buttons visibility
+            btnLogout.setVisibility(View.GONE);
+            btnUpload.setVisibility(View.GONE);
+        }
     }
 
     // LISTENERS AND FEATURES
