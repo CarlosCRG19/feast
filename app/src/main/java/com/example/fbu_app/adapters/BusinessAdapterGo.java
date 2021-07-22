@@ -123,7 +123,7 @@ public class BusinessAdapterGo extends BusinessAdapter{
                 @Override
                 public void done(Business object, ParseException e) {
                     if(e != null) {
-                        Log.i("ParseSave", "Search for user", e);
+                        Log.i("ParseSave", "Search for business", e);
                         return;
                     }
                     // if the business exists, change value of member variable and create the new visit

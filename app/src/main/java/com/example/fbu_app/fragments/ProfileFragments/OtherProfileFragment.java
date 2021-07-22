@@ -23,6 +23,7 @@ import com.parse.SaveCallback;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class OtherProfileFragment extends ProfileFragment{
@@ -106,38 +107,57 @@ public class OtherProfileFragment extends ProfileFragment{
 
     // Check for pending friend request
     private void checkFriendRequest() {
+
+        // FIRST QUERY (CHECK IF CURRENT USER HAS SENT A REQUEST)
+
         // Specify query type
-        ParseQuery<FriendRequest> query = new ParseQuery<>(FriendRequest.class);
+        ParseQuery<FriendRequest> queryMadeRequest = new ParseQuery<>(FriendRequest.class);
+        // Check that user
+        queryMadeRequest.whereEqualTo("fromUser", currentUser);
+        queryMadeRequest.whereEqualTo("toUser", profileUser);
+
+        // SECOND QUERY (CHECK IF CURRENT USER HAS RECEIVED A REQUEST
+
+        // Specify query type
+        ParseQuery<FriendRequest> queryReceivedRequest = new ParseQuery<>(FriendRequest.class);
+        // Check that user
+        queryReceivedRequest.whereEqualTo("fromUser", profileUser);
+        queryReceivedRequest.whereEqualTo("toUser", currentUser);
+
+        // COMPOUND QUERY
+
+        ParseQuery<FriendRequest> compoundQuery = new ParseQuery<>(FriendRequest.class).or(Arrays.asList(queryMadeRequest, queryReceivedRequest));
         // Include both users in query
-        query.include("fromUser");
-        query.include("toUser");
+        compoundQuery.include("fromUser");
+        compoundQuery.include("toUser");
+
         // Make query
-        query.getFirstInBackground(new GetCallback<FriendRequest>() {
+        compoundQuery.getFirstInBackground(new GetCallback<FriendRequest>() {
             @Override
             public void done(FriendRequest friendRequest, ParseException e) {
-                // Check for errors
-                if (e != null) {
-                    Log.i("FriendRequest", "Error getting friend request");
-                    return;
-                }
                 // Check if friendRequest is null
-                if (friendRequest == null) {
+                if (e != null && friendRequest == null) {
+                    Log.i("FriendRequest", "No friend requests found");
                     // Change text of button
                     btnFriendStatus.setText("Send friend request");
                     // Enable button
                     btnFriendStatus.setEnabled(true);
                     return;
                 }
-
                 // Check if status is pending
                 if (friendRequest.getStatus().equals("pending")) {
-                    // Change text of button
-                    btnFriendStatus.setText("Pending");
+                    // Check if current user is owner of request
+                    if (friendRequest.getFromUser().getObjectId().equals(currentUser.getObjectId())) {
+                        // Change text of button
+                        btnFriendStatus.setText("Pending");
+                    } else {
+                        // Change text of button
+                        btnFriendStatus.setText("You have a pending request!");
+                    }
                     // Enable button
                     btnFriendStatus.setEnabled(false);
                     return;
                 }
-
                 // If status is not pending, user can send another invite
                 btnFriendStatus.setText("Send friend request");
                 // Enable button

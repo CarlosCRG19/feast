@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_app.R;
 import com.example.fbu_app.adapters.VisitsAdapter;
@@ -34,6 +35,9 @@ public class PastVisitsFragment extends Fragment {
     // VIEWS
     RecyclerView rvVisits; // RV to display visits
     Button btnNextVisits; // Button to go to next visits
+
+    // HELPERS
+    SwipeRefreshLayout swipeContainer; // handles refresh action
 
     // Model to store visits data
     List<Visit> visits;
@@ -77,6 +81,7 @@ public class PastVisitsFragment extends Fragment {
 
         // Make query for NextVisits
         queryPastVisits();
+
     }
 
     // Makes a query to parse DataBase and gets visits whose date is older than today's
@@ -114,6 +119,5 @@ public class PastVisitsFragment extends Fragment {
             }
         });
     }
-
 }
 

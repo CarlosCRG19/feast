@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_app.R;
 import com.example.fbu_app.adapters.InvitationAdapter;
@@ -100,6 +101,9 @@ public class NextVisitsFragment extends Fragment {
         queryNextVisits();
         queryInvitations();
 
+//        // Enable refresh feature
+//        setRefreshFeature(view);
+
     }
 
     // Makes a query to parse DataBase and gets visits whos date is greater or equal than todays
@@ -133,7 +137,9 @@ public class NextVisitsFragment extends Fragment {
                 visits.addAll(visitsList);
                 // Notify adapter
                 adapter.notifyDataSetChanged();
-                return;
+                // Hide refreshing icon
+//                swipeContainer.setRefreshing(false);
+//                return;
             }
         });
     }
@@ -169,6 +175,8 @@ public class NextVisitsFragment extends Fragment {
                     invitations.addAll(invitationList);
                     // Notify adapter
                     invitationAdapter.notifyDataSetChanged();
+                    // Hide refreshing icon
+//                    swipeContainer.setRefreshing(false);
                     return;
                 }
             }
