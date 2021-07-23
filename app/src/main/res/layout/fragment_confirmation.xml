@@ -58,22 +58,15 @@
         android:textSize="18sp"
         android:text="Visit date 12/12/12"/>
 
-    <EditText
-        android:id="@+id/etUsername"
-        android:layout_below="@id/tvDate"
-        android:layout_alignStart="@+id/tvDate"
-        android:layout_marginTop="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Send invite to a friend" />
 
-    <ImageButton
+    <Button
         android:id="@+id/btnInvite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_send_24"
-        android:layout_alignTop="@+id/etUsername"
-        android:layout_toEndOf="@id/etUsername" />
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/tvDate"
+        android:layout_centerHorizontal="true"
+        android:text="Send invite to friends"/>
 
 
     <Button

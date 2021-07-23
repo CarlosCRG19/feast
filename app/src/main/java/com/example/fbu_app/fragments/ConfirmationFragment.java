@@ -19,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.fragments.DialogFragments.InviteFragment;
+import com.example.fbu_app.fragments.DialogFragments.NotificationsFragment;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitInvitation;
@@ -41,8 +43,7 @@ public class ConfirmationFragment extends Fragment {
     Button btnConfirm;
 
     // TEST VIEWS
-    ImageButton btnInvite;
-    EditText etUsername;
+    Button btnInvite;
 
     public ConfirmationFragment() {}
 
@@ -67,7 +68,6 @@ public class ConfirmationFragment extends Fragment {
         btnConfirm = view.findViewById(R.id.btnConfirm);
 
         // TEST VIEWS
-        etUsername = view.findViewById(R.id.etUsername);
         btnInvite = view.findViewById(R.id.btnInvite);
 
         tvName.setText(visitBusiness.getName());
@@ -98,63 +98,20 @@ public class ConfirmationFragment extends Fragment {
         btnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get username from edittext
-                String invitedUsername = etUsername.getText().toString();
-                searchUserAndSendInvitation(invitedUsername);
+                // Create bundle to pass visit
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("visit", visit);
+                // Create new instance of fragment
+                InviteFragment inviteFragment = new InviteFragment();
+                // Add arguments to fragment
+                inviteFragment.setArguments(bundle);
+                // Launch fragment
+                inviteFragment.show(getChildFragmentManager(), "fragment_invite");
             }
         });
 
 
     }
-
-    private void searchUserAndSendInvitation(String username) {
-        // Specify type of query
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        // Search for business in database based on yelpId
-        query.whereEqualTo("username", username);
-        // Use getFirstInBackground to finish the search if it has found one matching business
-        query.getFirstInBackground(new GetCallback<ParseUser>() {
-            @Override
-            public void done(ParseUser object, ParseException e) {
-                if (object != null) {
-                    // Check if searched user is not the same as current user
-                    if (object.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
-                        Toast.makeText(getContext(), "You can't send an invitation to yourself.", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        sendInvitation(object);
-                    }
-                    return;
-                }
-                Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void sendInvitation(ParseUser user) {
-        // Create new invitation object
-        VisitInvitation visitInvitation = new VisitInvitation();
-        // Set the visit for this invite
-        visitInvitation.setVisit(visit);
-        // Assign users
-        visitInvitation.setFromUser(ParseUser.getCurrentUser());
-        visitInvitation.setToUser(user);
-        // Set status
-        visitInvitation.setStatus("pending");
-        // Save invitation using background thread
-        visitInvitation.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    // Display success message
-                    Toast.makeText(getContext(), user.getUsername() + " invited to visit!", Toast.LENGTH_SHORT).show();
-                    // Change text in edit text
-                    etUsername.setText("");
-                }
-            }
-        });
-    }
-
 
 
 }
