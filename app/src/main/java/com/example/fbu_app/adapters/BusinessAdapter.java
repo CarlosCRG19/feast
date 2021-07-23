@@ -138,7 +138,6 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
                 @Override
                 public void done(Business object, ParseException e) {
                     if(e != null) {
-                        return;
                     }
                     // if the business exists, change value of member variable
                     if (object != null) {

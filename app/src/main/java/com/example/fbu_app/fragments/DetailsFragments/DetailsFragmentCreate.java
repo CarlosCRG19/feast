@@ -62,6 +62,12 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
 
         // Assign Views
         btnDate = view.findViewById(R.id.btnDate); // Date selection
+        btnCreateVisit = view.findViewById(R.id.btnCreateVisit);
+    }
+
+    @Override
+    protected void setClickListeners() {
+        super.setClickListeners();
         // Button date setup
         btnDate.setText(getTodaysDate());
         btnDate.setOnClickListener(new View.OnClickListener() {
@@ -70,13 +76,12 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
                 datePickerDialog.show();
             }
         });
-
-        btnCreateVisit = view.findViewById(R.id.btnCreateVisit);
+        // Set listener to create button
         btnCreateVisit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Verify if business exists and pass date info to create visit
-                verifyBusinessExistsAndCreateVisit(visitDate, visitDateStr);
+                createVisit(visitDate, visitDateStr);
             }
         });
     }

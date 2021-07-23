@@ -123,21 +123,8 @@ public class DetailsFragmentBase extends Fragment {
         rvHours.setAdapter(adapter);
         rvHours.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // check if user has previously liked the business
-        verifyUserLiked();
-        // set listener for like button
-        btnLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // if user has previously liked the business, unlike it
-                if (userLike != null) {
-                    saveUnlike();
-                } else {
-                    // create new like if business has not been liked before
-                    verifyBusinessExistsAndSaveLike();
-                }
-            }
-        });
+        // check if the business is already in database and setup listeners
+        verifyBusinessAndSetListeners();
 
         yelpClient.getBusinessDetails(business.getYelpId(), new JsonHttpResponseHandler() {
             @Override
@@ -161,8 +148,8 @@ public class DetailsFragmentBase extends Fragment {
     }
 
     // Checks if local business is already in database, if it is, the value of business is changed to match that one
-    // after that, it creates a new visit
-    protected void verifyBusinessExistsAndCreateVisit(Date visitDate, String visitDateStr) {
+    // after that, enables all the listeners
+    protected void verifyBusinessAndSetListeners() {
         // Specify type of query
         ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
         // Search for business in database based on yelpId
@@ -173,37 +160,33 @@ public class DetailsFragmentBase extends Fragment {
             public void done(Business object, ParseException e) {
                 if(e != null) {
                     Log.i("ParseSave", "Search for business", e);
-                    return;
                 }
                 // if the business exists, change value of member variable and create the new visit
                 if (object != null) {
                     business = object;
+                    // if business exists verify if the business has been liked
+                    verifyUserLiked();
                 }
-                createVisit(visitDate, visitDateStr);
+                // Set listeners
+                setClickListeners();
             }
         });
-
     }
 
-    // Same as previous method, but saves a like
-    protected void verifyBusinessExistsAndSaveLike() {
-        // Specify type of query
-        ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
-        // Search for business in database based on yelpId
-        query.whereEqualTo("yelpId", business.getYelpId());
-        // Use getFirstInBackground to finish the search if it has found one matching business
-        query.getFirstInBackground(new GetCallback<Business>() {
+
+    // Sets listeners for the different views
+    protected void setClickListeners() {
+        // set listener for like button
+        btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void done(Business object, ParseException e) {
-                if(e != null) {
-                    return;
+            public void onClick(View v) {
+                // if user has previously liked the business, unlike it
+                if (userLike != null) {
+                    saveUnlike();
+                } else {
+                    // create new like if business has not been liked before
+                    saveLike();
                 }
-                // if the business exists, change value of member variable and create the new visit
-                if (object != null) {
-                    business = object;
-                }
-                // Save like
-                saveLike();
             }
         });
     }
@@ -313,13 +296,14 @@ public class DetailsFragmentBase extends Fragment {
             public void done(Like foundLike, ParseException e) {
                 if(e != null) { // e == null when no matching object has been found
                     btnLike.setImageResource(R.drawable.ic_round_favorite); // set button icon to just the stroke
-                    return;
                 }
-                // if the user has liked the business, change button and save that business
-                btnLike.setImageResource(R.drawable.ic_round_favorite_red); // change icon to filled heart
-                userLike = foundLike;
-                // Save that business
-                business = foundLike.getBusiness();
+                if(foundLike != null){
+                    // if the user has liked the business, change button and save that business
+                    btnLike.setImageResource(R.drawable.ic_round_favorite_red); // change icon to filled heart
+                    userLike = foundLike;
+                    // Save that business
+                    business = foundLike.getBusiness();
+                }
             }
         });
     }

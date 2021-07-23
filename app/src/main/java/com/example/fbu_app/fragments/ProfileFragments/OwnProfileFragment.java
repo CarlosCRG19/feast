@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
+import com.example.fbu_app.fragments.DialogFragments.NotificationsFragment;
 import com.example.fbu_app.helpers.BitmapScaler;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -34,6 +36,7 @@ public class OwnProfileFragment extends ProfileFragment {
 
     // VIEWS
     Button btnUpload, btnLogout;
+    ImageButton btnNotifications;
 
     // Codes for GET_CONTENT action
     public final static int PICK_PHOTO_CODE = 1046;
@@ -58,6 +61,8 @@ public class OwnProfileFragment extends ProfileFragment {
         // Interaction views
         btnUpload = view.findViewById(R.id.btnUpload);
         btnLogout = view.findViewById(R.id.btnLogout);
+        // Notifications
+        btnNotifications = view.findViewById(R.id.btnNotifications);
     }
 
     // Set listeners for each buttons (these are only available if profileUser is the same as current user)
@@ -79,6 +84,16 @@ public class OwnProfileFragment extends ProfileFragment {
                 getActivity().finish();
             }
         });
+
+        // Show dialog fragment for notifications
+        btnNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotificationsFragment notificationsFragment = new NotificationsFragment();
+                notificationsFragment.show(getChildFragmentManager(), "fragment_notifications");
+            }
+        });
+
     }
 
     // MEDIA METHODS

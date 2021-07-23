@@ -124,7 +124,6 @@ public class BusinessAdapterGo extends BusinessAdapter{
                 public void done(Business object, ParseException e) {
                     if(e != null) {
                         Log.i("ParseSave", "Search for business", e);
-                        return;
                     }
                     // if the business exists, change value of member variable and create the new visit
                     if (object != null) {

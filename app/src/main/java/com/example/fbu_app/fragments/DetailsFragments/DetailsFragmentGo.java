@@ -49,18 +49,23 @@ public class DetailsFragmentGo extends DetailsFragmentBase {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get view model
         visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
-
+        // Assign views
         btnGo = view.findViewById(R.id.btnGo);
+    }
+
+    @Override
+    protected void setClickListeners() {
+        super.setClickListeners();
         btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Verify if business exists and pass data info to create visit
                 Date visitDate = visitViewModel.getVisitDate().getValue();
                 String visitDateStr = visitViewModel.getVisitDateStr().getValue();
-                verifyBusinessExistsAndCreateVisit(visitDate, visitDateStr);
+                createVisit(visitDate, visitDateStr);
             }
         });
     }
-
 }
