@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fbu_app.R;
+import com.example.fbu_app.adapters.FriendRequestAdapter;
 import com.example.fbu_app.adapters.NotificationsAdapter;
 import com.example.fbu_app.models.FriendRequest;
 import com.example.fbu_app.models.VisitInvitation;
@@ -31,11 +32,16 @@ import java.util.List;
 
 public class NotificationsFragment extends DialogFragment {
 
-    private RecyclerView rvRequests, rvConfirmations;
+    // RecyclerView for Friend Requests
+    private RecyclerView rvRequests;
+    private List<FriendRequest> requests;
+    private FriendRequestAdapter friendRequestAdapter;
 
-    // RVs values
+
+    // RecyclerView for Notifications
+    private RecyclerView rvConfirmations;
     private List<ParseObject> confirmations;
-    private NotificationsAdapter adapter;
+    private NotificationsAdapter notificationsAdapter;
 
     // Current user
     ParseUser currentUser;
@@ -57,18 +63,58 @@ public class NotificationsFragment extends DialogFragment {
         // Get current user from parse
         currentUser = ParseUser.getCurrentUser();
 
-        // Initialize data and adapter
+        // Initialize lists for notifications
+        requests = new ArrayList<>();
         confirmations = new ArrayList<>();
-        adapter = new NotificationsAdapter(getContext(), confirmations);
+        // Initialize adapters
+        friendRequestAdapter = new FriendRequestAdapter(getContext(), requests);
+        notificationsAdapter = new NotificationsAdapter(getContext(), confirmations);
+
+        // Setup friend requests rv
+        rvRequests = view.findViewById(R.id.rvRequests);
+        rvRequests.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvRequests.setAdapter(friendRequestAdapter);
 
         // Setup confirmations rv
         rvConfirmations = view.findViewById(R.id.rvConfirmations);
         rvConfirmations.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvConfirmations.setAdapter(adapter);
+        rvConfirmations.setAdapter(notificationsAdapter);
+
+        // Query for friend requests sent to the user
+        queryPendingFriendRequests();
 
         // Query for confirmations
         queryFriendRequests();
         queryVisitInvitations();
+    }
+
+    // Query for pending friend request sent to the user
+    private void queryPendingFriendRequests() {
+        // Specify queryTypes
+        ParseQuery<FriendRequest> query = new ParseQuery<>(FriendRequest.class);
+        // Include users
+        query.include("fromUser");
+        // Check that request was sent to the user
+        query.whereEqualTo("toUser", currentUser);
+        // Check if status is pending
+        query.whereEqualTo("status", "pending");
+        // Make query using background thread
+        query.findInBackground(new FindCallback<FriendRequest>() {
+            @Override
+            public void done(List<FriendRequest> friendRequests, ParseException e) {
+                // Check for errors
+                if (friendRequests == null && e!= null) {
+                    Log.i("FriendRequest", "No pending requests found");
+                    return;
+                }
+                // Clear requests
+                requests.clear();
+                // Add objects to data model
+                requests.addAll(friendRequests);
+                // Notify adapter of change
+                friendRequestAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     // Query VisitInvitationConfirmations
@@ -80,6 +126,8 @@ public class NotificationsFragment extends DialogFragment {
         // Include visit and business
         query.include("visit");
         query.include("visit.business");
+        // Check if status is pending
+        query.whereNotEqualTo("status", "pending");
         // Check that user is owner of request
         query.whereEqualTo("fromUser", currentUser);
         // Make query using background thread
@@ -88,13 +136,13 @@ public class NotificationsFragment extends DialogFragment {
             public void done(List<VisitInvitation> visitInvitations, ParseException e) {
                 // Check for errors
                 if (visitInvitations == null && e!= null) {
-                    Log.i("VisitInvitations", "No requests found");
+                    Log.i("VisitInvitations", "No visit invitations found");
                     return;
                 }
                 // Add objects to data model
                 confirmations.addAll(visitInvitations);
                 // Notify adapter of change
-                adapter.notifyDataSetChanged();
+                notificationsAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -107,19 +155,21 @@ public class NotificationsFragment extends DialogFragment {
         query.include("toUser");
         // Check that user is owner of request
         query.whereEqualTo("fromUser", currentUser);
+        // Check if status is pending
+        query.whereNotEqualTo("status", "pending");
         // Make query using background thread
         query.findInBackground(new FindCallback<FriendRequest>() {
             @Override
             public void done(List<FriendRequest> friendRequests, ParseException e) {
                 // Check for errors
                 if (friendRequests == null && e!= null) {
-                    Log.i("FriendRequest", "No requests found");
+                    Log.i("FriendRequest", "No results for requests found");
                     return;
                 }
                 // Add objects to data model
                 confirmations.addAll(friendRequests);
                 // Notify adapter of change
-                adapter.notifyDataSetChanged();
+                notificationsAdapter.notifyDataSetChanged();
             }
         });
     }

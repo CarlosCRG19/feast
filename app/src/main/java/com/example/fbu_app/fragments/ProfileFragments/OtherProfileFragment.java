@@ -87,23 +87,10 @@ public class OtherProfileFragment extends ProfileFragment{
         // exist a request or that both users are friends, the state might change
         btnFriendStatus.setEnabled(false);
         // Verify friendship status
-        verifyFriendship();
+        checkFriendRequest();
 
     }
 
-    // Verifies if current user and profile user are friends
-    private void verifyFriendship() {
-        // Get current user friends
-        List<ParseUser> currentUserFriends = (List) currentUser.get("friends");
-        if(currentUserFriends != null && currentUserFriends.contains(profileUser)){
-            // Change btnText
-            btnFriendStatus.setText("Friends ✓");
-            // Enable button
-            btnFriendStatus.setEnabled(false);
-        } else {
-            checkFriendRequest();
-        }
-    }
 
     // Check for pending friend request
     private void checkFriendRequest() {
@@ -154,6 +141,12 @@ public class OtherProfileFragment extends ProfileFragment{
                         // Change text of button
                         btnFriendStatus.setText("You have a pending request!");
                     }
+                    // Enable button
+                    btnFriendStatus.setEnabled(false);
+                    return;
+                } else if (friendRequest.getStatus().equals("accepted")) {
+                    // Change btnText
+                    btnFriendStatus.setText("Friends ✓");
                     // Enable button
                     btnFriendStatus.setEnabled(false);
                     return;

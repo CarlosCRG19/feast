@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/ivProfilePicture"
+        android:layout_marginStart="10dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvFriendRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/ivProfilePicture"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="13sp"
+        tools:text="DemoUser has sent you a friend request" />
+
+
+    <Button
+        android:id="@+id/btnDecline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/btnAccept"
+        android:layout_below="@+id/tvFriendRequest"
+        android:textSize="12sp"
+        android:text="Decline"/>
+
+    <Button
+        android:id="@+id/btnAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/btnDecline"
+        android:layout_toEndOf="@+id/ivProfilePicture"
+        android:layout_alignStart="@+id/tvFriendRequest"
+        android:layout_marginEnd="10dp"
+        android:textSize="12sp"
+        android:layout_below="@+id/tvFriendRequest"
+        android:text="Accept"/>
+
+</RelativeLayout>

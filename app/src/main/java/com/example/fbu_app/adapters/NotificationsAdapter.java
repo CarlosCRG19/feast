@@ -172,13 +172,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             // Set text
             String notificationText = user.getUsername() + " has " + status + " your friend request.";
             tvNotification.setText(notificationText);
-            // Delete the friend request from database
-            destroyFriendRequest();
-        }
-
-        // Destroys the current friendRequest in database
-        private void destroyFriendRequest() {
-            friendRequest.deleteInBackground();
         }
     }
 }
