@@ -20,6 +20,15 @@ public class Business extends ParseObject{
 
     // DISTANCE TEMPORAL FIELD
     private int distance;
+    private boolean closed;
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
 
     public int getDistance() {
         return distance;
@@ -53,6 +62,7 @@ public class Business extends ParseObject{
         business.setPrice(jsonObject.optString("price"));
         business.setPriceInt(jsonObject.optString("price"));
         business.setDistance((int) jsonObject.optDouble("distance"));
+        business.setClosed((boolean) jsonObject.optBoolean("is_closed"));
 
         // Coordinates
         JSONObject coordinates = jsonObject.optJSONObject("coordinates");
@@ -92,6 +102,26 @@ public class Business extends ParseObject{
             businesses.add(fromJson(jsonArray.getJSONObject(i))); // add objects to businesses list
         }
         return businesses;
+    }
+
+    // Method to format distance
+    public static  String formatDistance(int distance) {
+        // Convert distance to kilometers
+        float distanceKm = ((float) distance) / 1000;
+        // Create distance in String
+        String formattedDistance = String.format("%.1f km.", distanceKm);
+        // Return formatted distance
+        return formattedDistance;
+    }
+
+    // Method to format categories
+    public static String formatCategories(List<String> categories) {
+        // Concatenate all strings
+        String concatenated = String.join(", ", categories);
+        // Remove last two characters
+        concatenated.substring(0, concatenated.length() - 2);
+        // Return concatenated
+        return concatenated;
     }
 
     // SETTERS (use put method from ParseObject)

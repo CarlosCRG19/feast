@@ -22,57 +22,103 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:padding="16dp"
-        android:background="@drawable/gradation_black">
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:textColor="@color/darkest_grey"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="26sp"
-            tools:text="Restaurant name"/>
+            tools:text="Restaurant name" />
+
+        <RatingBar
+            android:id="@+id/rbRating"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_below="@id/tvName"
+            android:layout_alignStart="@+id/tvName"
+            android:secondaryProgressTint="@android:color/transparent"
+            android:indeterminateDrawable="@drawable/star"
+            android:layout_marginTop="12dp"
+            android:numStars="5"
+            android:stepSize="1.0"
+            android:progressDrawable="@drawable/yelp_progress_bar" />
+
 
         <TextView
-            android:id="@+id/tvRating"
+            android:id="@+id/tvDistance"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvCategories"
+            android:textColor="@color/dark_grey"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="14 mi. · "/>
+
+        <TextView
+            android:id="@+id/tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            tools:text="Restaurant rating"/>
+            android:layout_alignTop="@+id/tvDistance"
+            android:layout_below="@+id/tvCategories"
+            android:layout_toEndOf="@id/tvDistance"
+            android:textColor="@color/dark_grey"
+            android:textSize="16sp"
+            tools:text="177A Bleecker Street"/>
 
         <TextView
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvRating"
+            android:layout_below="@+id/rbRating"
+            android:textColor="@color/dark_grey"
             android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            tools:text="Restaurant price"/>
+            android:textSize="16sp"
+            tools:text="$$$ · "/>
 
-        <Button
-            android:id="@+id/btnInfo"
+        <TextView
+            android:id="@+id/tvCategories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/rbRating"
+            android:layout_alignTop="@+id/tvPrice"
+            android:layout_toStartOf="@+id/btnInfo"
+            android:layout_toEndOf="@id/tvPrice"
+            android:textColor="@color/dark_grey"
+            android:textSize="16sp"
+            tools:text="pizza, italian, burgers" />
+
+        <TextView
+            android:id="@+id/tvOpen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tvName"
+            android:layout_alignEnd="@id/btnInfo"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/dark_grey"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            tools:text="Open "/>
+
+        <ImageButton
+            android:id="@+id/btnInfo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/rbRating"
             android:layout_alignParentEnd="true"
-            android:text="info"/>
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/info_icon"
+            android:backgroundTint="@color/dark_grey"
+            android:elevation="9dp"
+            android:text="info" />
+
 
     </RelativeLayout>
-
-<!--    <FrameLayout-->
-<!--        android:id="@+id/left_overlay"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:background="@drawable/overlay_black" />-->
-
-<!--    <FrameLayout-->
-<!--        android:id="@+id/right_overlay"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:background="@drawable/overlay_black" />-->
 
 
 </androidx.cardview.widget.CardView>

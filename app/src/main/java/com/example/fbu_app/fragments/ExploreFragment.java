@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -51,7 +52,8 @@ public class ExploreFragment extends Fragment {
     private VisitViewModel visitViewModel; // communication object between fragments
 
     // Navigation views
-    Button btnFilters, btnCompare;
+    Button btnCompare;
+    ImageButton btnFilters;
 
     // API client to handle requests
     YelpClient yelpClient;
@@ -205,6 +207,8 @@ public class ExploreFragment extends Fragment {
         manager.setSwipeThreshold(0.3f); // threshold to consider item as selected
         manager.setMaxDegree(20.0f); // degree of card rotation when dragged
         manager.setDirections(Direction.HORIZONTAL); // only allow horizontal swipes
+        manager.setStackFrom(StackFrom.Top); // show stack at the bottom
+        manager.setTranslationInterval(4.0f);
         manager.setCanScrollHorizontal(true);
         manager.setCanScrollVertical(false);
         manager.setSwipeableMethod(SwipeableMethod.Manual);

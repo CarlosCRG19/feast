@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
+    android:background="@color/lightest_grey"
     tools:context=".fragments.ProfileFragments.OwnProfileFragment">
 
     <ImageView

@@ -5,11 +5,40 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
     <color name="blue">#1877F2</color>
     <color name="green">#5CB85C</color>
     <color name="red">#FD1D1D</color>
     <color name="light_gray">#25000000</color>
     <color name="gray">#59000000</color>
+
+    <!--    Gray scale colors -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_white">#FAFAFA</color>
+    <color name="lightest_grey">#F5F7FA</color>
+    <color name="light_grey">#ECF1F4</color>
+    <color name="grey">#D2DDEB</color>
+    <color name="dark_grey">#617691</color>
+    <color name="darkest_grey">#12263F</color>
+    <color name="black">#FF000000</color>
+
+    <!--    GUI Colors-->
+    <color name="red_orange">#F03D16</color>
+    <color name="orange">#F65C36</color>
+    <color name="brown">#B74922</color>
+    <color name="yellow">#FAC22D</color>
+
+    <!--    Accent colors-->
+    <color name="color_alert">#DA3030</color>
+    <color name="color_warning">#F4C964</color>
+    <color name="color_success">#39C072</color>
+
+
+
+
+
+
+
+
+
 </resources>

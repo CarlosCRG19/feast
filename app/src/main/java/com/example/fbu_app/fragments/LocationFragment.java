@@ -169,6 +169,8 @@ public class LocationFragment extends Fragment {
                 visitViewModel.addFilter("longitude", String.valueOf(longitude));
                 // Set radius search to 20km
                 visitViewModel.addFilter("radius", "20000");
+                // Search only for food businesses
+                visitViewModel.addFilter("term", "food");
 //                // Create new fragment
                 ExploreFragment exploreFragment = new ExploreFragment();
                 // Use activity's fragment manager to change fragment

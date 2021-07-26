@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import com.example.fbu_app.models.Business;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 // Adapter for CardStackView from the yuyakaido library
 public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.ViewHolder> {
@@ -84,17 +87,22 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
 
         // Layout views as member variables
         private ImageView ivBusinessImage;
-        private TextView tvName, tvRating, tvPrice;
-        private Button btnInfo;
+        private TextView tvName, tvPrice, tvDistance, tvAddress, tvCategories, tvOpen;
+        private ImageButton btnInfo;
+        private RatingBar rbRating;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             // View assignments
             ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
             tvName = itemView.findViewById(R.id.tvName);
-            tvRating = itemView.findViewById(R.id.tvRating);
+            rbRating = itemView.findViewById(R.id.rbRating);
             tvPrice = itemView.findViewById(R.id.tvPrice);
+            tvCategories = itemView.findViewById(R.id.tvCategories);
+            tvDistance = itemView.findViewById(R.id.tvDistance);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
             btnInfo = itemView.findViewById(R.id.btnInfo);
+            tvOpen = itemView.findViewById(R.id.tvOpen);
 
         }
 
@@ -106,8 +114,21 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
 
             // Set TVs with info from the business
             tvName.setText(business.getName());
-            tvPrice.setText("Price: " + business.getPrice());
-            tvRating.setText("Rating: " + business.getRating() + "/5");
+            // Set Price text
+            if(business.getPrice().length() > 0) {
+                tvPrice.setText(business.getPrice() + " · ");
+            }
+            // Set categories text
+            tvCategories.setText(Business.formatCategories(business.getCategories()));
+            // Set distance text
+            if (!Objects.isNull(business.getDistance())) {
+                tvDistance.setText(Business.formatDistance(business.getDistance()) +  " · ");
+            }
+            // Set address text
+            tvAddress.setText(business.getAddress());
+            // Check if business is now closed
+            tvOpen.setText(business.isClosed() ? "Closed" : "Open");
+            rbRating.setRating(business.getRating());
 
             // Set button listener for details screen
             btnInfo.setOnClickListener(new View.OnClickListener() {
