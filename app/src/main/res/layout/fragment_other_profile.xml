@@ -109,7 +109,7 @@ tools:context=".fragments.ProfileFragments.OtherProfileFragment">
             android:layout_gravity="start"
             android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/darkest_grey"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:text="Favorite restaurants" />
 
         <androidx.recyclerview.widget.RecyclerView
