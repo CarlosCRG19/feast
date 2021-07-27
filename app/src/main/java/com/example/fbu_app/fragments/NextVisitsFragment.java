@@ -20,6 +20,8 @@ import com.example.fbu_app.adapters.InvitationAdapter;
 import com.example.fbu_app.adapters.VisitsAdapter;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitInvitation;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -96,6 +98,9 @@ public class NextVisitsFragment extends Fragment {
                         .commit();
             }
         });
+
+        // Make sure that bottom navbar is being displayed
+        showBottomnNavBar();
 
         // Make query for NextVisits
         queryNextVisits();
@@ -181,6 +186,18 @@ public class NextVisitsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    // OTHER METHODS
+    private void showBottomnNavBar() {
+        // Change navbar configuration
+        BottomAppBar bottomAppBar = getActivity().findViewById(R.id.bottomAppBar);
+        // Change visibility of toolbar
+        bottomAppBar.setVisibility(View.VISIBLE);
+        // Change create button configuration
+        FloatingActionButton btnCreate = getActivity().findViewById(R.id.btnCreate);
+        // Change visibility of button
+        btnCreate.show();
     }
 }
 

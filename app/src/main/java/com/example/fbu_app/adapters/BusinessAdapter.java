@@ -77,7 +77,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         // VIEWS
         protected Business business;
         protected ImageView ivBusinessImage;
-        protected TextView tvName, tvRating;
+        protected TextView tvName;
 
         // Constructor
         public ViewHolder(@NonNull @NotNull View itemView) {
@@ -85,7 +85,6 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             // Get views from layout
             ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
             tvName = itemView.findViewById(R.id.tvName);
-            tvRating = itemView.findViewById(R.id.tvRating);
             // Set an onClick listener
             itemView.setOnClickListener(this);
 
@@ -105,10 +104,6 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
                     .centerCrop()
                     .into(ivBusinessImage);
             tvName.setText(business.getName());
-            // Set text for rating
-            String textRating = business.getRating() > 0 ? " " + String.valueOf(business.getRating()) : "NA";
-            tvRating.setText(textRating);
-
         }
 
         // If a row is clicked, a new fragment displays more information about that business

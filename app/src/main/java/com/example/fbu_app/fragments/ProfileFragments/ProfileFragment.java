@@ -6,17 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.adapters.BusinessAdapter;
+import com.example.fbu_app.adapters.UserAdapter;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Like;
 import com.parse.FindCallback;
@@ -41,10 +45,23 @@ public class ProfileFragment extends Fragment {
     // Views
     ImageView ivProfile;
     TextView tvUsername, tvEmail;
-    RecyclerView rvBusinesses; // View group to display user's favorited restaurants
 
+    // Recycler Views Setup
+
+    // Adapters
     BusinessAdapter adapter;
+    UserAdapter userAdapter; // Adapter for search RV
+
+    // RecyclerView
+    RecyclerView rvBusinesses; // View group to display user's favorited restaurants
+    RecyclerView rvSearch;
+
+    // Lists for users and businesses
     List<Business> likedBusinesses;
+    List<ParseUser> userList;
+
+    // Search View
+    SearchView svPeople;
 
     // Required empty public constructor
     public ProfileFragment() {}
@@ -65,20 +82,70 @@ public class ProfileFragment extends Fragment {
 
         // Init liked businesses list
         likedBusinesses = new ArrayList<>();
+        // Init users
+        userList = new ArrayList<>();
+
+        // Adapters for the RVs
+        adapter = new BusinessAdapter(getContext(), likedBusinesses); // adapter for liked businesses
+        userAdapter = new UserAdapter(getContext(), userList);
 
         // Set views from specified layout
         setViews(view);
         // Bind profile info
         populateViews();
 
-        // Setup RV
-        adapter = new BusinessAdapter(getContext(), likedBusinesses);
+        // RV FOR LIKED BUSINESSES SETUP
+
+        // Add adapter to RV
         rvBusinesses.setAdapter(adapter);
-        rvBusinesses.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Set layout manager for recycler view
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2); // use 3 columns for grid
+        rvBusinesses.setLayoutManager(gridLayoutManager);
 
         // Get liked businesses
         queryLikedBusinesses();
 
+        // RV FOR USER SEARCH
+
+        // Create LinearLayoutManager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+
+        // Initialize RV
+        rvSearch.setLayoutManager(linearLayoutManager);
+        rvSearch.setAdapter(userAdapter);
+        // Set item decoration
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvSearch.getContext(),
+                linearLayoutManager.getOrientation());
+        rvSearch.addItemDecoration(dividerItemDecoration);
+
+        // SV SETUP
+
+        // Set searchView Listeners
+        svPeople.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // When text is submitted, check for users that match that query
+                searchUsers(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() < 3) {
+                    userList.clear();
+                    userAdapter.notifyDataSetChanged();
+                }
+                return false;
+            }
+        });
+
+        // Set complete SV click listener
+        svPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                svPeople.setIconified(false);
+            }
+        });
     }
 
     // VIEWS METHODS
@@ -90,6 +157,10 @@ public class ProfileFragment extends Fragment {
         tvEmail = view.findViewById(R.id.tvEmail);
         // Recycler view
         rvBusinesses = view.findViewById(R.id.rvBusinesses);
+        rvSearch = view.findViewById(R.id.rvSearch);
+        // Search views
+        svPeople = view.findViewById(R.id.svPeople);
+
     }
 
     // Binds the views with the users data
@@ -140,5 +211,31 @@ public class ProfileFragment extends Fragment {
         }
         // Notify adapter of change
         adapter.notifyDataSetChanged();
+    }
+
+    // Method to query users whose username match the search
+    private void searchUsers(String queryText) {
+        // Create query and specify class
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.include("email");
+        // Search for users that start with that text
+        query.whereStartsWith("username", queryText);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> users, ParseException e) {
+                // Check for errors
+                if (e != null) {
+                    Log.i("CreateFragment", "Error while searching users", e);
+                    return;
+                }
+                // Check if objects is null
+                if (users != null) {
+                    Log.i("CreateFragment", "Total users obtained: " + users.size());
+                    userList.clear();
+                    userList.addAll(users);
+                    userAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 }

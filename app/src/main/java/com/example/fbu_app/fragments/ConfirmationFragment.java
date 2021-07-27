@@ -24,7 +24,9 @@ import com.example.fbu_app.fragments.DialogFragments.NotificationsFragment;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitInvitation;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -85,12 +87,6 @@ public class ConfirmationFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.flContainer, nextVisitsFragment)
                         .commit();
-                // Change navbar configuration
-                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigation);
-                // Change visibility of toolbar
-                bottomNavigationView.setVisibility(View.VISIBLE);
-                // Change selected item on toolbar
-                bottomNavigationView.setSelectedItemId(R.id.action_history);
             }
         });
 

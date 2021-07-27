@@ -100,6 +100,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             // Use glide to load PP
             Glide.with(context)
                     .load(profileImage.getUrl())
+                    .circleCrop()
                     .into(ivUserImage);
 
             // Set TVs with the users data

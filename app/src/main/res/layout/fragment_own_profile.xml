@@ -8,8 +8,32 @@
     android:background="@color/lightest_grey"
     tools:context=".fragments.ProfileFragments.OwnProfileFragment">
 
+    <SearchView
+        android:id="@+id/svPeople"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"
+        android:clickable="true"
+        android:iconifiedByDefault="false"
+        android:queryHint="Find other people"
+        android:elevation="3dp"
+        android:queryBackground="@null" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearch"
+        android:layout_marginTop="2dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/svPeople"
+        android:background="@color/background_white"
+        android:elevation="3dp"/>
+
+
     <ImageView
         android:id="@+id/ivProfile"
+        android:layout_below="@+id/svPeople"
+        android:layout_marginTop="16dp"
         android:layout_width="70dp"
         android:layout_height="70dp"
         tools:srcCompat="@tools:sample/avatars" />
@@ -19,6 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_alignTop="@+id/ivProfile"
         android:layout_toEndOf="@+id/ivProfile"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="18sp"
@@ -39,6 +64,7 @@
         android:id="@+id/btnNotifications"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_alignTop="@+id/ivProfile"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
         app:srcCompat="@drawable/ic_baseline_notifications" />

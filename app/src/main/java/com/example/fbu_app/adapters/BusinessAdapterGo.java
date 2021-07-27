@@ -61,7 +61,7 @@ public class BusinessAdapterGo extends BusinessAdapter{
     public class ViewHolder extends BusinessAdapter.ViewHolder {
 
         // VIEWS
-        private TextView tvPrice, tvDistance, tvAddress, tvCategories;
+        private TextView tvRating, tvPrice, tvDistance, tvAddress, tvCategories;
         private Button btnGo; // new view for visit creation
 
 
@@ -74,12 +74,16 @@ public class BusinessAdapterGo extends BusinessAdapter{
             tvDistance = itemView.findViewById(R.id.tvDistance);
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvCategories = itemView.findViewById(R.id.tvCategories);
+            tvRating = itemView.findViewById(R.id.tvRating);
         }
 
         @Override
         public void bind(Business businessToBind) {
             // Call super class bind method
             super.bind(businessToBind);
+            // Set text for rating
+            String textRating = business.getRating() > 0 ? " " + String.valueOf(business.getRating()) : "NA";
+            tvRating.setText(textRating);
             // Set text for price
             String textPrice = business.getPriceInt() > 0 ? String.valueOf(business.getPriceInt()) : "NA";
             tvPrice.setText(textPrice);

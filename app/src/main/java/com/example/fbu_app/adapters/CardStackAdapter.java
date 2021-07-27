@@ -1,6 +1,7 @@
 package com.example.fbu_app.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -127,6 +129,17 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             // Set address text
             tvAddress.setText(business.getAddress());
             // Check if business is now closed
+            if(business.isClosed()){
+                // Set tv text
+                tvOpen.setText("Closed");
+                // Change tv color
+                tvOpen.setTextColor(ContextCompat.getColor(context, R.color.color_alert));
+            } else {
+                // Set tv text to open
+                tvOpen.setText("Open");
+                // Change tv color to green
+                tvOpen.setTextColor(ContextCompat.getColor(context, R.color.color_success));
+            }
             tvOpen.setText(business.isClosed() ? "Closed" : "Open");
             rbRating.setRating(business.getRating());
 
