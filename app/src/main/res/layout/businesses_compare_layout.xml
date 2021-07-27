@@ -79,7 +79,7 @@
                 android:drawableLeft="@drawable/star_2"
                 android:gravity="end"
                 android:textColor="@color/darkest_grey"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="NA" />
 
             <TextView
@@ -89,9 +89,10 @@
                 android:fontFamily="@font/open_sans_bold"
                 android:layout_alignBottom="@+id/tvRating"
                 android:layout_toEndOf="@+id/tvRating"
+                android:layout_marginBottom="1dp"
                 android:gravity="end"
                 android:textColor="@color/dark_grey"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:text="/5" />
 
             <LinearLayout
@@ -110,7 +111,7 @@
                     android:fontFamily="@font/open_sans_bold"
                     android:gravity="end"
                     android:textColor="@color/darkest_grey"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="4"
                     app:drawableLeftCompat="@drawable/money_icon" />
 
@@ -123,7 +124,7 @@
                     android:gravity="bottom"
                     android:text="/5"
                     android:textColor="@color/dark_grey"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -134,26 +135,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/tvRating"
-
                 android:layout_toStartOf="@+id/tvDistanceScale"
                 android:fontFamily="@font/open_sans_bold"
                 android:drawableLeft="@drawable/location"
                 android:gravity="end"
                 android:textColor="@color/darkest_grey"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="40" />
 
             <TextView
                 android:id="@+id/tvDistanceScale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="2dp"
                 android:fontFamily="@font/open_sans_bold"
                 android:layout_alignParentEnd="true"
-                android:layout_alignBottom="@+id/tvRating"
+                android:layout_alignTop="@+id/tvRating"
                 android:gravity="end"
                 android:textColor="@color/dark_grey"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:text=" km" />
 
 

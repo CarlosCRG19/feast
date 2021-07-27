@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fbu_app.R;
+import com.google.android.material.textfield.TextInputEditText;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -21,7 +23,8 @@ public class LoginActivity extends AppCompatActivity {
 
     // VIEWS
     Button btnLogin, btnGoSignup;
-    EditText etUsername,  etPassword;
+    TextInputEditText etUsername,  etPassword;
+    TextView tvSignup;
 
 
     @Override
@@ -36,10 +39,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Get views from layout
         setViews();
-        // Set click listener for btnLogin
-        setLoginListener();
-        // Set listener to go to account creation
-        setGoSignupListener();
+        // Set listeners for the login button and for the clickable text
+        setListeners();
     }
 
     // VIEWS METHODS
@@ -49,11 +50,11 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        btnGoSignup = findViewById(R.id.btnGoSignup);
+        tvSignup = findViewById(R.id.tvSignup);
     }
 
-    // Set click listener for login
-    private void setLoginListener(){
+    // Set click listeners for the views
+    private void setListeners(){
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,11 +66,9 @@ public class LoginActivity extends AppCompatActivity {
                 loginUser(username, password);
             }
         });
-    }
 
-    // Set click listener to return to login
-    private void setGoSignupListener(){
-        btnGoSignup.setOnClickListener(new View.OnClickListener() {
+        // Setup clickable text view
+        tvSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Go signup button clicked");

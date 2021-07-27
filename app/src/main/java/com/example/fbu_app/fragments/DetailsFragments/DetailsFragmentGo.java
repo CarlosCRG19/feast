@@ -1,6 +1,7 @@
 package com.example.fbu_app.fragments.DetailsFragments;
 
 import android.os.Bundle;
+import android.transition.ChangeBounds;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,6 @@ public class DetailsFragmentGo extends DetailsFragmentBase {
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-//        return super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_details_go, container, false);
     }
 

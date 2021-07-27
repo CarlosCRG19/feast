@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fbu_app.R;
+import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -21,8 +23,9 @@ public class SignupActivity extends AppCompatActivity {
     public static String TAG = "SignupActivity"; // TAG for log messages
 
     // VIEWS
-    Button  btnSignup, btnGoLogin;
-    EditText etUsername,  etPassword, etEmail;
+    Button  btnSignup;
+    TextInputEditText etUsername, etFirstName, etLastName, etPassword, etDescription, etEmail;
+    TextView tvLogin;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -31,42 +34,47 @@ public class SignupActivity extends AppCompatActivity {
 
         // Get views from layout
         setViews();
-        // Set click listener for btnSignup
-        setSignUpListener();
-        // Set listener for returning to login
-        setGoLoginListener();
+        // Set listeners to create account and go to login
+        setListeners();
     }
 
     // Assign views on layout to variables
     private void setViews() {
         // ETs
         etUsername = findViewById(R.id.etUsername);
+        etFirstName = findViewById(R.id.etFirstName);
+        etLastName = findViewById(R.id.etLastName);
+        etDescription = findViewById(R.id.etDescription);
         etPassword = findViewById(R.id.etPassword);
         etEmail = findViewById(R.id.etEmail);
-        btnSignup = findViewById(R.id.btnSignup);
         // Buttons
-        btnGoLogin = findViewById(R.id.btnGoLogin);
+        btnSignup = findViewById(R.id.btnSignup);
+        // Clickable text views
+        tvLogin = findViewById(R.id.tvLogin);
     }
 
-    // Set click listener for signup
-    private void setSignUpListener(){
+    // Set listeners for button and clickable text
+    private void setListeners() {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Signup Button clicked");
+                // Variable declaration
+                String username, firstName, lastName, email, description, password;
                 // Get content of EditTexts
-                String username = etUsername.getText().toString();
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+                username = etUsername.getText().toString();
+                email = etEmail.getText().toString();
+                password = etPassword.getText().toString();
+                // Optional texts
+                firstName = etFirstName.getText().toString();
+                lastName = etLastName.getText().toString();
+                description = etDescription.getText().toString();
                 // Try to sign up user
-                signupUser(username, email, password);
+                signupUser(username, firstName, lastName, description, email, password);
             }
         });
-    }
 
-    // Set click listener to return to login
-    private void setGoLoginListener(){
-        btnGoLogin.setOnClickListener(new View.OnClickListener() {
+        tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Display log message
@@ -77,11 +85,15 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+
     // Register new user with new credentials
-    private void signupUser(String username, String email, String password) {
+    private void signupUser(String username, String firstName, String lastName, String description, String email, String password) {
         // Create new user instance
         ParseUser newUser = new ParseUser();
         newUser.put("username", username);
+        newUser.put("firstName", firstName);
+        newUser.put("lastName", lastName);
+        newUser.put("description", description);
         newUser.put("email", email);
         newUser.put("password", password);
         // Execute login async call

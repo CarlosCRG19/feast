@@ -3,6 +3,7 @@ package com.example.fbu_app.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.transition.Slide;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,6 +159,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                     // Make fragment transaction adding to back stack to return when back clicked
                     ((MainActivity) context).getSupportFragmentManager()
                             .beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_up, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_down)
                             .add(R.id.flContainer, detailsFragmentGo)
                             .addToBackStack(null)
                             .commit();
