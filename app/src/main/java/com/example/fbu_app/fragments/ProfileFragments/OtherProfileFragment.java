@@ -89,6 +89,11 @@ public class OtherProfileFragment extends ProfileFragment{
         // Verify friendship status
         checkFriendRequest();
 
+        // Set text of tvFavorites
+        String userFirstName = (String) profileUser.get("firstName");
+        String textFavorites = userFirstName != null ? userFirstName + "'s favorite restaurants" : "Favorite restaurants";
+        tvFavorites.setText(textFavorites);
+
     }
 
 

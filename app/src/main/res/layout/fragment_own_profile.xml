@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
     android:background="@color/lightest_grey"
     tools:context=".fragments.ProfileFragments.OwnProfileFragment">
 
@@ -12,105 +11,137 @@
         android:id="@+id/svPeople"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/btnNotifications"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
         android:background="@drawable/spinner_background"
         android:clickable="true"
         android:iconifiedByDefault="false"
         android:queryHint="Find other people"
-        android:elevation="3dp"
+        android:elevation="9dp"
         android:queryBackground="@null" />
+
+    <ImageButton
+        android:id="@+id/btnNotifications"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/svPeople"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/dark_grey"
+        android:background="@drawable/ic_notification_empty" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearch"
         android:layout_marginTop="2dp"
         android:layout_marginHorizontal="20dp"
+        android:layout_alignStart="@+id/svPeople"
+        android:layout_alignEnd="@+id/svPeople"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/svPeople"
         android:background="@color/background_white"
-        android:elevation="3dp"/>
-
+        android:elevation="9dp"/>
 
     <ImageView
         android:id="@+id/ivProfile"
-        android:layout_below="@+id/svPeople"
-        android:layout_marginTop="16dp"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:elevation="8.5dp"
+        android:layout_marginTop="84dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/top_corners_rounded"
+        android:padding="4dp"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+    <ImageButton
+        android:id="@+id/btnUpload"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignTop="@+id/ivProfile"
-        android:layout_toEndOf="@+id/ivProfile"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        tools:text="username" />
-
-    <TextView
-        android:id="@+id/tvEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvUsername"
-        android:layout_below="@+id/tvUsername"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="15sp"
-        tools:text="email" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toStartOf="@+id/ivProfile"
+        android:elevation="8.5dp"
+        android:background="@drawable/rounded_button"
+        app:srcCompat="@drawable/ic_edit" />
 
     <ImageButton
-        android:id="@+id/btnNotifications"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignTop="@+id/ivProfile"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        app:srcCompat="@drawable/ic_baseline_notifications" />
-
-    <Button
-        android:id="@+id/btnUpload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvUsername"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/ivProfile"
-        android:backgroundTint="@color/blue"
-        android:textColor="@color/white"
-        android:text="Change Picture"
-        android:textAllCaps="false" />
-
-    <Button
         android:id="@+id/btnLogout"
-        android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnUpload"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/btnUpload"
-        android:text="Logout"
-        android:textAllCaps="false" />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignTop="@+id/ivProfile"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/ivProfile"
+        android:elevation="8.5dp"
+        android:background="@drawable/rounded_button"
+        app:srcCompat="@drawable/ic_logout" />
 
-    <TextView
-        android:id="@+id/tvFavorites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/btnUpload"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="Favorite restaurants" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvBusinesses"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/tvFavorites"
+    <LinearLayout
+        android:layout_below="@id/svPeople"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:layout_marginTop="60dp"
+        android:paddingHorizontal="24dp"
+        android:background="@drawable/top_corners_rounded"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="18sp"
+            android:textColor="@color/darkest_grey"
+            tools:text="Carlos Rodriguez" />
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/orange"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="14sp"
+            tools:text="carloscrg19" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/darkest_grey"
+            android:fontFamily="@font/open_sans"
+            android:textSize="14sp"
+            android:gravity="center"
+            tools:text="I like Rubik's cubes, coding and spending time with my friend" />
+
+        <TextView
+            android:id="@+id/tvFavorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="start"
+            android:fontFamily="@font/open_sans_bold"
+            android:textColor="@color/darkest_grey"
+            android:textSize="24sp"
+            android:text="Favorite restaurants" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBusinesses"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
 
 
 

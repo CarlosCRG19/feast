@@ -35,8 +35,7 @@ import java.io.IOException;
 public class OwnProfileFragment extends ProfileFragment {
 
     // VIEWS
-    Button btnUpload, btnLogout;
-    ImageButton btnNotifications;
+    ImageButton btnUpload, btnLogout, btnNotifications;
 
     // Codes for GET_CONTENT action
     public final static int PICK_PHOTO_CODE = 1046;
@@ -51,6 +50,8 @@ public class OwnProfileFragment extends ProfileFragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Set text of tvFavorites
+        tvFavorites.setText("Your favorite restaurants");
         // Set listeners for upload and logout buttons
         setClickListeners();
     }

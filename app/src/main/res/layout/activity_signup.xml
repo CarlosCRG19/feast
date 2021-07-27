@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_margin="36dp"
+        android:layout_margin="32dp"
         android:background="@drawable/rounded_background"
         android:elevation="9dp"
         android:padding="20dp"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:fontFamily="@font/open_sans_bold"
             android:text="Welcome to Feast!" />
 
@@ -163,7 +163,7 @@
                 android:maxLength="100"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textMultiLine"
                 android:fontFamily="@font/open_sans"
                 android:textSize="13sp"/>
 

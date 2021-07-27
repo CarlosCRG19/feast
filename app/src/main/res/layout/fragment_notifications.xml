@@ -13,10 +13,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:textSize="25sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/open_sans_bold"
+        android:textColor="@color/dark_grey"
+        android:textSize="24sp"
         android:layout_marginEnd="50dp"
         android:text="Notifications" />
+
+    <TextView
+        android:id="@+id/tvNoNotifications"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/open_sans_bold"
+        android:textColor="@color/dark_grey"
+        android:gravity="center"
+        android:textSize="12sp"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRequests"

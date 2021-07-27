@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment {
 
     // Views
     ImageView ivProfile;
-    TextView tvUsername, tvEmail;
+    TextView tvName, tvUsername, tvDescription, tvFavorites;
 
     // Recycler Views Setup
 
@@ -154,7 +154,9 @@ public class ProfileFragment extends Fragment {
         // User info
         ivProfile = view.findViewById(R.id.ivProfile);
         tvUsername = view.findViewById(R.id.tvUsername);
-        tvEmail = view.findViewById(R.id.tvEmail);
+        tvName = view.findViewById(R.id.tvName);
+        tvDescription = view.findViewById(R.id.tvDescription);
+        tvFavorites = view.findViewById(R.id.tvFavorites);
         // Recycler view
         rvBusinesses = view.findViewById(R.id.rvBusinesses);
         rvSearch = view.findViewById(R.id.rvSearch);
@@ -173,7 +175,14 @@ public class ProfileFragment extends Fragment {
                 .into(ivProfile);
         // Fill TVs with username and email
         tvUsername.setText(profileUser.getUsername());
-        tvEmail.setText((String) profileUser.get("email"));
+        // Set complete name text
+        String firstName = (String) profileUser.get("firstName");
+        String lastName = (String) profileUser.get("lastName");
+        String fullName = firstName != null && lastName != null ? firstName + " " + lastName : "";
+        // Set text for name
+        tvName.setText(fullName);
+        // Set text for description
+        tvDescription.setText(profileUser.get("description") != null ? (String) profileUser.get("description") : "");
     }
 
     // LISTENERS AND FEATURES
