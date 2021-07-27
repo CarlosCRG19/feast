@@ -2,6 +2,7 @@ package com.example.fbu_app.fragments;
 
 import com.example.fbu_app.BuildConfig;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.DatePickerController;
 import com.example.fbu_app.models.BusinessesViewModel;
 import com.example.fbu_app.models.VisitViewModel;
 import com.google.android.gms.common.api.Status;
@@ -73,6 +74,10 @@ public class LocationFragment extends Fragment {
     VisitViewModel visitViewModel; // Communication object between fragments
     BusinessesViewModel businessesViewModel;
 
+    // DATE VARIABLES
+    Date visitDate;
+    String visitDateStr;
+
     // VIEWS
     DatePickerDialog datePickerDialog; // Date picking
     Button btnDate, btnConfirmLocation;
@@ -121,16 +126,32 @@ public class LocationFragment extends Fragment {
         // Setup Map
         setUpMap();
 
-        // Initialize the datePicker listener and set current date
-        initDatePicker();
+        // Create Listener for datePicker
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                // Save visit date to communication object
+                visitDate = new Date(year - 1900, month, dayOfMonth);
+                // Create date string
+                month += 1; // months start with 0
+                // Format date
+                visitDateStr = DatePickerController.makeDateString(dayOfMonth, month, year);
+                // Populate view
+                btnDate.setText(visitDateStr);
+            }
+        };
+        // Initialize the datePicker using controller
+        datePickerDialog = DatePickerController.initDatePicker(getContext(), dateSetListener);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+
 
         // Assign Views
         btnDate = view.findViewById(R.id.btnDate); // Date selection
         btnConfirmLocation = view.findViewById(R.id.btnConfirmLocation); // Location selection
         // Button date setup
-        btnDate.setText(getTodaysDate());
+        btnDate.setText(DatePickerController.getTodaysDate(visitDate, visitDateStr));
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +185,9 @@ public class LocationFragment extends Fragment {
         btnConfirmLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Save values for date
+                visitViewModel.setVisitDate(visitDate);
+                visitViewModel.setVisitDateStr(visitDateStr);
                 // Add latitude and longitude filters to view model
                 visitViewModel.addFilter("latitude", String.valueOf(latitude));
                 visitViewModel.addFilter("longitude", String.valueOf(longitude));
@@ -204,95 +228,6 @@ public class LocationFragment extends Fragment {
             Status status = Autocomplete.getStatusFromIntent(data);
             // Display error with a toast
             Toast.makeText(getContext().getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // DATEPICKER METHODS
-
-    // Sets a listener for the datePicker dialog and displays the selected date
-    private void initDatePicker() {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                // Save visit date to communication object
-                visitViewModel.setVisitDate(new Date(year - 1900, month, dayOfMonth));
-                // Create date string
-                month += 1; // months start with 0
-                // Format date
-                String date = makeDateString(dayOfMonth, month, year);
-                // Save date string in ViewModel
-                visitViewModel.setVisitDateStr(date);
-                // Populate view
-                btnDate.setText(date);
-            }
-        };
-
-        // Initialize dialog with current date
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        // Set style for dialog
-        int style = AlertDialog.THEME_HOLO_LIGHT;
-        // Create datePickerDialog
-        datePickerDialog = new DatePickerDialog(getContext(), style, dateSetListener, year, month, day);
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000); // set today's date as minimum date
-    }
-
-    // Returns todays date as a string
-    private String getTodaysDate() {
-        // Create calendar instance and get date for today
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        // Save visit date into ViewModel
-        visitViewModel.setVisitDate(new Date(year - 1900, month, day));
-
-        // Formate date as string
-        month += 1; // months starts with 0 for January
-        String date = makeDateString(day, month, year);
-        // Save date string
-        visitViewModel.setVisitDateStr(date);
-        return date;
-    }
-
-
-    // Gets date info as ints and returns a string in 'MONTH DD YYYY' format
-    private String makeDateString(int dayOfMonth, int month, int year) {
-        return getMonthFormat(month) + " " + dayOfMonth + " " + year;
-    }
-
-    // Returns the name from the month's number
-    private String getMonthFormat(int month) {
-        switch (month) {
-            case 1:
-                return "Jan";
-            case 2:
-                return "Feb";
-            case 3:
-                return "Mar";
-            case 4:
-                return "Apr";
-            case 5:
-                return "May";
-            case 6:
-                return "Jun";
-            case 7:
-                return "Jul";
-            case 8:
-                return "Aug";
-            case 9:
-                return "Sep";
-            case 10:
-                return "Oct";
-            case 11:
-                return "Nov";
-            case 12:
-                return "Dec";
-            default:
-                return "";
         }
     }
 
