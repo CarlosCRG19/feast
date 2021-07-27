@@ -1,66 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginHorizontal="16dp"
+    android:animateLayoutChanges="true"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp">
 
-    <ImageView
-        android:id="@+id/ivBusinessImage"
-        android:layout_marginStart="10dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvName"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/ivBusinessImage"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="13sp"
-        tools:text="Business restaurant" />
+        android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/tvRating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_below="@+id/tvName"
-        android:layout_toEndOf="@id/ivBusinessImage"
-        android:textSize="12sp"
-        tools:text="Rating" />
+        <ImageView
+            android:id="@+id/ivBusinessImage"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/rvInfo"
+            tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/tvPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_below="@+id/tvRating"
-        android:layout_toEndOf="@id/ivBusinessImage"
-        android:textSize="12sp"
-        tools:text="Price" />
+        <RelativeLayout
+            android:id="@+id/rvInfo"
+            android:layout_toEndOf="@id/ivBusinessImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvDistance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_below="@+id/tvPrice"
-        android:layout_toEndOf="@id/ivBusinessImage"
-        android:textSize="12sp"
-        tools:text="Distance" />
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/btnGo"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/darkest_grey"
+                android:textSize="16sp"
+                tools:text="Business restaurant" />
 
-    <Button
-        android:id="@+id/btnGo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
-        android:text="GO!" />
+            <TextView
+                android:id="@+id/tvCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvName"
+                android:layout_alignStart="@+id/tvName"
+                android:layout_marginTop="8dp"
+                android:layout_toStartOf="@+id/btnGo"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/dark_grey"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                tools:text="pizza, italian, burgers" />
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvCategories"
+                android:layout_alignStart="@+id/tvCategories"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/dark_grey"
+                android:textSize="12sp"
+                tools:text="177A Bleecker Street"/>
+
+            <TextView
+                android:id="@+id/tvRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAddress"
+                android:layout_alignStart="@+id/tvAddress"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:drawableLeft="@drawable/star_2"
+                android:gravity="end"
+                android:textColor="@color/darkest_grey"
+                android:textSize="18sp"
+                tools:text="NA" />
+
+            <TextView
+                android:id="@+id/tvRatingScale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_bold"
+                android:layout_alignBottom="@+id/tvRating"
+                android:layout_toEndOf="@+id/tvRating"
+                android:gravity="end"
+                android:textColor="@color/dark_grey"
+                android:textSize="14sp"
+                android:text="/5" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_toEndOf="@+id/tvRatingScale"
+                android:layout_toStartOf="@+id/tvDistance"
+                android:layout_alignBottom="@+id/tvRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|bottom">
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:gravity="end"
+                    android:textColor="@color/darkest_grey"
+                    android:textSize="18sp"
+                    tools:text="4"
+                    app:drawableLeftCompat="@drawable/money_icon" />
+
+
+                <TextView
+                    android:id="@+id/tvPriceScale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:gravity="bottom"
+                    android:text="/5"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
 
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/tvDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tvRating"
+
+                android:layout_toStartOf="@+id/tvDistanceScale"
+                android:fontFamily="@font/open_sans_bold"
+                android:drawableLeft="@drawable/location"
+                android:gravity="end"
+                android:textColor="@color/darkest_grey"
+                android:textSize="18sp"
+                tools:text="40" />
+
+            <TextView
+                android:id="@+id/tvDistanceScale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/tvRating"
+                android:gravity="end"
+                android:textColor="@color/dark_grey"
+                android:textSize="14sp"
+                android:text=" km" />
+
+
+            <Button
+                android:id="@+id/btnGo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/tvName"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="GO!"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

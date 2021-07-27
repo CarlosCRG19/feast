@@ -109,7 +109,7 @@ public class Business extends ParseObject{
         // Convert distance to kilometers
         float distanceKm = ((float) distance) / 1000;
         // Create distance in String
-        String formattedDistance = String.format("%.1f km.", distanceKm);
+        String formattedDistance = String.format("%.1f", distanceKm);
         // Return formatted distance
         return formattedDistance;
     }

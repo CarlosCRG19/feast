@@ -2,40 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightest_grey" >
-
-<!--    <LinearLayout-->
-<!--        android:id="@+id/llMenu"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:padding="15dp"-->
-<!--        android:elevation="9dp"-->
-<!--        android:background="@drawable/bottom_corners_rounded"-->
-<!--        android:gravity="center">-->
-
-<!--        <Button-->
-<!--            android:id="@+id/btnExplore"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:textColor="@color/dark_grey"-->
-<!--            android:fontFamily="@font/open_sans_bold"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:text="Explore"/>-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="fill_parent"-->
-<!--            android:gravity="center"-->
-<!--            android:background="@drawable/button_background"-->
-<!--            android:padding="10dp"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:fontFamily="@font/open_sans_bold"-->
-<!--            android:textSize="16sp"-->
-<!--            android:text="Compare" />-->
-<!--    </LinearLayout>-->
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/lightest_grey">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/llMenu"
@@ -70,29 +38,39 @@
             android:fontFamily="@font/open_sans_bold"
             android:textSize="16sp"
             android:text="Compare" />
+
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/llSort"
         android:layout_below="@+id/llMenu"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/btnRandomPick"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
         android:orientation="horizontal"
+        android:gravity="center"
         android:paddingHorizontal="10dp"
-        android:background="@drawable/radio_normal">
+        android:background="@drawable/spinner_background">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="12sp"
             android:textColor="@color/black"
             android:text="Sorted by: " />
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:theme="@style/spinnerItemStyle"/>
 
     </LinearLayout>
 
@@ -101,8 +79,14 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_alignTop="@+id/llSort"
-        android:layout_toEndOf="@id/llSort"
-        android:layout_marginStart="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_background"
+        android:drawableLeft="@drawable/random_icon"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:fontFamily="@font/open_sans_bold"
+        android:textSize="12sp"
+        android:textColor="@color/white"
         android:text="Random"
         android:textAllCaps="false" />
 
@@ -111,7 +95,8 @@
         android:id="@+id/rvBusinesses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
         android:layout_below="@id/llSort" />
 
 </RelativeLayout>

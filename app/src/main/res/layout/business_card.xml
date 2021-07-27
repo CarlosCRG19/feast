@@ -31,7 +31,6 @@
             android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/darkest_grey"
             android:textSize="24sp"
-            android:textStyle="bold"
             tools:text="Restaurant name" />
 
         <RatingBar
@@ -54,6 +53,7 @@
             android:layout_marginTop="8dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvCategories"
+            android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/dark_grey"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -66,6 +66,7 @@
             android:layout_alignTop="@+id/tvDistance"
             android:layout_below="@+id/tvCategories"
             android:layout_toEndOf="@id/tvDistance"
+            android:fontFamily="@font/open_sans"
             android:textColor="@color/dark_grey"
             android:textSize="16sp"
             tools:text="177A Bleecker Street"/>
@@ -76,6 +77,7 @@
             android:layout_marginTop="12dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rbRating"
+            android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/dark_grey"
             android:textStyle="bold"
             android:textSize="16sp"
@@ -89,6 +91,7 @@
             android:layout_alignTop="@+id/tvPrice"
             android:layout_toStartOf="@+id/btnInfo"
             android:layout_toEndOf="@id/tvPrice"
+            android:fontFamily="@font/open_sans"
             android:textColor="@color/dark_grey"
             android:textSize="16sp"
             tools:text="pizza, italian, burgers" />
@@ -100,6 +103,7 @@
             android:layout_alignTop="@id/tvName"
             android:layout_alignEnd="@id/btnInfo"
             android:layout_marginTop="4dp"
+            android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/dark_grey"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -109,7 +113,8 @@
             android:id="@+id/btnInfo"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignTop="@+id/rbRating"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/tvOpen"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
             android:background="@drawable/info_icon"

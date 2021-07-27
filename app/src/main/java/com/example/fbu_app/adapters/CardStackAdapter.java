@@ -122,7 +122,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
             tvCategories.setText(Business.formatCategories(business.getCategories()));
             // Set distance text
             if (!Objects.isNull(business.getDistance())) {
-                tvDistance.setText(Business.formatDistance(business.getDistance()) +  " · ");
+                tvDistance.setText(Business.formatDistance(business.getDistance()) +  "km.  · ");
             }
             // Set address text
             tvAddress.setText(business.getAddress());

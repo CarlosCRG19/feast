@@ -102,9 +102,12 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             // Bind data to views
             Glide.with(context)
                     .load(business.getImageUrl())
+                    .centerCrop()
                     .into(ivBusinessImage);
             tvName.setText(business.getName());
-            tvRating.setText("Rating: " + business.getRating());
+            // Set text for rating
+            String textRating = business.getRating() > 0 ? " " + String.valueOf(business.getRating()) : "NA";
+            tvRating.setText(textRating);
 
         }
 

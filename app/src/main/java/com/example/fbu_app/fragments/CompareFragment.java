@@ -164,7 +164,7 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
         // Find spinner in layout
         attributeSpinner = view.findViewById(R.id.spinner);
         // Create adapter using the attributes array on resources
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.attributes, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.attributes, R.layout.spinner_item);
         // Set dropdown style
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Assign adapter to spinner
