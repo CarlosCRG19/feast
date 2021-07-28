@@ -72,8 +72,6 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     // Class responsible of binding each business data with their respective row
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        protected static final String BUSINESS_TAG = "business"; // identifier for business when using bundle
-
         // VIEWS
         protected Business business;
         protected ImageView ivBusinessImage;
@@ -111,7 +109,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
         public void onClick(View v) {
             // Create bundle to pass busines as argument
             Bundle bundle = new Bundle();
-            bundle.putParcelable(BUSINESS_TAG, business);
+            bundle.putParcelable(Business.TAG, business);
 
             // Create new detailsFragmentCreate instance
             DetailsFragmentCreate detailsFragmentCreate = new DetailsFragmentCreate();

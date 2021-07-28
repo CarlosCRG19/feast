@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 
 import com.example.fbu_app.R;
 import com.example.fbu_app.controllers.DatePickerController;
@@ -49,7 +50,7 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-//        return super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_details_create, container, false);
     }
 
@@ -84,7 +85,10 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
     protected void setClickListeners() {
         super.setClickListeners();
         // Button date setup
-        btnDate.setText(DatePickerController.getTodaysDate(visitDate, visitDateStr));
+        Pair<Date, String> todaysDate = DatePickerController.getTodaysDate();
+        visitDate = todaysDate.first;
+        visitDateStr = todaysDate.second;
+        btnDate.setText(visitDateStr);
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +104,5 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
             }
         });
     }
-
 }
 

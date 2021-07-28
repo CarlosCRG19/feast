@@ -86,8 +86,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     // Inner ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public static final String BUSINESS_TAG  = "business"; // identifier for passing busines with bundle
-
         // Layout views as member variables
         private ImageView ivBusinessImage;
         private TextView tvName, tvPrice, tvDistance, tvAddress, tvCategories, tvOpen;
@@ -150,7 +148,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
                 public void onClick(View v) {
                     // Create new bundle
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable(BUSINESS_TAG, business);
+                    bundle.putParcelable(Business.TAG, business);
 
                     // Create new instance for detailsFragmentGo
                     DetailsFragmentGo detailsFragmentGo = new DetailsFragmentGo();

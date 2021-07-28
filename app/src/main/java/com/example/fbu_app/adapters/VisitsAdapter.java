@@ -67,8 +67,6 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public static final String BUSINESS_TAG  = "business"; // identifier for passing busines with bundle
-
         // Visit for this holder
         Visit visit;
 
@@ -125,7 +123,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
         public void onClick(View v) {
             // Create new bundle to pass args
             Bundle bundle = new Bundle();
-            bundle.putParcelable(BUSINESS_TAG, visitBusiness);
+            bundle.putParcelable(Business.TAG, visitBusiness);
 
             // Create new instance of detailsFragment (the user can create a new visit from this details screen)
             DetailsFragmentCreate detailsFragmentCreate = new DetailsFragmentCreate();
@@ -134,7 +132,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
             // Make fragment transaction adding to back stack
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.flContainer, detailsFragmentCreate)
+                    .replace(R.id.flContainer, detailsFragmentCreate)
                     .addToBackStack(null)
                     .commit();
         }

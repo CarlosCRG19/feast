@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
+import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.adapters.BusinessAdapter;
 import com.example.fbu_app.adapters.UserAdapter;
 import com.example.fbu_app.models.Business;
@@ -79,6 +80,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Make sure that bottom nav bar is being displayed
+        ((MainActivity) getActivity()).showBottomNavBar();
 
         // Init liked businesses list
         likedBusinesses = new ArrayList<>();

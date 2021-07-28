@@ -11,9 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="2dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="13sp"
-        tools:text="username" />
+        android:fontFamily="@font/open_sans_bold"
+        android:textColor="@color/dark_grey"
+        android:textSize="12sp"
+        tools:text="Monday" />
 
     <TextView
         android:id="@+id/tvStart"
@@ -21,16 +22,22 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_alignTop="@+id/tvDay"
+        android:layout_alignBottom="@+id/tvDay"
         android:layout_toEndOf="@id/tvDay"
+        android:fontFamily="@font/open_sans"
+        android:textColor="@color/dark_grey"
         android:textSize="12sp"
-        tools:text="10:00" />
+        tools:text="10:00 - " />
 
     <TextView
         android:id="@+id/tvEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tvDay"
+        android:layout_alignBottom="@+id/tvDay"
         android:layout_toEndOf="@id/tvStart"
+        android:fontFamily="@font/open_sans"
+        android:textColor="@color/dark_grey"
         android:textSize="12sp"
         tools:text="10:00" />
 

@@ -66,9 +66,6 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public static final String BUSINESS_TAG  = "business"; // identifier for passing busines with bundle
-        public static final String INVITATION_TAG = "invitation"; // Simple tag to send invitation with bundle
-
         // VIEWS
         private ImageView ivProfilePicture;
         private Button btnAccept, btnDecline;

@@ -18,6 +18,9 @@ import java.util.List;
 @ParseClassName("Business")
 public class Business extends ParseObject{
 
+    // TAG FOR REFERENCE
+    public static final String TAG = "business";
+
     // DISTANCE TEMPORAL FIELD
     private int distance;
     private boolean closed;

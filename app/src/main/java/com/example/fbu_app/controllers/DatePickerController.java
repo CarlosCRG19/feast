@@ -6,6 +6,8 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.DatePicker;
 
+import androidx.core.util.Pair;
+
 import com.example.fbu_app.models.VisitViewModel;
 
 import java.util.Calendar;
@@ -32,7 +34,7 @@ public class DatePickerController {
     }
 
     // Returns todays date as a string
-    public static String getTodaysDate(Date visitDate, String visitDateStr) {
+    public static Pair<Date, String> getTodaysDate() {
         // Create calendar instance and get date for today
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -40,13 +42,12 @@ public class DatePickerController {
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         // Save visit date
-        visitDate = new Date(year - 1900, month, day);
+        Date visitDate = new Date(year - 1900, month, day);
 
         // Formate date as string
         month += 1; // months starts with 0 for January
-        String date = makeDateString(day, month, year);
-        visitDateStr = date;
-        return date;
+        String visitDateStr = makeDateString(day, month, year);
+        return new Pair<>(visitDate, visitDateStr);
     }
 
     // Returns todays date as a string

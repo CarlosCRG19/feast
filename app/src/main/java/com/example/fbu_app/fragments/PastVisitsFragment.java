@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_app.R;
+import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.adapters.VisitsAdapter;
 import com.example.fbu_app.models.Visit;
 import com.parse.FindCallback;
@@ -57,6 +58,9 @@ public class PastVisitsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Make sure that bottom nav bar is being displayed
+        ((MainActivity) getActivity()).showBottomNavBar();
 
         // Init visits list and adapter
         visits = new ArrayList<>();

@@ -26,6 +26,7 @@ import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
+import com.example.fbu_app.controllers.MediaController;
 import com.example.fbu_app.fragments.DialogFragments.NotificationsFragment;
 import com.example.fbu_app.helpers.BitmapScaler;
 import com.parse.ParseException;
@@ -143,29 +144,12 @@ public class OwnProfileFragment extends ProfileFragment {
 
     // MEDIA METHODS
 
-    // Returns the File for a photo stored on disk given the fileName
-    public File getPhotoFileUri(String fileName) {
-        // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
-        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-            Log.d(TAG, "failed to create directory");
-        }
-
-        // Return the file target for the photo based on filename
-        return new File(mediaStorageDir.getPath() + File.separator + fileName);
-    }
-
-
     private void launchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference for future access
         String photoFileName = "photo.jpg";
-        file = getPhotoFileUri(photoFileName);
+        file = MediaController.getPhotoFileUri(getContext(), photoFileName);
         // Set value for photoFile so it can be saved into database
         // wrap File object into a content provider
         // required for API >= 24
@@ -196,24 +180,6 @@ public class OwnProfileFragment extends ProfileFragment {
         }
     }
 
-    private Bitmap loadFromUri(Uri photoUri) {
-        Bitmap image = null;
-        try {
-            // check version of Android on device
-            if(Build.VERSION.SDK_INT > 27){
-                // on newer versions of Android, use the new decodeBitmap method
-                ImageDecoder.Source source = ImageDecoder.createSource(getActivity().getContentResolver(), photoUri);
-                image = ImageDecoder.decodeBitmap(source);
-            } else {
-                // support older versions of Android by using getBitmap
-                image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
-    }
-
     // RESULT METHOD
 
     @Override
@@ -225,67 +191,16 @@ public class OwnProfileFragment extends ProfileFragment {
                 // Get image from intent
                 Uri photoUri = data.getData();
                 // Load the image located at photoUri into selectedImage
-                Bitmap selectedImage = loadFromUri(photoUri);
-                Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(selectedImage, 500); // resize image using helper
-                // Configure byte output stream
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                // Transform to byte array
-                byte[] byteArray = stream.toByteArray();
-                // Create new parseFile to save image
-                ParseFile newProfileImage = new ParseFile("profile.png", byteArray);
-                // Set new image on profileUser object
-                profileUser.put("profileImage", newProfileImage);
-                // Save profile user in background thread
-                profileUser.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        // Check for errors
-                        if (e != null) {
-                            Log.e(TAG, "Profile image wasn't saved", e);
-                            return;
-                        }
-                        Toast.makeText(getContext(), "Profile image changed!", Toast.LENGTH_SHORT).show(); // display success message
-                    }
-                });
-                // Change image on view
-                Glide.with(getContext())
-                        .load(byteArray)
-                        .circleCrop()
-                        .into(ivProfile);
+                Bitmap selectedImage = MediaController.loadFromUri(getActivity(), photoUri);
+                // Use method to save image
+                saveProfileImage(selectedImage);
             }
         } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // By this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(file.getAbsolutePath());
-                Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(takenImage, 500); // resize image using helper
-                // Configure byte output stream
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                // Compress the image further
-                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                // Transform to byte array
-                byte[] byteArray = bytes.toByteArray();
-                // Create new parseFile to save image
-                ParseFile newProfileImage = new ParseFile("profile.png", byteArray);
-                // Set new image on profileUser object
-                profileUser.put("profileImage", newProfileImage);
-                // Save profile user in background thread
-                profileUser.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        // Check for errors
-                        if (e != null) {
-                            Log.e(TAG, "Profile image wasn't saved", e);
-                            return;
-                        }
-                        Toast.makeText(getContext(), "Profile image changed!", Toast.LENGTH_SHORT).show(); // display success message
-                    }
-                });
-                // Change image on view
-                Glide.with(getContext())
-                        .load(byteArray)
-                        .circleCrop()
-                        .into(ivProfile);
+                // Use method to save image
+                saveProfileImage(takenImage);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -293,6 +208,34 @@ public class OwnProfileFragment extends ProfileFragment {
     }
 
     // OTHER METHODS
+
+    // Uses a bitmap to create a new parse file
+    // Saves it into the database and changes the IV
+    private void saveProfileImage(Bitmap bitmap) {
+        // Transform to byte array
+        byte[] byteArray = MediaController.byteArrayFromBitmap(bitmap);
+        // Create new parseFile to save image
+        ParseFile newProfileImage = new ParseFile("profile.png", byteArray);
+        // Set new image on profileUser object
+        profileUser.put("profileImage", newProfileImage);
+        // Save profile user in background thread
+        profileUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                // Check for errors
+                if (e != null) {
+                    Log.e(TAG, "Profile image wasn't saved", e);
+                    return;
+                }
+                Toast.makeText(getContext(), "Profile image changed!", Toast.LENGTH_SHORT).show(); // display success message
+            }
+        });
+        // Change image on view
+        Glide.with(getContext())
+                .load(byteArray)
+                .circleCrop()
+                .into(ivProfile);
+    }
 
     // Calls logout method from ParseUser to forget current credentials
     public void logout() {

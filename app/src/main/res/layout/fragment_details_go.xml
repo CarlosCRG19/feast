@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1"
         android:fillViewport="true" >
 
         <RelativeLayout
@@ -28,14 +27,11 @@
                 android:id="@+id/btnLike"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-
                 android:layout_alignTop="@+id/ivBusinessImage"
                 android:layout_alignEnd="@+id/ivBusinessImage"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
-
                 android:elevation="9dp"
-
                 android:background="@drawable/rounded_button"
                 app:srcCompat="@drawable/ic_round_favorite" />
 
@@ -44,44 +40,84 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ivBusinessImage"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:fontFamily="sans-serif-black"
-                android:textColor="@color/black"
-                android:textSize="30sp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="4dp"
+                android:layout_toStartOf="@+id/btnHide"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/darkest_grey"
+                android:textSize="28sp"
                 tools:text="Restaurant name" />
 
 
-            <TextView
-                android:id="@+id/tvRating"
+            <RatingBar
+                android:id="@+id/rbRating"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvName"
+                android:layout_height="27dp"
+                android:layout_below="@id/tvName"
                 android:layout_alignStart="@+id/tvName"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:text="Rating"/>
+                android:secondaryProgressTint="@android:color/transparent"
+                android:indeterminateDrawable="@drawable/star"
+                android:layout_marginTop="12dp"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:progressDrawable="@drawable/yelp_progress_bar" />
 
             <TextView
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvRating"
-                android:layout_alignStart="@+id/tvRating"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/rbRating"
+                android:layout_alignStart="@+id/rbRating"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/dark_grey"
                 android:textStyle="bold"
-                android:textSize="20sp"
-                android:text="Price"/>
+                android:textSize="18sp"
+                tools:text="$$$ · "/>
+
+            <TextView
+                android:id="@+id/tvCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rbRating"
+                android:layout_alignTop="@+id/tvPrice"
+                android:layout_toEndOf="@id/tvPrice"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/dark_grey"
+                android:textStyle="italic"
+                android:textSize="18sp"
+                tools:text="pizza, italian, burgers" />
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/tvCategories"
+                android:layout_alignStart="@+id/rbRating"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                tools:text="177A Bleecker Street"
+                android:drawablePadding="4dp"
+                app:drawableLeftCompat="@drawable/ic_location" />
 
             <TextView
                 android:id="@+id/tvTelephone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvPrice"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/tvAddress"
                 android:layout_alignStart="@+id/tvPrice"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textSize="20sp"
-                android:text="Telephone"/>
+                android:text="3121206124"
+                android:drawablePadding="8dp"
+                app:drawableLeftCompat="@drawable/ic_phone" />
 
             <TextView
                 android:id="@+id/tvHours"
@@ -89,31 +125,54 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvTelephone"
                 android:layout_alignStart="@+id/tvTelephone"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/darkest_grey"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textSize="20sp"
                 android:text="Open hours: "/>
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvHours"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="24dp"
                 android:layout_below="@+id/tvHours"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <ImageButton
+                android:id="@+id/btnHide"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/ivBusinessImage"
+                android:layout_marginBottom="-25dp"
+                android:layout_marginEnd="32dp"
+                android:elevation="9dp"
+                android:backgroundTint="@color/dark_grey"
+                android:background="@drawable/circle_orange"
+                android:src="@drawable/ic_arrow_down"/>
 
             <Button
                 android:id="@+id/btnGo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="280dp"
-                android:text="Go!" />
-
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:layout_toStartOf="@+id/btnHide"
+                android:layout_alignTop="@+id/btnHide"
+                android:layout_alignBottom="@+id/btnHide"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:elevation="8dp"
+                android:background="@drawable/spinner_background"
+                android:text="Go!"/>
         </RelativeLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

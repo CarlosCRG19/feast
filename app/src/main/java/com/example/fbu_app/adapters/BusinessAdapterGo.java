@@ -108,7 +108,7 @@ public class BusinessAdapterGo extends BusinessAdapter{
         public void onClick(View v) {
             // Create bundle to pass busines as argument
             Bundle bundle = new Bundle();
-            bundle.putParcelable(BUSINESS_TAG, business);
+            bundle.putParcelable(Business.TAG, business);
 
             // Create new detailsFragmentGo instance
             DetailsFragmentGo detailsFragmentGo = new DetailsFragmentGo();
@@ -117,6 +117,7 @@ public class BusinessAdapterGo extends BusinessAdapter{
             // Make fragment transaction adding to back stack to return when back clicked
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_up, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_down)
                     .replace(R.id.flContainer, detailsFragmentGo)
                     .addToBackStack(null)
                     .commit();

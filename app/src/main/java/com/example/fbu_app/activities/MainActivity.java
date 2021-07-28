@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.fbu_app.R;
-import com.example.fbu_app.fragments.CreateFragment;
 import com.example.fbu_app.fragments.LocationFragment;
 import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.fragments.ProfileFragments.OwnProfileFragment;
@@ -95,7 +94,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // OTHER METHODS
-    private void hideBottomNavBar() {
+    public void showBottomNavBar() {
+        // Change visibility of toolbar
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
+        bottomAppBar.setVisibility(View.VISIBLE);
+        // Change visibility of this button
+        btnCreate.show();
+    }
+
+    // OTHER METHODS
+    public void hideBottomNavBar() {
         // Change visibility of toolbar
         BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
         bottomAppBar.setVisibility(View.GONE);

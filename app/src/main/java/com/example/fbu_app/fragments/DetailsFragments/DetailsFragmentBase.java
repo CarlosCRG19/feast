@@ -2,6 +2,8 @@ package com.example.fbu_app.fragments.DetailsFragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,9 +62,10 @@ public class DetailsFragmentBase extends Fragment {
 
     protected Business business;
 
-    // Views
-    ImageView ivBusinessImage;
-    TextView tvName, tvRating, tvPrice, tvTelephone;
+    // Layout views as member variables
+    private ImageView ivBusinessImage;
+    private TextView tvName, tvPrice, tvAddress, tvTelephone, tvCategories, tvHours;
+    private RatingBar rbRating;
 
     HoursAdapter adapter;
     List<Hour> hours;
@@ -84,7 +88,9 @@ public class DetailsFragmentBase extends Fragment {
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-       return super.onCreateView(inflater, container, savedInstanceState);
+       // Hide Activity's bottomAppBar
+        ((MainActivity) getActivity()).hideBottomNavBar();
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -98,23 +104,9 @@ public class DetailsFragmentBase extends Fragment {
 
         business = getArguments().getParcelable("business");
 
-        ivBusinessImage = view.findViewById(R.id.ivBusinessImage);
-        tvName = view.findViewById(R.id.tvName);
-        tvRating = view.findViewById(R.id.tvRating);
-        tvPrice =view.findViewById(R.id.tvPrice);
-        tvTelephone = view.findViewById(R.id.tvTelephone);
-        btnLike = view.findViewById(R.id.btnLike);
-
-        // Set TVs with info from the business
-        tvName.setText(business.getName());
-        tvPrice.setText("Price: " + business.getPrice());
-        tvRating.setText("Rating: " + business.getRating() + "/5");
-        tvTelephone.setText("Telephone: " + business.getTelephone());
-
-        Glide.with(getContext())
-                .load(business.getImageUrl())
-                .centerCrop()
-                .into(ivBusinessImage);
+        // Use private method to assign views values
+        setViews(view);
+        populateViews();
 
         hours = new ArrayList<>();
         adapter = new HoursAdapter(getContext(), hours);
@@ -133,7 +125,13 @@ public class DetailsFragmentBase extends Fragment {
 
                     JSONObject hoursJSON = json.jsonObject.getJSONArray("hours").getJSONObject(0);
                     hours = Hour.fromJsonArray(hoursJSON.getJSONArray("open"), business);
-                    adapter.addAll(hours);
+                    // Check if hours where received
+                    if(hours.size() > 0) {
+                        // Add hours to adapter
+                        adapter.addAll(hours);
+                        // Change Hours text visibility
+                        tvHours.setVisibility(View.VISIBLE);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -145,6 +143,53 @@ public class DetailsFragmentBase extends Fragment {
             }
         });
 
+    }
+
+    // Assigns views to member variables
+    private void setViews(View view) {
+        // ImageView for business photo
+        ivBusinessImage = view.findViewById(R.id.ivBusinessImage);
+        // Text views
+        tvName = view.findViewById(R.id.tvName);
+        tvPrice =view.findViewById(R.id.tvPrice);
+        tvCategories = view.findViewById(R.id.tvCategories);
+        tvAddress = view.findViewById(R.id.tvAddress);
+        tvTelephone = view.findViewById(R.id.tvTelephone);
+        tvHours = view.findViewById(R.id.tvHours);
+        // Assign yelp rating bar
+        rbRating = view.findViewById(R.id.rbRating);
+        // Like button
+        btnLike = view.findViewById(R.id.btnLike);
+    }
+
+    // Binds the business data with the views
+    private void populateViews() {
+        // Use glide to populate ImageView
+        Glide.with(getContext())
+                .load(business.getImageUrl())
+                .centerCrop()
+                .into(ivBusinessImage);
+
+        // Set TVs with info from the business
+        tvName.setText(business.getName());
+        // Check if price value exists
+        if(business.getPrice().length() > 0) {
+            // Set price text
+            String textPrice = business.getPrice() + " · ";
+            tvPrice.setText(textPrice);
+        }
+        // Set categories text
+        tvCategories.setText(Business.formatCategories(business.getCategories()));
+        // Set address text
+        tvAddress.setText(business.getAddress());
+        // Set telephone text
+        if(business.getTelephone().length() > 0) {
+            tvTelephone.setText(business.getTelephone());
+        } else {
+            tvTelephone.setVisibility(View.INVISIBLE);
+        }
+        // Use business rating to setup rating bar
+        rbRating.setRating(business.getRating());
     }
 
     // Checks if local business is already in database, if it is, the value of business is changed to match that one
@@ -187,6 +232,17 @@ public class DetailsFragmentBase extends Fragment {
                     // create new like if business has not been liked before
                     saveLike();
                 }
+            }
+        });
+
+        // Set listener to make call
+        tvTelephone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String uri = "tel: " + business.getTelephone();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
             }
         });
     }

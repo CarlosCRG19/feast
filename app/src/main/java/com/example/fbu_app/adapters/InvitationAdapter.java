@@ -74,7 +74,6 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public static final String BUSINESS_TAG  = "business"; // identifier for passing busines with bundle
         public static final String INVITATION_TAG = "invitation"; // Simple tag to send invitation with bundle
 
         // VIEWS
@@ -169,7 +168,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         public void onClick(View v) {
             // Create new bundle to pass args
             Bundle bundle = new Bundle();
-            bundle.putParcelable(BUSINESS_TAG, visit.getBusiness());
+            bundle.putParcelable(Business.TAG, visit.getBusiness());
             bundle.putParcelable(INVITATION_TAG, invitation);
 
             // Create new instance of detailsFragment (the user can create a new visit from this details screen)

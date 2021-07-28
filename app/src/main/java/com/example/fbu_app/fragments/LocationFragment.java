@@ -31,6 +31,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -151,7 +152,10 @@ public class LocationFragment extends Fragment {
         btnDate = view.findViewById(R.id.btnDate); // Date selection
         btnConfirmLocation = view.findViewById(R.id.btnConfirmLocation); // Location selection
         // Button date setup
-        btnDate.setText(DatePickerController.getTodaysDate(visitDate, visitDateStr));
+        Pair<Date, String> todaysDate = DatePickerController.getTodaysDate();
+        visitDate = todaysDate.first;
+        visitDateStr = todaysDate.second;
+        btnDate.setText(visitDateStr);
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
