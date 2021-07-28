@@ -31,6 +31,9 @@
             <action android:name="android.intent.action.GET_CONTENT" />
         </intent>
 
+        <package android:name="com.google.android.apps.maps"/>
+
+
     </queries>
 
 

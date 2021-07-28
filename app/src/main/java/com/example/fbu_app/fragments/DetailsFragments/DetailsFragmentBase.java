@@ -37,6 +37,14 @@ import com.example.fbu_app.models.Hour;
 import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.DeleteCallback;
 import com.parse.GetCallback;
@@ -82,6 +90,13 @@ public class DetailsFragmentBase extends Fragment {
     // Current user from parse
     ParseUser currentUser;
 
+    // MAP FEATURE VIEWS
+
+    // Map view
+    MapView mapView;
+    // Google Map
+    GoogleMap googleMap;
+
     public DetailsFragmentBase(){}
 
     @Nullable
@@ -107,6 +122,11 @@ public class DetailsFragmentBase extends Fragment {
         // Use private method to assign views values
         setViews(view);
         populateViews();
+
+        // Get business location
+        LatLng businessLocation = new LatLng(business.getCoordLatitude(), business.getCoordLongitude());
+        // Setup map with location
+        setUpMap(businessLocation);
 
         hours = new ArrayList<>();
         adapter = new HoursAdapter(getContext(), hours);
@@ -160,6 +180,8 @@ public class DetailsFragmentBase extends Fragment {
         rbRating = view.findViewById(R.id.rbRating);
         // Like button
         btnLike = view.findViewById(R.id.btnLike);
+        // Map view for business location
+        mapView = view.findViewById(R.id.mvLocation);
     }
 
     // Binds the business data with the views
@@ -363,6 +385,45 @@ public class DetailsFragmentBase extends Fragment {
             }
         });
     }
+
+    // MAP METHODS
+
+    // Assigns the map component of the app. Which is represented as a child fragment inside LocationFragment
+    private void setUpMap(LatLng businessLocation) {
+        // Check if map is null
+        if (mapView != null) {
+            // Call onCreate method
+            mapView.onCreate(null);
+            // Set callback to begin
+             mapView.getMapAsync(new OnMapReadyCallback() {
+                 @Override
+                 public void onMapReady(@NonNull @NotNull GoogleMap map) {
+                     // Initialize map action
+                     MapsInitializer.initialize(getContext());
+                     // assign map to member variable once it is ready
+                     googleMap = map;
+                     // Set map style
+                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                     pointLocation(businessLocation);
+                 }
+             });
+        }
+    }
+
+    // Creates a new marker on the map and erases previous locations
+    private void pointLocation(@NonNull LatLng latLng) {
+        // Create new marker
+        MarkerOptions markerOptions = new MarkerOptions();
+        // Assign position to marker
+        markerOptions.position(latLng);
+        // Clear all markers
+        googleMap.clear();
+        // Make animation for camera movement
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+        // Add new marker
+        googleMap.addMarker(markerOptions);
+    }
+
 
 
 }
