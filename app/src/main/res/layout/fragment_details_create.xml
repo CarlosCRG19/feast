@@ -40,10 +40,10 @@
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivBusinessImage"
+                android:layout_below="@+id/llCreateVisit"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/open_sans_bold"
                 android:textColor="@color/darkest_grey"
@@ -89,15 +89,32 @@
                 android:textColor="@color/dark_grey"
                 android:textStyle="italic"
                 android:textSize="18sp"
-                tools:text="pizza, italian, burgers" />
+                tools:text="pizza, italian, burgers"
+                android:drawablePadding="4dp"
+                app:drawableLeftCompat="@drawable/ic_menu"
+                android:drawableTint="@color/dark_grey" />
+            <TextView
+                android:id="@+id/tvTelephone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/tvCategories"
+                android:layout_alignStart="@+id/rbRating"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:text="3121206124"
+                android:drawablePadding="8dp"
+                app:drawableLeftCompat="@drawable/ic_phone" />
 
             <TextView
                 android:id="@+id/tvAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_below="@+id/tvCategories"
-                android:layout_alignStart="@+id/rbRating"
+                android:layout_below="@+id/tvTelephone"
+                android:layout_alignStart="@+id/tvTelephone"
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/open_sans"
                 android:textColor="@color/dark_grey"
@@ -116,27 +133,11 @@
                 android:layout_marginHorizontal="32dp"/>
 
             <TextView
-                android:id="@+id/tvTelephone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_below="@+id/mvLocation"
-                android:layout_alignStart="@+id/tvPrice"
-                android:layout_marginEnd="24dp"
-                android:fontFamily="@font/open_sans_bold"
-                android:textColor="@color/dark_grey"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="3121206124"
-                android:drawablePadding="8dp"
-                app:drawableLeftCompat="@drawable/ic_phone" />
-
-            <TextView
                 android:id="@+id/tvHours"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTelephone"
-                android:layout_alignStart="@+id/tvTelephone"
+                android:layout_below="@+id/mvLocation"
+                android:layout_alignStart="@+id/tvAddress"
                 android:layout_marginTop="20dp"
                 android:visibility="gone"
                 android:fontFamily="@font/open_sans_bold"
@@ -149,49 +150,53 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvHours"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="24dp"
                 android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="24dp"
                 android:layout_below="@+id/tvHours"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/llCreateVisit"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_alignBottom="@+id/ivBusinessImage"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="-22dp"
+                android:background="@drawable/spinner_background"
+                android:backgroundTint="@color/white"
+                android:orientation="horizontal"
+                android:elevation="4dp"
+                app:layout_anchor="@id/ivBusinessImage"
+                app:layout_anchorGravity="bottom|end">
+
+                <Button
+                    android:id="@+id/btnDate"
+                    style="?android:spinnerStyle"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/open_sans"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:text="13 JUL 2021" />
+
+                <Button
+                    android:id="@+id/btnCreateVisit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_background"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:text="Create visit!" />
+
+            </LinearLayout>
+
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <LinearLayout
-        android:id="@+id/llCreateVisit"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:background="@drawable/spinner_background"
-        android:backgroundTint="@color/white"
-        android:orientation="horizontal"
-        android:elevation="4dp"
-        app:layout_anchor="@id/ivBusinessImage"
-        app:layout_anchorGravity="bottom|end">
-
-        <Button
-            android:id="@+id/btnDate"
-            style="?android:spinnerStyle"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/open_sans"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            tools:text="13 JUL 2021" />
-
-        <Button
-            android:id="@+id/btnCreateVisit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/spinner_background"
-            android:fontFamily="@font/open_sans_bold"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:text="Create visit!" />
-
-    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

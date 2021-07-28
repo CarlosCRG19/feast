@@ -1,5 +1,6 @@
 package com.example.fbu_app.fragments.ProfileFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.activities.ShowImageActivity;
 import com.example.fbu_app.adapters.BusinessAdapter;
 import com.example.fbu_app.adapters.UserAdapter;
 import com.example.fbu_app.models.Business;
@@ -64,6 +67,9 @@ public class ProfileFragment extends Fragment {
     // Search View
     SearchView svPeople;
 
+    // File for profileImage
+    ParseFile profileImage;
+
     // Required empty public constructor
     public ProfileFragment() {}
 
@@ -81,6 +87,9 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Set image
+        profileImage = (ParseFile) profileUser.get("profileImage");
+
         // Make sure that bottom nav bar is being displayed
         ((MainActivity) getActivity()).showBottomNavBar();
 
@@ -97,6 +106,20 @@ public class ProfileFragment extends Fragment {
         setViews(view);
         // Bind profile info
         populateViews();
+
+        // Set listener to open profile image
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch intent to open show image activity
+                Intent intent = new Intent(getContext(), ShowImageActivity.class);
+                // Pass image url as extra
+                intent.putExtra("photoUrl", profileImage.getUrl());
+                ActivityOptionsCompat options = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(((MainActivity) getActivity()), ivProfile, "profile_image");
+                startActivity(intent, options.toBundle());
+            }
+        });
 
         // RV FOR LIKED BUSINESSES SETUP
 
@@ -171,8 +194,6 @@ public class ProfileFragment extends Fragment {
 
     // Binds the views with the users data
     protected void populateViews() {
-        // Set image
-        ParseFile profileImage = (ParseFile) profileUser.get("profileImage");
         Glide.with(getContext())
                 .load(profileImage.getUrl())
                 .circleCrop()

@@ -120,7 +120,7 @@ public class InviteFragment extends DialogFragment {
         ParseQuery<FriendRequest> queryReceivedRequest = new ParseQuery<>(FriendRequest.class);
         queryReceivedRequest.whereEqualTo("toUser", currentUser);
         // Check status of request
-        queryMadeRequest.whereEqualTo("status", "accepted");
+        queryReceivedRequest.whereEqualTo("status", "accepted");
 
         // COMPOUND QUERY
 

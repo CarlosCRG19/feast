@@ -90,15 +90,32 @@
                 android:textColor="@color/dark_grey"
                 android:textStyle="italic"
                 android:textSize="18sp"
-                tools:text="pizza, italian, burgers" />
+                tools:text="pizza, italian, burgers"
+                app:drawableLeftCompat="@drawable/ic_menu"
+                android:drawableTint="@color/dark_grey" />
+
+            <TextView
+                android:id="@+id/tvTelephone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/tvCategories"
+                android:layout_alignStart="@+id/rbRating"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:text="3121206124"
+                android:drawablePadding="8dp"
+                app:drawableLeftCompat="@drawable/ic_phone" />
 
             <TextView
                 android:id="@+id/tvAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_below="@+id/tvCategories"
-                android:layout_alignStart="@+id/rbRating"
+                android:layout_below="@+id/tvTelephone"
+                android:layout_alignStart="@+id/tvTelephone"
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/open_sans"
                 android:textColor="@color/dark_grey"
@@ -117,26 +134,11 @@
                 android:layout_marginHorizontal="32dp"/>
 
             <TextView
-                android:id="@+id/tvTelephone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_below="@+id/mvLocation"
-                android:layout_alignStart="@+id/rbRating"
-                android:layout_marginEnd="24dp"
-                android:fontFamily="@font/open_sans"
-                android:textColor="@color/dark_grey"
-                android:textSize="18sp"
-                android:text="3121206124"
-                android:drawablePadding="8dp"
-                app:drawableLeftCompat="@drawable/ic_phone" />
-
-            <TextView
                 android:id="@+id/tvHours"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTelephone"
-                android:layout_alignStart="@+id/tvTelephone"
+                android:layout_below="@+id/mvLocation"
+                android:layout_alignStart="@+id/tvAddress"
                 android:layout_marginTop="20dp"
                 android:visibility="gone"
                 android:fontFamily="@font/open_sans_bold"

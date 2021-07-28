@@ -40,6 +40,7 @@ tools:context=".fragments.ProfileFragments.OtherProfileFragment">
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:adjustViewBounds="true"
+        android:transitionName="profile_image"
         android:src="@drawable/top_corners_rounded"
         android:padding="4dp"
         tools:srcCompat="@tools:sample/avatars" />
