@@ -7,6 +7,7 @@ import com.parse.ParseUser;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @ParseClassName("Visit")
 public class Visit extends ParseObject {
@@ -42,6 +43,8 @@ public class Visit extends ParseObject {
     public ParseUser getUser() {
         return getParseUser("user");
     }
+
+    public List<ParseUser> getAttendees() {return (List<ParseUser>) get("attendees"); }
 
     public void addAttendee(ParseUser user) { add("attendees", user); }
 

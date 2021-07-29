@@ -1,44 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/lightest_grey"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/llMenu"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:padding="15dp"-->
-<!--        android:elevation="9dp"-->
-<!--        android:background="@drawable/bottom_corners_rounded"-->
-<!--        android:gravity="center">-->
-<!--        -->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="fill_parent"-->
-<!--            android:background="@drawable/button_background"-->
-<!--            android:padding="10dp"-->
-<!--            android:gravity="center"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:fontFamily="@font/open_sans_bold"-->
-<!--            android:textSize="16sp"-->
-<!--            android:text="Explore" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/btnCompare"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:textColor="@color/dark_grey"-->
-<!--            android:fontFamily="@font/open_sans_bold"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:text="Compare" />-->
-
-<!--    </LinearLayout>-->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

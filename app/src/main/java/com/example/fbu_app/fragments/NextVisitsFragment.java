@@ -39,7 +39,6 @@ import java.util.List;
 public class NextVisitsFragment extends Fragment {
 
     // VIEWS
-    TextView tvInvitations;
     RecyclerView rvVisits; // RV to display visits
     Button btnPastVisits; // Button to go to past visits
 
@@ -77,9 +76,6 @@ public class NextVisitsFragment extends Fragment {
         // Init invitation list and adapter
         invitations = new ArrayList<>();
         invitationAdapter = new InvitationAdapter(getContext(), invitations);
-
-        // Find tv invitations
-        tvInvitations = view.findViewById(R.id.tvInvitations);
 
         // Setup RecyclerView for invitations
         rvInvitations = view.findViewById(R.id.rvVisitInvitations);
@@ -176,8 +172,6 @@ public class NextVisitsFragment extends Fragment {
                     return;
                 }
                 if(invitationList.size() > 0) {
-                    tvInvitations.setVisibility(View.VISIBLE);
-                    tvInvitations.setText("Your Invitations!");
                     // Clear list
                     invitations.clear();
                     // Add values to invitations

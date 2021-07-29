@@ -1,61 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginHorizontal="16dp"
+    android:animateLayoutChanges="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp">
 
-    <ImageView
-        android:id="@+id/ivBusinessImage"
-        android:layout_marginStart="10dp"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/ivBusinessImage"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="13sp"
-        tools:text="Business restaurant" />
+        android:background="@color/lightest_grey">
 
-    <TextView
-        android:id="@+id/tvInvitedBy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_below="@+id/tvName"
-        android:layout_toEndOf="@id/ivBusinessImage"
-        android:textSize="12sp"
-        tools:text="Rating" />
+        <ImageView
+            android:id="@+id/ivBusinessImage"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/rvInfo"
+            tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
-        android:text="25 AUG 2929" />
+        <RelativeLayout
+            android:id="@+id/rvInfo"
+            android:layout_toEndOf="@id/ivBusinessImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-    <Button
-        android:id="@+id/btnDecline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvDate"
-        android:layout_below="@+id/tvInvitedBy"
-        android:text="Decline"/>
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/darkest_grey"
+                android:layout_toStartOf="@+id/tvDate"
+                android:textSize="16sp"
+                tools:text="Business restaurant" />
 
-    <Button
-        android:id="@+id/btnAccept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/btnDecline"
-        android:layout_marginEnd="10dp"
-        android:layout_below="@+id/tvInvitedBy"
-        android:text="Accept"/>
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/dark_grey"
+                android:textSize="12sp"
+                android:text="25 AUG 2929" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvName"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/open_sans"
+                android:textStyle="italic"
+                android:textColor="@color/dark_grey"
+                android:textSize="12sp"
+                tools:text="177A Bleecker Street"/>
+
+            <TextView
+                android:id="@+id/tvLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvAddress"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/dark_grey"
+                android:textSize="12sp"
+                tools:text="Seattle, US" />
+
+            <ImageView
+                android:id="@+id/ivCreatorImage"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="7dp"
+                android:layout_alignBottom="@+id/btnAccept"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tvCreatorUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/btnAccept"
+                android:layout_alignBottom="@+id/btnAccept"
+                android:layout_toEndOf="@+id/ivCreatorImage"
+                android:layout_marginStart="4dp"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/open_sans"
+                android:textStyle="bold"
+                android:textColor="@color/dark_grey"
+                android:textSize="10sp"
+                tools:text="carloscrg9"/>
+
+            <Button
+                android:id="@+id/btnAccept"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/tvLocation"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/tvDecline"
+                android:background="@drawable/spinner_background"
+                android:fontFamily="@font/open_sans_bold"
+                android:gravity="center"
+                android:text="Accept"
+                android:textAllCaps="false"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvDecline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/tvDate"
+                android:layout_alignTop="@+id/btnAccept"
+                android:layout_alignBottom="@+id/btnAccept"
+                android:gravity="center_vertical"
+                android:background="@android:color/transparent"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="@color/orange_pale"
+                android:fontFamily="@font/open_sans_bold"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:text="Decline"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

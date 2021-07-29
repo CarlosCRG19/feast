@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.DatePickerController;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Like;
@@ -26,7 +27,9 @@ import com.example.fbu_app.models.VisitInvitation;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -73,8 +76,8 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
         Visit visit;
 
         // VIEWS
-        private ImageView ivBusinessImage;
-        private TextView tvName, tvRating, tvDate;
+        private ImageView ivBusinessImage, ivCreatorImage;
+        private TextView tvName, tvAddress, tvLocation, tvAttendees, tvDate;
         private TextView tvOptions; // tv to display cancel visit option
 
         // Business for this visit
@@ -87,26 +90,67 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
             super(itemView);
             // Get views from layout
             ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
+            ivCreatorImage = itemView.findViewById(R.id.ivCreatorImage);
             tvName = itemView.findViewById(R.id.tvName);
-            tvRating = itemView.findViewById(R.id.tvRating);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvLocation = itemView.findViewById(R.id.tvLocation);
+            tvAttendees = itemView.findViewById(R.id.tvAttendees);
             tvDate = itemView.findViewById(R.id.tvDate);
             // TV that serves as menu button
             tvOptions = itemView.findViewById(R.id.tvOptions);
-                    // Set listener
+            // Set listener
             itemView.setOnClickListener(this);
         }
 
         public void bind(Visit visitToBind) {
             // Assign visit value
             visit = visitToBind;
-            // Unite info from visit
+            // Get todays date
+            String todaysDateStr = DatePickerController.getTodaysDate().second;
+            // Check if visit date is today
+            if (visit.getDateStr().equals(todaysDateStr)) {
+                // Set tvDate text
+                tvDate.setText("Today");
+            } else {
+                tvDate.setText(visit.getDateStr());
+            }
+
+
+            // Get business from visit
             visitBusiness = visit.getBusiness();
+            // Bind business info to respective views
             Glide.with(context)
                     .load(visitBusiness.getImageUrl())
                     .into(ivBusinessImage);
+            // Set name text
             tvName.setText(visitBusiness.getName());
-            tvRating.setText("Rating: " + visitBusiness.getRating());
-            tvDate.setText(visit.getDateStr());
+            // Set address text
+            tvAddress.setText(visitBusiness.getAddress());
+            // Create text for location
+            String locationText = visitBusiness.getCity() + ", " + visitBusiness.getCountry();
+            // Set text into view
+            tvLocation.setText(locationText);
+
+            // Get attendees from visit
+            ParseUser visitCreator = visit.getUser();
+            // Get creator's profile picture
+            ParseFile creatorImage = (ParseFile) visitCreator.get("profileImage");
+            // Embbed creator pp into IV
+            Glide.with(context)
+                    .load(creatorImage.getUrl())
+                    .circleCrop()
+                    .into(ivCreatorImage);
+
+            // Check if list of attendees exists
+            List<ParseUser> attendees = visit.getAttendees();
+            // Check if list is empty
+            if (attendees == null || attendees.size() <= 1) {
+                tvAttendees.setVisibility(View.INVISIBLE);
+            } else {
+                // Create text for attendees bubble
+                String attendeesText = "+" + String.valueOf(attendees.size() - 1);
+                tvAttendees.setText(attendeesText);
+            }
 
             // Set menu click listener
             tvOptions.setOnClickListener(new View.OnClickListener() {

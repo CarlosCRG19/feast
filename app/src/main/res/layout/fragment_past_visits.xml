@@ -6,19 +6,26 @@
     android:layout_height="match_parent"
     android:background="@color/lightest_grey" >
 
-<LinearLayout
+    <LinearLayout
         android:id="@+id/llMenu"
         android:orientation="horizontal"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:padding="10dp"
+        android:elevation="9dp"
+        android:background="@drawable/bottom_corners_rounded">
 
         <Button
             android:id="@+id/btnNextVisits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textColor="@color/dark_grey"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="16sp"
             android:textAllCaps="false"
             android:text="Next Visits"/>
 
@@ -26,16 +33,23 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:background="@drawable/button_background"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="16sp"
             android:text="Past Visits" />
+
     </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPastVisits"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp"/>
 
 
 </LinearLayout>

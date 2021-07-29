@@ -25,6 +25,7 @@
     <!--    GUI Colors-->
     <color name="red_orange">#F03D16</color>
     <color name="orange">#F65C36</color>
+    <color name="orange_pale">#D57158</color>
     <color name="brown">#B74922</color>
     <color name="yellow">#FAC22D</color>
 

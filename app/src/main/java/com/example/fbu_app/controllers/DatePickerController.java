@@ -41,13 +41,13 @@ public class DatePickerController {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        // Save visit date
-        Date visitDate = new Date(year - 1900, month, day);
+        // Save todays date
+        Date todaysDate = new Date(year - 1900, month, day);
 
         // Formate date as string
         month += 1; // months starts with 0 for January
-        String visitDateStr = makeDateString(day, month, year);
-        return new Pair<>(visitDate, visitDateStr);
+        String todaysDateStr = makeDateString(day, month, year);
+        return new Pair<>(todaysDate, todaysDateStr);
     }
 
     // Returns todays date as a string

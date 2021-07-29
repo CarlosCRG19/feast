@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.DatePickerController;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentInvitation;
 import com.example.fbu_app.models.Business;
@@ -28,6 +29,7 @@ import com.example.fbu_app.models.VisitInvitation;
 import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -77,9 +79,9 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         public static final String INVITATION_TAG = "invitation"; // Simple tag to send invitation with bundle
 
         // VIEWS
-        private ImageView ivBusinessImage;
-        private Button btnAccept, btnDecline;
-        private TextView tvName, tvInvitedBy, tvDate;
+        private ImageView ivBusinessImage, ivCreatorImage;
+        private Button btnAccept;
+        private TextView tvName, tvAddress, tvLocation, tvCreatorUsername, tvDate, tvDecline;
 
         // Invitation object
         VisitInvitation invitation;
@@ -92,28 +94,63 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             super(itemView);
             // Get views from layout
             ivBusinessImage = itemView.findViewById(R.id.ivBusinessImage);
+            ivCreatorImage = itemView.findViewById(R.id.ivCreatorImage);
             tvName = itemView.findViewById(R.id.tvName);
-            tvInvitedBy = itemView.findViewById(R.id.tvInvitedBy);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvLocation = itemView.findViewById(R.id.tvLocation);
+            tvCreatorUsername = itemView.findViewById(R.id.tvCreatorUsername);
             tvDate = itemView.findViewById(R.id.tvDate);
             btnAccept = itemView.findViewById(R.id.btnAccept);
-            btnDecline = itemView.findViewById(R.id.btnDecline);
+            tvDecline = itemView.findViewById(R.id.tvDecline);
             // Set listener
             itemView.setOnClickListener(this);
         }
 
+
+
         public void bind(VisitInvitation visitInvitation) {
-            // Set invitation value
+
+            // Assign invitation value
             invitation = visitInvitation;
-            // Get visit and fromUser fields
-            visit = invitation.getVisit();
-            fromUser = invitation.getFromUser();
-            // Unite info from invitation
+
+            // Get visit for this invitation
+            visit = visitInvitation.getVisit();
+            // Get todays date
+            String todaysDateStr = DatePickerController.getTodaysDate().second;
+            // Check if visit date is today
+            if (visit.getDateStr().equals(todaysDateStr)) {
+                // Set tvDate text
+                tvDate.setText("Today");
+            } else {
+                tvDate.setText(visit.getDateStr());
+            }
+
+            // Get business from visit
+            Business visitBusiness = visit.getBusiness();
+            // Bind business info to respective views
             Glide.with(context)
-                    .load(visit.getBusiness().getImageUrl())
+                    .load(visitBusiness.getImageUrl())
                     .into(ivBusinessImage);
-            tvName.setText(visit.getBusiness().getName());
-            tvInvitedBy.setText("Invited by: " + fromUser.getUsername());
-            tvDate.setText(visit.getDateStr());
+            // Set name text
+            tvName.setText(visitBusiness.getName());
+            // Set address text
+            tvAddress.setText(visitBusiness.getAddress());
+            // Create text for location
+            String locationText = visitBusiness.getCity() + ", " + visitBusiness.getCountry();
+            // Set text into view
+            tvLocation.setText(locationText);
+
+            // Get creator of invitation
+            ParseUser visitCreator = visitInvitation.getFromUser();
+            // Get creator's profile picture
+            ParseFile creatorImage = (ParseFile) visitCreator.get("profileImage");
+            // Embbed creator pp into IV
+            Glide.with(context)
+                    .load(creatorImage.getUrl())
+                    .circleCrop()
+                    .into(ivCreatorImage);
+            // Populate TV with creator username
+            tvCreatorUsername.setText(visitCreator.getUsername());
 
             // Button to accept the invitation
             btnAccept.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +171,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             });
 
             // Button to decline an invitation
-            btnDecline.setOnClickListener(new View.OnClickListener() {
+            tvDecline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Display a message of success
