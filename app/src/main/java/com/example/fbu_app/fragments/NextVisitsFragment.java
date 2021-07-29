@@ -130,7 +130,7 @@ public class NextVisitsFragment extends Fragment {
         // Add new attendee
         query.whereEqualTo("attendees", ParseUser.getCurrentUser());
         // order posts by date
-        query.addDescendingOrder("date");
+        query.addAscendingOrder("date");
         // Make query using background thread
         query.findInBackground(new FindCallback<Visit>() {
             @Override

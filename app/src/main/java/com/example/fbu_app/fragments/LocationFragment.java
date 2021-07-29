@@ -31,6 +31,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -240,7 +241,6 @@ public class LocationFragment extends Fragment {
     // Handle the result of permission request
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // Use requested code for launched activity and determine whether request was approved
         if (requestCode == REQUEST_LOCATION_PERMISSIONS_CODE
                 && grantResults.length > 0 && (grantResults[0] + grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
@@ -265,10 +265,8 @@ public class LocationFragment extends Fragment {
 
         } else {
             // When permission is not granted
-            ActivityCompat.requestPermissions(getActivity()
-                    , new String[]{Manifest.permission.ACCESS_FINE_LOCATION
-                            ,Manifest.permission.ACCESS_COARSE_LOCATION}
-                    ,REQUEST_LOCATION_PERMISSIONS_CODE);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_LOCATION_PERMISSIONS_CODE);
         }
     }
 

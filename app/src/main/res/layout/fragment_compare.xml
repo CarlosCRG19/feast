@@ -84,6 +84,7 @@
         android:background="@drawable/button_background"
         android:drawableLeft="@drawable/random_icon"
         android:textAppearance="?attr/textAppearanceBody1"
+        android:clickable="true"
         android:fontFamily="@font/open_sans_bold"
         android:textSize="12sp"
         android:textColor="@color/white"

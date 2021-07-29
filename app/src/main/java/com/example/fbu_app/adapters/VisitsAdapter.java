@@ -22,7 +22,9 @@ import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
+import com.example.fbu_app.models.VisitInvitation;
 import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -175,13 +177,14 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
                             Toast.makeText(context, "Error deleting visit!", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                         // Display success message
                         Toast.makeText(context, "Visit deleted!" , Toast.LENGTH_SHORT).show();
                         // Eliminate row
                         visits.remove(getAdapterPosition());
                         // Notify item removed
                         notifyItemRemoved(getAdapterPosition());
+                        // Check for visit invites using this visit and delete them
+                        deleteVisitInvitations(visit);
                     }
                 });
             } else {
@@ -198,6 +201,28 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
             }
         }
 
+    }
+
+    // Checks for pending invitations that were made using this visit
+    // Deletes them if they exist
+    private void deleteVisitInvitations(Visit visit) {
+        // Create query for visit invitations
+        ParseQuery<VisitInvitation> query = ParseQuery.getQuery(VisitInvitation.class);
+        // Check that invitation uses visit
+        query.whereEqualTo("visit", visit);
+        // Make query
+        query.findInBackground(new FindCallback<VisitInvitation>() {
+            @Override
+            public void done(List<VisitInvitation> visitInvitations, ParseException e) {
+                // Check if visits where found
+                if (e == null) {
+                    // Make a for loop and delete the invitations
+                    for (VisitInvitation visitInvitation : visitInvitations) {
+                        visitInvitation.deleteInBackground();
+                    }
+                }
+            }
+        });
     }
 
 }
