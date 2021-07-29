@@ -52,6 +52,9 @@ public class NextVisitsFragment extends Fragment {
     List<VisitInvitation> invitations;
     RecyclerView rvInvitations;
 
+    // HELPERS
+    SwipeRefreshLayout swipeContainer; // handles refresh action
+
     // Required empty constructor
     public NextVisitsFragment() {};
 
@@ -106,10 +109,31 @@ public class NextVisitsFragment extends Fragment {
         queryNextVisits();
         queryInvitations();
 
-//        // Enable refresh feature
-//        setRefreshFeature(view);
+        // Enable refresh feature
+        setRefreshFeature(view);
 
     }
+
+    // Lets the user refresh the main feed swiping down on the RV
+    protected void setRefreshFeature(View view) {
+        // Get view from layout
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Make query to get next visits and invitations
+                queryNextVisits();
+                queryInvitations();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
 
     // Makes a query to parse DataBase and gets visits whos date is greater or equal than todays
     private void queryNextVisits() {
@@ -143,8 +167,8 @@ public class NextVisitsFragment extends Fragment {
                 // Notify adapter
                 adapter.notifyDataSetChanged();
                 // Hide refreshing icon
-//                swipeContainer.setRefreshing(false);
-//                return;
+                swipeContainer.setRefreshing(false);
+                return;
             }
         });
     }
@@ -179,7 +203,7 @@ public class NextVisitsFragment extends Fragment {
                     // Notify adapter
                     invitationAdapter.notifyDataSetChanged();
                     // Hide refreshing icon
-//                    swipeContainer.setRefreshing(false);
+                    swipeContainer.setRefreshing(false);
                     return;
                 }
             }

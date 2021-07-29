@@ -1,74 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
 
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Date: "
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp" />
-
-    <Button
-        android:id="@+id/btnDate"
-        style="?android:spinnerStyle"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_alignTop="@+id/tvDate"
-        android:layout_toEndOf="@id/tvDate"
-        android:text="13 JUL 2021"
-        android:textColor="@color/black"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/tvSelectLocation"
-        android:layout_below="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Location: "
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="20dp" />
-
-    <EditText
-        android:id="@+id/etPlaces"
-        android:layout_below="@+id/tvSelectLocation"
+    <RelativeLayout
+        android:id="@+id/rlForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="  Enter address"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:padding="16dp"
-        android:drawableLeft="@drawable/ic_location"
-        android:gravity="center_vertical"
-        android:background="@android:drawable/editbox_background" />
+        android:background="@drawable/bottom_corners_rounded"
+        android:backgroundTint="@color/lightest_grey"
+        android:elevation="8dp"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="24dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/darkest_grey"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="24sp"
+            android:text="Create new visit" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Date: "
+            android:textColor="@color/darkest_grey"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="18sp"
+            android:layout_alignTop="@+id/llDate"
+            android:layout_alignBottom="@+id/llDate"
+            android:gravity="center_vertical"/>
+
+        <LinearLayout
+            android:id="@+id/llDate"
+            android:layout_below="@+id/tvTitle"
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/tvDate"
+            android:layout_marginStart="10dp"
+            android:elevation="4dp"
+            android:background="@drawable/spinner_background"
+            android:backgroundTint="@color/white">
+
+            <Button
+                android:id="@+id/btnDate"
+                style="?android:spinnerStyle"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans"
+                android:text="13 JUL 2021"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tvSelectLocation"
+            android:layout_below="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Location: "
+            android:textColor="@color/darkest_grey"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="18sp"
+            android:layout_marginTop="24dp" />
+
+        <EditText
+            android:id="@+id/etPlaces"
+            android:layout_below="@+id/tvSelectLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:textSize="14sp"
+            android:hint="Enter address"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/open_sans"
+            android:padding="16dp"
+            android:drawableLeft="@drawable/ic_location"
+            android:drawablePadding="2dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/spinner_background"
+            android:backgroundTint="@color/white"
+            android:layout_marginBottom="4dp"/>
+
+
+    </RelativeLayout>
+
 
     <fragment
         android:id="@+id/fragmentMap"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/etPlaces"
-        android:layout_marginTop="20dp"
-        android:layout_above="@+id/btnConfirmLocation"
+        android:layout_below="@id/rlForm"
+        android:layout_marginTop="-20dp"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
-    <Button
-        android:id="@+id/btnConfirmLocation"
-        android:layout_alignParentEnd="true"
+    <LinearLayout
+        android:id="@+id/llConfirmation"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_height="40dp"
-        android:textColor="@color/white"
-        android:text="Confirm location"/>
+        android:padding="10dp"
+        android:background="@drawable/top_corners_rounded"
+        android:elevation="8dp"
+        android:backgroundTint="@color/lightest_grey">
+
+        <Button
+            android:id="@+id/btnConfirmLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_background"
+            android:elevation="6dp"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:text="Confirm location"/>
+
+    </LinearLayout>
+
 
 
 

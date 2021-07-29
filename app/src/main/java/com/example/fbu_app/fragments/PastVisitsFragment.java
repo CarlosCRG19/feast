@@ -86,6 +86,28 @@ public class PastVisitsFragment extends Fragment {
         // Make query for NextVisits
         queryPastVisits();
 
+        // Enable refresh feature
+        setRefreshFeature(view);
+
+    }
+
+    // Lets the user refresh the main feed swiping down on the RV
+    protected void setRefreshFeature(View view) {
+        // Get view from layout
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Make query to get next visits and invitations
+                queryPastVisits();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     // Makes a query to parse DataBase and gets visits whose date is older than today's
@@ -119,6 +141,8 @@ public class PastVisitsFragment extends Fragment {
                 visits.addAll(visitsList);
                 // Notify adapter
                 adapter.notifyDataSetChanged();
+                // Hide refreshing icon
+                swipeContainer.setRefreshing(false);
                 return;
             }
         });
