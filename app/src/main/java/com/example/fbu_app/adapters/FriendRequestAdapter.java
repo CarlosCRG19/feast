@@ -68,8 +68,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
         // VIEWS
         private ImageView ivProfilePicture;
-        private Button btnAccept, btnDecline;
-        private TextView tvFriendRequest;
+        private Button btnAccept;
+        private TextView tvFriendRequest, tvDecline;
 
         // Friend request object for this VH
         FriendRequest request;
@@ -83,7 +83,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             ivProfilePicture = itemView.findViewById(R.id.ivProfilePicture);
             tvFriendRequest = itemView.findViewById(R.id.tvFriendRequest);
             btnAccept = itemView.findViewById(R.id.btnAccept);
-            btnDecline = itemView.findViewById(R.id.btnDecline);
+            tvDecline = itemView.findViewById(R.id.tvDecline);
         }
 
         public void bind(FriendRequest friendRequest) {
@@ -128,7 +128,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             });
 
             // Button to decline an invitation
-            btnDecline.setOnClickListener(new View.OnClickListener() {
+            tvDecline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Display a message of success

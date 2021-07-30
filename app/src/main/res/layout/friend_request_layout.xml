@@ -8,8 +8,8 @@
     <ImageView
         android:id="@+id/ivProfilePicture"
         android:layout_marginStart="10dp"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -17,34 +17,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/ivProfilePicture"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="13sp"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/open_sans"
+        android:textColor="@color/darkest_grey"
+        android:textSize="12sp"
         tools:text="DemoUser has sent you a friend request" />
 
 
     <Button
-        android:id="@+id/btnDecline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:layout_toEndOf="@+id/btnAccept"
-        android:layout_below="@+id/tvFriendRequest"
-        android:textSize="12sp"
-        android:text="Decline"/>
-
-    <Button
         android:id="@+id/btnAccept"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/tvFriendRequest"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/tvDecline"
+        android:background="@drawable/spinner_background"
+        android:fontFamily="@font/open_sans_bold"
+        android:gravity="center"
+        android:text="Accept"
+        android:textAllCaps="false"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvDecline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/btnDecline"
-        android:layout_toEndOf="@+id/ivProfilePicture"
-        android:layout_alignStart="@+id/tvFriendRequest"
-        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/btnAccept"
+        android:layout_alignBottom="@+id/btnAccept"
+        android:gravity="center_vertical"
+        android:background="@android:color/transparent"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="@color/orange_pale"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_marginEnd="12dp"
         android:textSize="12sp"
-        android:layout_below="@+id/tvFriendRequest"
-        android:text="Accept"/>
+        android:textAllCaps="false"
+        android:text="Decline"/>
 
 </RelativeLayout>

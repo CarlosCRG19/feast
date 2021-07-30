@@ -147,6 +147,8 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
             if (attendees == null || attendees.size() <= 1) {
                 tvAttendees.setVisibility(View.INVISIBLE);
             } else {
+                // Change visibility
+                tvAttendees.setVisibility(View.VISIBLE);
                 // Create text for attendees bubble
                 String attendeesText = "+" + String.valueOf(attendees.size() - 1);
                 tvAttendees.setText(attendeesText);

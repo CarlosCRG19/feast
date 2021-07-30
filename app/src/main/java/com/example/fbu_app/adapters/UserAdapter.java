@@ -84,7 +84,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             // Get views from layout
             ivUserImage = itemView.findViewById(R.id.ivUserImage);
             tvUsername = itemView.findViewById(R.id.tvUsername);
-            tvEmail = itemView.findViewById(R.id.tvEmail);
+            tvEmail = itemView.findViewById(R.id.tvName);
 
             // Set click listener to go to the users profile
             itemView.setOnClickListener(this);

@@ -104,7 +104,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             // Get views from layout
             ivUserImage = itemView.findViewById(R.id.ivUserImage);
             tvUsername = itemView.findViewById(R.id.tvUsername);
-            tvEmail = itemView.findViewById(R.id.tvEmail);
+            tvEmail = itemView.findViewById(R.id.tvName);
             rlUser =  itemView.findViewById(R.id.rlUser);
 
             // Set click listener to go to the users profile
