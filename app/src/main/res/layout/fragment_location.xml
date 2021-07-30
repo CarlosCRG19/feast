@@ -118,6 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/spinner_background"
+            android:foreground="?android:attr/selectableItemBackground"
             android:elevation="6dp"
             android:textAppearance="?attr/textAppearanceBody1"
             android:fontFamily="@font/open_sans_bold"
@@ -126,10 +127,5 @@
             android:text="Confirm location"/>
 
     </LinearLayout>
-
-
-
-
-
 
 </RelativeLayout>

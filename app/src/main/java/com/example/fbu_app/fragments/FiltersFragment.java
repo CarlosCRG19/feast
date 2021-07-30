@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fbu_app.R;
 import com.example.fbu_app.models.VisitViewModel;
+import com.google.android.material.slider.Slider;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,8 +37,8 @@ public class FiltersFragment extends Fragment {
     Button btnFilter; // Apply filters button
 
     // Distance selection views
-    RadioGroup rgDistance;
-    RadioButton rbD5, rbD10, rbD15, rbD20;
+    Slider sliderDistance;
+    TextView tvDistance;
 
     // Price selection views
     RadioGroup rgPrice;
@@ -73,14 +76,21 @@ public class FiltersFragment extends Fragment {
         getFiltersValues();
 
         // Distance selection setup
+        sliderDistance = view.findViewById(R.id.sliderDistance);
+        tvDistance = view.findViewById(R.id.tvDistance);
+        // Set tv distance text to 0 km
+        tvDistance.setText("20 km");
+        // Set listener for slider
+        sliderDistance.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
+                String distanceText = String.valueOf((int) value) + " km";
+                // Add space at the beginning
+                distanceText = value <= 10 ? " " + distanceText : distanceText;
+                tvDistance.setText(distanceText);
+            }
+        });
 
-        // Get radio group
-        rgDistance = view.findViewById(R.id.rgDistance);
-        // Get each radio button
-        rbD5 = view.findViewById(R.id.rbD5);
-        rbD10 = view.findViewById(R.id.rbD10);
-        rbD15 = view.findViewById(R.id.rbD15);
-        rbD20 = view.findViewById(R.id.rbD20);
 
         // Price selection setup
 
@@ -114,9 +124,11 @@ public class FiltersFragment extends Fragment {
                 // If this checkbox is selected, select all checkboxes inside llCheckboxes
                 for(int i=0 ; i < llCheckboxes.getChildCount(); i++) {
                     // Check if child is an instance of checkbox
-                    if(llCheckboxes.getChildAt(i) instanceof CheckBox) {
+                    if(llCheckboxes.getChildAt(i) instanceof RelativeLayout) {
+                        // Get layout that contains checkbox
+                        RelativeLayout containerLayout = ((RelativeLayout) llCheckboxes.getChildAt(i));
                         // Change check state
-                        ((CheckBox) llCheckboxes.getChildAt(i)).setChecked(isChecked);
+                        ((CheckBox) containerLayout.getChildAt(1)).setChecked(isChecked);
                     }
                 }
             }
@@ -124,7 +136,6 @@ public class FiltersFragment extends Fragment {
 
         // Initialize hashmaps for values
         initializePriceMap();
-        initializeDistanceMap();
         initializeCategoriesMap();
 
         // Change state of views and check if they have been selected
@@ -170,7 +181,7 @@ public class FiltersFragment extends Fragment {
         else
             getRbFromMap(priceMap, price).setChecked(true);
         // DISTANCE SETTINGS
-        getRbFromMap(distanceMap, radius).setChecked(true);
+        sliderDistance.setValue(Float.parseFloat(radius) / 1000);
         // CATEGORIES SETUP
         if (categories == null || categories == "All")
             cbAll.setChecked(true);
@@ -204,17 +215,7 @@ public class FiltersFragment extends Fragment {
 
     // Returns the price selected with the radiogroup
     private void setSelectedDistance() {
-        for (int i = 0; i < rgDistance.getChildCount(); i++) {
-            if (rgDistance.getChildAt(i) instanceof RadioButton) {
-                RadioButton radioButton = (RadioButton) rgDistance.getChildAt(i);
-                if (radioButton.isChecked()) {
-                    // Get distance from hashmap
-                    radius = distanceMap.get(radioButton);
-                    // Break loop
-                    break;
-                }
-            }
-        }
+        radius = String.valueOf((int) sliderDistance.getValue()) + "000";
     }
 
 
@@ -228,9 +229,11 @@ public class FiltersFragment extends Fragment {
             // Check each checkboxes with a for loop
             for(int i=0 ; i < llCheckboxes.getChildCount(); i++) {
                 // Verify that view is an instance of checkbox
-                if(llCheckboxes.getChildAt(i) instanceof CheckBox) {
+                if(llCheckboxes.getChildAt(i) instanceof RelativeLayout) {
+                    // Get relative layout that contains checkbox
+                    RelativeLayout containerLayout = (RelativeLayout) llCheckboxes.getChildAt(i);
                     // Get checkbox at postion
-                    CheckBox checkBox = (CheckBox) llCheckboxes.getChildAt(i);
+                    CheckBox checkBox = (CheckBox) containerLayout.getChildAt(1);
                     // Check if current checkbox if selected
                     if (checkBox.isChecked()) {
                         // Get category from hashmap
@@ -248,13 +251,6 @@ public class FiltersFragment extends Fragment {
     }
 
     // UTILITY METHODS TO FILL HASHMAPS
-    private void initializeDistanceMap() {
-        distanceMap = new HashMap<>();
-        distanceMap.put(rbD5, "5000");
-        distanceMap.put(rbD10, "10000");
-        distanceMap.put(rbD15, "15000");
-        distanceMap.put(rbD20, "20000");
-    }
 
     private void initializePriceMap() {
         priceMap = new HashMap<>();
