@@ -4,81 +4,173 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
 
     <!-- bunch of components here -->
+
     <ImageView
         android:id="@+id/ivBusinessImage"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:adjustViewBounds="true"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="-1dp"
+        android:foreground="@drawable/gradation_black"
+        android:scaleType="centerCrop"
         android:transitionName="business_image"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/tvVisitCreated"
+    <LinearLayout
+        android:id="@+id/llBusinessImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivBusinessImage"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="268dp"
-        android:background="@drawable/radio_normal"
-        android:fontFamily="sans-serif-black"
-        android:padding="10dp"
-        android:text="Visit Created!"
-        android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="64dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvVisitCreated"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:fontFamily="sans-serif-black"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        tools:text="Restaurant name" />
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:elevation="70dp"
+            android:src="@drawable/ic_confirm" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:shadowColor="@color/darkest_grey"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:text="Visit created!" />
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
-        android:layout_alignStart="@+id/tvName"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:text="Visit date 12/12/12"/>
+    </LinearLayout>
 
-
-    <Button
-        android:id="@+id/btnInvite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/tvDate"
-        android:layout_centerHorizontal="true"
-        android:text="Send invite to friends"/>
-
-
-    <Button
-        android:id="@+id/btnConfirm"
+    <RelativeLayout
+        android:layout_below="@+id/ivBusinessImage"
+        android:background="@drawable/top_corners_rounded"
+        android:layout_marginTop="-28dp"
+        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="Go to next visits "
-        android:textAllCaps="false"
-        android:textColor="@color/white" />
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="18sp"
+            android:textColor="@color/darkest_grey"
+            tools:text="Restaurant name" />
+
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_below="@+id/tvName"
+            android:paddingEnd="4dp"
+            android:textStyle="italic"
+            android:fontFamily="@font/open_sans_bold"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:textSize="12sp"
+            android:textColor="@color/dark_grey"
+            android:drawablePadding="4dp"
+            app:drawableLeftCompat="@drawable/ic_calendar"
+            android:text="Visit date 12/12/12 "/>
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/tvDate"
+            android:layout_alignStart="@+id/tvName"
+            android:layout_marginEnd="24dp"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/open_sans"
+            android:textColor="@color/dark_grey"
+            android:textStyle="italic"
+            android:textSize="12sp"
+            tools:text="177A Bleecker Street"
+            android:drawablePadding="4dp"
+            app:drawableLeftCompat="@drawable/ic_location" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mvLocation"
+            map:liteMode="true" map:mapType="none"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_below="@id/tvAddress"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="42dp"/>
+
+
+        <TextView
+            android:id="@+id/tvAlone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tvName"
+            android:layout_alignTop="@+id/btnInvite"
+            android:layout_alignBottom="@+id/btnInvite"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/open_sans_bold"
+            android:layout_marginEnd="8dp"
+            android:textSize="12sp"
+            android:textColor="@color/dark_grey"
+            android:text="Eating alone?"/>
+
+        <TextView
+            android:id="@+id/tvInvite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tvAlone"
+            android:layout_marginEnd="8dp"
+            android:layout_alignTop="@+id/btnInvite"
+            android:layout_alignBottom="@+id/btnInvite"
+            android:gravity="center_vertical"
+            app:backgroundTint="@color/background_white"
+            android:fontFamily="@font/open_sans"
+            android:textSize="12sp"
+            android:textColor="@color/orange_pale"
+            android:elevation="9dp"
+            android:text="Invite your friends!"/>
+
+        <ImageButton
+            android:id="@+id/btnInvite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toEndOf="@+id/tvInvite"
+            android:layout_above="@+id/btnConfirm"
+            android:layout_marginBottom="24dp"
+            android:elevation="4dp"
+            android:background="@drawable/semi_rounded_background"
+            android:src="@drawable/ic_people" />
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/spinner_background"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:elevation="6dp"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:text="Go to next visits"/>
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

@@ -53,7 +53,7 @@
             android:id="@+id/rvPastVisits"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="24dp"/>
+            android:paddingBottom="24dp"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
