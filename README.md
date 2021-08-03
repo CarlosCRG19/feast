@@ -215,8 +215,58 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 | toUser | Pointer to User | User that received friend request | 
 | status | String | current state of the request, can be "pending", "accepted" or "declined" | 
 
+# Networking
+
+## Parse Network Requests
+
+* History Screen
+  * (Read/GET) Query next visits 
+  * (Read/GET) Query past visits
+  * (Read/GET) Query visit invites
+  * (Delete) Delete existing visit
+* Profile Screen
+  * (Read/GET) Query user object
+  * (Read/GET) Query businesses liked by the user
+  * (Create/POST) Send friend request
+  * (Update/PUT) Update user profile images
+* Notifications Screen
+  * (Read/GET) Query visit invitations results
+  * (Read/GET) Query friend request results
+  * (Update/PUT) Answer to friend requests
+* Details Screen 
+  * (Read/GET) Query business object 
+  * (Read/GET) Query if like for that object exists
+  * (Create/POST) Create a new visit from details screen 
 
 # Sprints walkthroughs
 
-## Sprint 1
+## Sprint 1 (July 12th - July 16th)
+
+* User can go to create screen
+  * User can select a date
+  * User can select a location using Places API
+  * User can see restaurants near them 
+  * Restaurants are displayed using Tinder-like cards, can swipe to left or right
+* User can go to filters screen and apply filters to specify the criteria for restaurant
+* User can go to compare screen and see the restaurants that were swiped to the left
+* Next visits and past visits are displayed on History screen
+* User can like restaurants on past visits
+* User can login
+* User can logout
+* User can see their favorite restaurants 
+
 <img src='sprint1_walkthrough.gif' title='Sprint 1 walkthrough' width='' alt='Sprint 1 walkthrough' />
+
+## Sprint 2 (July 19th - July 23th)
+
+* User can search for other users 
+  * User can see other users liked restaurant
+* User can go to details screen and see other important info about the restaurant
+* User can like restaurants in Details Screen
+* User can send friend requests
+* User can answer friend requests on Notifications Screen
+* User can see Visit Invitations or Friend Requests results on notifications screen
+* User can see invitations in Next Visits
+
+<img src='sprint2_walkthrough.gif' title='Sprint 2 walkthrough' width='' alt='Sprint 2 walkthrough' />
+
