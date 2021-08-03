@@ -22,9 +22,9 @@ public class LoginActivity extends AppCompatActivity {
     public static String TAG = "LoginActivity"; // TAG for log messages
 
     // VIEWS
-    Button btnLogin, btnGoSignup;
-    TextInputEditText etUsername,  etPassword;
-    TextView tvSignup;
+    private Button btnLogin;
+    private TextInputEditText etUsername,  etPassword; // ETs from material design
+    private TextView tvSignup;
 
 
     @Override
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         setListeners();
     }
 
-    // VIEWS METHODS
+    //-- VIEWS METHODS --//
 
     // Assign views on layout to variables
     private void setViews() {
@@ -77,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //-- LOGIN METHOD --//
+
     // Tries to login user with username and password
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempting to login user " + username + password);
@@ -96,6 +98,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    //-- METHODS TO REDIRECT USER --//
 
     // Uses intent to pass to MainActivity and ends LoginActivity
     private void goMainActivity() {

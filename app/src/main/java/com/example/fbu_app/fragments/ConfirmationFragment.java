@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.DialogFragments.InviteFragment;
 import com.example.fbu_app.fragments.DialogFragments.NotificationsFragment;
 import com.example.fbu_app.models.Business;
@@ -46,19 +47,22 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConfirmationFragment extends Fragment {
 
-    Visit visit;
-    ImageView ivBusinessImage;
-    TextView tvName, tvDate, tvAddress;
+    // Visit being confirmed
+    private Visit visit;
+    private Business visitBusiness;
 
-    Button btnConfirm;
+    // VIEWS
 
+    private ImageView ivBusinessImage;
+    private TextView tvName, tvDate, tvAddress;
+    private Button btnConfirm;
     // Invite button
-    ImageButton btnInvite;
+    private ImageButton btnInvite;
 
     // Map view
-    MapView mapView;
+    private MapView mapView;
     // Google Map
-    GoogleMap googleMap;
+    private GoogleMap googleMap;
 
     public ConfirmationFragment() {}
 
@@ -75,8 +79,26 @@ public class ConfirmationFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Business visitBusiness = visit.getBusiness();
+        // Get business from visit
+        visitBusiness = visit.getBusiness();
 
+
+        // Find views in layout
+        setViews(view);
+        // Populate views with info from visit
+        populateViews();
+        // Setup click listeners
+        setListeners();
+
+        // Get business location
+        LatLng businessLocation = new LatLng(visitBusiness.getCoordLatitude(), visitBusiness.getCoordLongitude());
+        // Setup map with location
+        setUpMap(businessLocation);
+
+    }
+
+    // VIEW METHODS
+    private void setViews(View view) {
         ivBusinessImage = view.findViewById(R.id.ivBusinessImage);
         tvName = view.findViewById(R.id.tvName);
         tvDate = view.findViewById(R.id.tvDate);
@@ -86,13 +108,9 @@ public class ConfirmationFragment extends Fragment {
         btnInvite = view.findViewById(R.id.btnInvite);
         // Map view for business location
         mapView = view.findViewById(R.id.mvLocation);
+    }
 
-        // Get business location
-        LatLng businessLocation = new LatLng(visitBusiness.getCoordLatitude(), visitBusiness.getCoordLongitude());
-        // Setup map with location
-        setUpMap(businessLocation);
-
-
+    private void populateViews() {
         String enjoyText = "Enjoy your next feast at <font color='#F65C36'>" + visitBusiness.getName() + "</font>!";
         tvName.setText(Html.fromHtml(enjoyText, 42));
         tvDate.setText(visit.getDateStr());
@@ -100,10 +118,10 @@ public class ConfirmationFragment extends Fragment {
         String addressText = visitBusiness.getAddress() + ", " + visitBusiness.getCity() + ", " + visitBusiness.getCountry();
         tvAddress.setText(addressText);
 
-        Glide.with(getContext())
-                .load(visitBusiness.getImageUrl())
-                .into(ivBusinessImage);
+        ImagesController.simpleImageLoad(getContext(), visitBusiness.getImageUrl(), ivBusinessImage);
+    }
 
+    private void setListeners() {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +148,6 @@ public class ConfirmationFragment extends Fragment {
                 inviteFragment.show(getChildFragmentManager(), "fragment_invite");
             }
         });
-
     }
 
 

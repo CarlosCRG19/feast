@@ -17,9 +17,12 @@ import java.util.List;
  */
 public class YelpClient extends AsyncHttpClient {
 
-    public static final String YELP_API_KEY = BuildConfig.YELP_API_KEY; // API secured in BuildConfig
+    // ENDPOINTS
     public static final String SEARCH_END_POINT = "https://api.yelp.com/v3/businesses/search"; // This endpoint returns up to 1000 businesses based on the provided search criteria. It has some basic information about the business.
     public static final String DETAILS_END_POINT = "https://api.yelp.com/v3/businesses/"; // This endpoint returns detailed business content like telephone, open hours and more photos
+
+    public static final String YELP_API_KEY = BuildConfig.YELP_API_KEY; // API secured in BuildConfig
+
 
     // Gets businesses according to the criteria specified by the user
     public void getMatchingBusinesses(JsonHttpResponseHandler handler, HashMap<String, String> filtersMap) {

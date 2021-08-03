@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.ProfileFragments.OtherProfileFragment;
 import com.example.fbu_app.fragments.ProfileFragments.OwnProfileFragment;
 import com.example.fbu_app.fragments.ProfileFragments.ProfileFragment;
@@ -94,17 +95,17 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         private RelativeLayout rlUser;
         private final ImageView ivUserImage;
         private final TextView tvUsername;
-        private final TextView tvEmail;
+        private final TextView tvName;
 
         // USER FOR BINDING
-        Friend friend;
+        private Friend friend;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // Get views from layout
             ivUserImage = itemView.findViewById(R.id.ivUserImage);
             tvUsername = itemView.findViewById(R.id.tvUsername);
-            tvEmail = itemView.findViewById(R.id.tvName);
+            tvName = itemView.findViewById(R.id.tvName);
             rlUser =  itemView.findViewById(R.id.rlUser);
 
             // Set click listener to go to the users profile
@@ -120,21 +121,21 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             ParseUser friendUser = friend.getFriendUser();
             // Get profile picture
             ParseFile profileImage = (ParseFile) friendUser.get("profileImage");
-            // Use glide to load PP
-            Glide.with(context)
-                    .load(profileImage.getUrl())
-                    .circleCrop()
-                    .into(ivUserImage);
+            // Load PP using static method
+            ImagesController.loadCircleImage(context, profileImage.getUrl(), ivUserImage);
 
             // Set TVs with the friend's data
             tvUsername.setText(friendUser.getUsername());
-            tvEmail.setText((String) friendUser.get("firstName") + " " + (String) friendUser.get("lastName"));
+
+            // Set text for user name
+            String nameText = (String) friendUser.get("firstName") + " " + (String) friendUser.get("lastName");
+            tvName.setText(nameText);
         }
 
 
         @Override
         public void onClick(View v) {
-            // Define friend check state
+            // Change friend check state
             friend.setChecked(!friend.isChecked());
             rlUser.setBackgroundResource(friend.isChecked() ? R.color.light_gray : R.color.white);
         }

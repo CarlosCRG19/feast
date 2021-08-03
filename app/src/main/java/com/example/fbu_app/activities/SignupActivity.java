@@ -23,9 +23,9 @@ public class SignupActivity extends AppCompatActivity {
     public static String TAG = "SignupActivity"; // TAG for log messages
 
     // VIEWS
-    Button  btnSignup;
-    TextInputEditText etUsername, etFirstName, etLastName, etPassword, etDescription, etEmail;
-    TextView tvLogin;
+    private Button  btnSignup;
+    private TextInputEditText etUsername, etFirstName, etLastName, etPassword, etDescription, etEmail;
+    private TextView tvLogin;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -58,7 +58,6 @@ public class SignupActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Signup Button clicked");
                 // Variable declaration
                 String username, firstName, lastName, email, description, password;
                 // Get content of EditTexts
@@ -85,6 +84,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    //-- SIGNUP METHODS --//
 
     // Register new user with new credentials
     private void signupUser(String username, String firstName, String lastName, String description, String email, String password) {
@@ -102,7 +102,6 @@ public class SignupActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 // Check for errors
                 if(e != null) {
-                    Log.e(TAG, "Issue trying to sign up user", e);
                     Toast.makeText(SignupActivity.this, "Issue with signing up!", Toast.LENGTH_LONG ).show();
                     return;
                 }

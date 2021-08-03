@@ -1,6 +1,7 @@
 package com.example.fbu_app.adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.ProfileFragments.OtherProfileFragment;
 import com.example.fbu_app.fragments.ProfileFragments.OwnProfileFragment;
 import com.example.fbu_app.fragments.ProfileFragments.ProfileFragment;
@@ -126,10 +128,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             // Get profile picture for the user
             ParseFile parseFile = (ParseFile) user.get("profileImage");
             // Bind data to views
-            Glide.with(context)
-                    .load(parseFile.getUrl())
-                    .circleCrop()
-                    .into(ivProfilePicture);
+            ImagesController.loadCircleImage(context, parseFile.getUrl(), ivProfilePicture);
             // Create notification text
             String notificationText = user.getUsername() + " has " + status + " your Visit Invitation to " + visit.getBusiness().getName();
             tvNotification.setText(notificationText);

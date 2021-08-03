@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.controllers.DatePickerController;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentInvitation;
 import com.example.fbu_app.models.Business;
@@ -124,13 +125,10 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             } else {
                 tvDate.setText(visit.getDateStr());
             }
-
             // Get business from visit
             Business visitBusiness = visit.getBusiness();
             // Bind business info to respective views
-            Glide.with(context)
-                    .load(visitBusiness.getImageUrl())
-                    .into(ivBusinessImage);
+            ImagesController.simpleImageLoad(context, visitBusiness.getImageUrl(), ivBusinessImage);
             // Set name text
             tvName.setText(visitBusiness.getName());
             // Set address text
@@ -145,10 +143,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             // Get creator's profile picture
             ParseFile creatorImage = (ParseFile) visitCreator.get("profileImage");
             // Embbed creator pp into IV
-            Glide.with(context)
-                    .load(creatorImage.getUrl())
-                    .circleCrop()
-                    .into(ivCreatorImage);
+            ImagesController.loadCircleImage(context, creatorImage.getUrl(), ivCreatorImage);
             // Populate TV with creator username
             tvCreatorUsername.setText(visitCreator.getUsername());
 

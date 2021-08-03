@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.R;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentGo;
 import com.example.fbu_app.fragments.NextVisitsFragment;
@@ -69,6 +70,8 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     }
 
 
+    // VIEW HOLDER
+
     // Class responsible of binding each business data with their respective row
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -96,11 +99,9 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
             // Check if passed business already exists in database
             verifyBusinessExists();
 
-            // Bind data to views
-            Glide.with(context)
-                    .load(business.getImageUrl())
-                    .centerCrop()
-                    .into(ivBusinessImage);
+            // Use static method to load image
+            ImagesController.simpleImageLoad(context, business.getImageUrl(), ivBusinessImage);
+            // Set text for name
             tvName.setText(business.getName());
         }
 
@@ -124,6 +125,8 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
                     .commit();
         }
 
+        // Checks if business already exists in database
+        // if it exists, changes the value of the current business object
         private void verifyBusinessExists() {
             // Specify type of query
             ParseQuery<Business> query = ParseQuery.getQuery(Business.class);

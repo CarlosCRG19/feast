@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentGo;
 import com.example.fbu_app.models.Business;
 
@@ -108,10 +109,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         }
 
         public void bind(Business business) {
-            // Use glide to populate ImageView
-            Glide.with(context)
-                    .load(business.getImageUrl())
-                    .into(ivBusinessImage);
+            // Use static method to populate ImageView
+            ImagesController.simpleImageLoad(context, business.getImageUrl(), ivBusinessImage);
 
             // Set TVs with info from the business
             tvName.setText(business.getName());

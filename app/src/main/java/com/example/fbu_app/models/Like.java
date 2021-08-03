@@ -4,16 +4,19 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-// Stores favorite interactions with restaurants
+// Stores like interactions with restaurants
+// (establishes a one to many relationship)
 @ParseClassName("Like")
 public class Like extends ParseObject {
 
     // SETTERS
 
+    // Business related to the like
     public void setBusiness(Business business) {
         put("business", business);
     }
 
+    // User that liked this business
     public void setUser(ParseUser user) {
         put("user", user);
     }

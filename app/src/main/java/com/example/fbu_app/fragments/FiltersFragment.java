@@ -31,30 +31,30 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FiltersFragment extends Fragment {
 
-    VisitViewModel visitViewModel; // object to communicate data between fragments
+    private VisitViewModel visitViewModel; // object to communicate data between fragments
 
     // VIEWS
-    Button btnFilter; // Apply filters button
+    private Button btnFilter; // Apply filters button
 
     // Distance selection views
-    Slider sliderDistance;
-    TextView tvDistance;
+    private Slider sliderDistance;
+    private TextView tvDistance;
 
     // Price selection views
-    RadioGroup rgPrice;
-    RadioButton rbP1, rbP2, rbP3, rbP4, rbP5, rbPAll;
+    private RadioGroup rgPrice;
+    private RadioButton rbP1, rbP2, rbP3, rbP4, rbP5, rbPAll;
 
     // Checkboxes
-    LinearLayout llCheckboxes;
-    CheckBox cbAll, cbPizza, cbPasta, cbBurger, cbSushi, cbMexican;
+    private LinearLayout llCheckboxes;
+    private CheckBox cbAll, cbPizza, cbPasta, cbBurger, cbSushi, cbMexican;
 
     // Filters values
-    String price, radius, categories;
+    private String price, radius, categories;
 
     // Views dictionary
-    HashMap<RadioButton, String> distanceMap;
-    HashMap<RadioButton, String> priceMap;
-    HashMap<CheckBox, String> categoriesMap;
+    private HashMap<RadioButton, String> distanceMap;
+    private HashMap<RadioButton, String> priceMap;
+    private HashMap<CheckBox, String> categoriesMap;
 
 
     public FiltersFragment() {};
@@ -75,23 +75,25 @@ public class FiltersFragment extends Fragment {
         // Get member vars values from viewmodel
         getFiltersValues();
 
-        // Distance selection setup
-        sliderDistance = view.findViewById(R.id.sliderDistance);
-        tvDistance = view.findViewById(R.id.tvDistance);
-        // Set tv distance text to 0 km
+        // Find views in layout
+        setViews(view);
+        // Set views listeners
+        setListeners();
+
+        // Set tv distance text to 20 km
         tvDistance.setText("20 km");
-        // Set listener for slider
-        sliderDistance.addOnChangeListener(new Slider.OnChangeListener() {
-            @Override
-            public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
-                String distanceText = String.valueOf((int) value) + " km";
-                // Add space at the beginning
-                distanceText = value <= 10 ? " " + distanceText : distanceText;
-                tvDistance.setText(distanceText);
-            }
-        });
 
+        // Initialize hashmaps for values
+        initializePriceMap();
+        initializeCategoriesMap();
 
+        // Change state of views and check if they have been selected
+        setFilterViewsState();
+    }
+
+    // VIEW METHODS
+
+    private void setViews(View view) {
         // Price selection setup
 
         // Get radio group
@@ -104,6 +106,9 @@ public class FiltersFragment extends Fragment {
         rbP5 = view.findViewById(R.id.rbP5);
         rbPAll = view.findViewById(R.id.rbPAll); // all prices
 
+        // Distance selection setup
+        sliderDistance = view.findViewById(R.id.sliderDistance);
+        tvDistance = view.findViewById(R.id.tvDistance);
 
         // Checkboxes setup
 
@@ -117,6 +122,24 @@ public class FiltersFragment extends Fragment {
         cbMexican = view.findViewById(R.id.cbMexican);
         // Get SELECT ALL checkbox
         cbAll = view.findViewById(R.id.cbAll);
+
+        // Apply button setup
+        btnFilter = view.findViewById(R.id.btnFilter);
+    }
+
+    private void setListeners() {
+        // Set listener for slider
+        sliderDistance.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
+                String distanceText = String.valueOf((int) value) + " km";
+                // Add space at the beginning
+                distanceText = value <= 10 ? " " + distanceText : distanceText;
+                tvDistance.setText(distanceText);
+            }
+        });
+
+
         // Set listener for SELECT ALL
         cbAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -134,15 +157,6 @@ public class FiltersFragment extends Fragment {
             }
         });
 
-        // Initialize hashmaps for values
-        initializePriceMap();
-        initializeCategoriesMap();
-
-        // Change state of views and check if they have been selected
-        setFilterViewsState();
-
-        // Apply button setup
-        btnFilter = view.findViewById(R.id.btnFilter);
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +180,10 @@ public class FiltersFragment extends Fragment {
             }
         });
 
+
     }
+
+    // FILTER METHODS
 
     private void getFiltersValues() {
         price = visitViewModel.getFilterValue("price");
@@ -174,6 +191,7 @@ public class FiltersFragment extends Fragment {
         categories = visitViewModel.getFilterValue("categories");
     }
 
+    // Changes the state of the views depending on the filters persisted using the view model
     private void setFilterViewsState() {
         // PRICE SETTINGS
         if (price == null)

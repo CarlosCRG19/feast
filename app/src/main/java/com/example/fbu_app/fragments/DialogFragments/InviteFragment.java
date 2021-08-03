@@ -50,10 +50,10 @@ public class InviteFragment extends DialogFragment {
     private ImageButton btnInvite;
 
     // Current user
-    ParseUser currentUser;
+    private ParseUser currentUser;
 
     // Visit object obtained from bundle
-    Visit visit;
+    private Visit visit;
 
     // Required empty constructor
     public InviteFragment() {}
@@ -80,13 +80,28 @@ public class InviteFragment extends DialogFragment {
         // Initialize adapter
         friendAdapter = new FriendAdapter(getContext(), friends);
 
-        // Setup friend requests rv
-        rvFriends = view.findViewById(R.id.rvFriends);
+        // Set views and listeners
+        setViews(view);
+        setListeners();
+
         rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFriends.setAdapter(friendAdapter);
 
+        // Get friends
+        queryFriends();
+    }
+
+
+    // VIEW METHODS
+
+    private void setViews(View view) {
         // Set button to send invites to friends
         btnInvite = view.findViewById(R.id.btnInvite);
+        // Setup friend requests rv
+        rvFriends = view.findViewById(R.id.rvFriends);
+    }
+
+    private void setListeners() {
         btnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,10 +113,8 @@ public class InviteFragment extends DialogFragment {
                 }
             }
         });
-
-        // Get friends
-        queryFriends();
     }
+
 
     // Query for friends via accepted friend requests
     private void queryFriends() {

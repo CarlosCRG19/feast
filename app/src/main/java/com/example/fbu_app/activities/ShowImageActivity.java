@@ -13,6 +13,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.example.fbu_app.R;
+import com.example.fbu_app.controllers.ImagesController;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public class ShowImageActivity extends AppCompatActivity {
 
     // Use library's image view
-    SubsamplingScaleImageView ivProfileImage;
+    private SubsamplingScaleImageView ivProfileImage;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -37,15 +38,11 @@ public class ShowImageActivity extends AppCompatActivity {
         ivProfileImage = findViewById(R.id.ivProfileImage);
 
         // Load image into ScaleImageView
-        Glide.with(this)
-                .asBitmap()
-                .load(photoUrl)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable Transition<? super Bitmap> transition) {
-                        ivProfileImage.setImage(ImageSource.bitmap(resource));
-                    }
-                });
-
+        ImagesController.loadImageAsBitmap(this, photoUrl, new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable Transition<? super Bitmap> transition) {
+                ivProfileImage.setImage(ImageSource.bitmap(resource));
+            }
+        });
     }
 }

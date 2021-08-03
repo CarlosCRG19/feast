@@ -30,6 +30,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.adapters.HoursAdapter;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.ConfirmationFragment;
 import com.example.fbu_app.helpers.YelpClient;
 import com.example.fbu_app.models.Business;
@@ -66,36 +67,39 @@ import okhttp3.Headers;
 
 public class DetailsFragmentBase extends Fragment {
 
-    public static final String VISIT_TAG = "visit"; // Simple tag to save objects in Parse
+    //-- FIELDS --//
 
+    public static final String VISIT_TAG = "visit"; // Simple tag to save objects in Parse
     protected Business business;
 
-    // Layout views as member variables
-    private ImageView ivBusinessImage;
-    private TextView tvName, tvPrice, tvAddress, tvTelephone, tvCategories, tvHours;
-    private RatingBar rbRating;
-
-    HoursAdapter adapter;
-    List<Hour> hours;
-    RecyclerView rvHours;
-
-    YelpClient yelpClient;
-
-    // Like button
-    ImageButton btnLike;
+    // Client to make requests
+    private YelpClient yelpClient;
 
     // Object to retreive like from database or create a new like
     private Like userLike;
 
     // Current user from parse
-    ParseUser currentUser;
+    private ParseUser currentUser;
+
+    // VIEWS
+
+    // Layout views as member variables
+    private ImageView ivBusinessImage;
+    private TextView tvName, tvPrice, tvAddress, tvTelephone, tvCategories, tvHours;
+    private RatingBar rbRating;
+    private ImageButton btnLike;     // Like button
+
+    // HOURS RECYCLER VIEW VARIABLES
+    protected HoursAdapter adapter;
+    protected List<Hour> hours;
+    protected RecyclerView rvHours;
 
     // MAP FEATURE VIEWS
 
     // Map view
-    MapView mapView;
+    protected MapView mapView;
     // Google Map
-    GoogleMap googleMap;
+    protected GoogleMap googleMap;
 
     public DetailsFragmentBase(){}
 
@@ -165,8 +169,10 @@ public class DetailsFragmentBase extends Fragment {
 
     }
 
+    // VIEWS METHODS
+
     // Assigns views to member variables
-    private void setViews(View view) {
+    protected void setViews(View view) {
         // ImageView for business photo
         ivBusinessImage = view.findViewById(R.id.ivBusinessImage);
         // Text views
@@ -183,63 +189,6 @@ public class DetailsFragmentBase extends Fragment {
         // Map view for business location
         mapView = view.findViewById(R.id.mvLocation);
     }
-
-    // Binds the business data with the views
-    private void populateViews() {
-        // Use glide to populate ImageView
-        Glide.with(getContext())
-                .load(business.getImageUrl())
-                .centerCrop()
-                .into(ivBusinessImage);
-
-        // Set TVs with info from the business
-        tvName.setText(business.getName());
-        // Check if price value exists
-        if(business.getPrice().length() > 0) {
-            // Set price text
-            String textPrice = business.getPrice() + " · ";
-            tvPrice.setText(textPrice);
-        }
-        // Set categories text
-        tvCategories.setText(Business.formatCategories(business.getCategories()));
-        // Set address text
-        tvAddress.setText(business.getAddress());
-        // Set telephone text
-        if(business.getTelephone().length() > 0) {
-            tvTelephone.setText(business.getTelephone());
-        } else {
-            tvTelephone.setVisibility(View.INVISIBLE);
-        }
-        // Use business rating to setup rating bar
-        rbRating.setRating(business.getRating());
-    }
-
-    // Checks if local business is already in database, if it is, the value of business is changed to match that one
-    // after that, enables all the listeners
-    protected void verifyBusinessAndSetListeners() {
-        // Specify type of query
-        ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
-        // Search for business in database based on yelpId
-        query.whereEqualTo("yelpId", business.getYelpId());
-        // Use getFirstInBackground to finish the search if it has found one matching business
-        query.getFirstInBackground(new GetCallback<Business>() {
-            @Override
-            public void done(Business object, ParseException e) {
-                if(e != null) {
-                    Log.i("ParseSave", "Search for business", e);
-                }
-                // if the business exists, change value of member variable and create the new visit
-                if (object != null) {
-                    business = object;
-                    // if business exists verify if the business has been liked
-                    verifyUserLiked();
-                }
-                // Set listeners
-                setClickListeners();
-            }
-        });
-    }
-
 
     // Sets listeners for the different views
     protected void setClickListeners() {
@@ -268,6 +217,63 @@ public class DetailsFragmentBase extends Fragment {
             }
         });
     }
+
+
+    // Binds the business data with the views
+    private void populateViews() {
+        // Populate imageView using static method
+        ImagesController.simpleImageLoad(getContext(), business.getImageUrl(), ivBusinessImage);
+
+        // Set TVs with info from the business
+        tvName.setText(business.getName());
+        // Check if price value exists
+        if(business.getPrice().length() > 0) {
+            // Set price text
+            String textPrice = business.getPrice() + " · ";
+            tvPrice.setText(textPrice);
+        }
+        // Set categories text
+        tvCategories.setText(Business.formatCategories(business.getCategories()));
+        // Set address text
+        tvAddress.setText(business.getAddress());
+        // Set telephone text
+        if(business.getTelephone().length() > 0) {
+            tvTelephone.setText(business.getTelephone());
+        } else {
+            tvTelephone.setVisibility(View.INVISIBLE);
+        }
+        // Use business rating to setup rating bar
+        rbRating.setRating(business.getRating());
+    }
+
+    // HELPER METHODS
+
+    // Checks if local business is already in database, if it is, the value of business is changed to match that one
+    // after that, enables all the listeners
+    protected void verifyBusinessAndSetListeners() {
+        // Specify type of query
+        ParseQuery<Business> query = ParseQuery.getQuery(Business.class);
+        // Search for business in database based on yelpId
+        query.whereEqualTo("yelpId", business.getYelpId());
+        // Use getFirstInBackground to finish the search if it has found one matching business
+        query.getFirstInBackground(new GetCallback<Business>() {
+            @Override
+            public void done(Business object, ParseException e) {
+                if(e != null) {
+                    Log.i("ParseSave", "Search for business", e);
+                }
+                // if the business exists, change value of member variable and create the new visit
+                if (object != null) {
+                    business = object;
+                    // if business exists verify if the business has been liked
+                    verifyUserLiked();
+                }
+                // Set listeners
+                setClickListeners();
+            }
+        });
+    }
+
 
     // SAVE (POST) METHODS
 

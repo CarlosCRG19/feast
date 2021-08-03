@@ -13,7 +13,7 @@ import com.parse.ParseObject;
 
 import org.w3c.dom.Comment;
 
-// 
+// Base class for maintaining global application state
 public class FeastApplication extends Application {
     @Override
     public void onCreate() {

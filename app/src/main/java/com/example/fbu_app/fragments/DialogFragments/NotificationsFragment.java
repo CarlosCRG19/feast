@@ -44,7 +44,7 @@ public class NotificationsFragment extends DialogFragment {
     private NotificationsAdapter notificationsAdapter;
 
     // Current user
-    ParseUser currentUser;
+    private ParseUser currentUser;
 
     // Required empty constructor
     public NotificationsFragment() {}
@@ -70,6 +70,19 @@ public class NotificationsFragment extends DialogFragment {
         friendRequestAdapter = new FriendRequestAdapter(getContext(), requests);
         notificationsAdapter = new NotificationsAdapter(getContext(), confirmations);
 
+        // Use method to setup rvs
+        setupRecyclerViews(view);
+
+        // Query for friend requests sent to the user
+        queryPendingFriendRequests();
+
+        // Query for confirmations
+        queryFriendRequests();
+        queryVisitInvitations();
+    }
+
+    // VIEW METHODS
+    private void setupRecyclerViews(View view) {
         // Setup friend requests rv
         rvRequests = view.findViewById(R.id.rvRequests);
         rvRequests.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -79,14 +92,9 @@ public class NotificationsFragment extends DialogFragment {
         rvConfirmations = view.findViewById(R.id.rvConfirmations);
         rvConfirmations.setLayoutManager(new LinearLayoutManager(getContext()));
         rvConfirmations.setAdapter(notificationsAdapter);
-
-        // Query for friend requests sent to the user
-        queryPendingFriendRequests();
-
-        // Query for confirmations
-        queryFriendRequests();
-        queryVisitInvitations();
     }
+
+    // QUERY METHODS
 
     // Query for pending friend request sent to the user
     private void queryPendingFriendRequests() {

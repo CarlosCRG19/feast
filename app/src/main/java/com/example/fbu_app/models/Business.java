@@ -15,15 +15,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+// Object that represents a restaurant from Yelp's API
 @ParseClassName("Business")
 public class Business extends ParseObject{
 
     // TAG FOR REFERENCE
     public static final String TAG = "business";
 
-    // DISTANCE TEMPORAL FIELD
+    // TEMPORAL FIELDS (this fields are not stored in database since they are only valid for an specific searc)
     private int distance;
     private boolean closed;
+
+    // METHODS FOR TEMPORAL FIELDS
 
     public boolean isClosed() {
         return closed;

@@ -51,21 +51,23 @@ public class Hour extends ParseObject{
 
     // SETTERS
 
+    // Day for corresponding hour (formatted using private method)
     public void setDay(int day) { // String representing the day of the week for the opening hours
         put("day", formatDay(day));
     }
 
+    // Start of opening hours (formatted using private method)
     public void setStart(String start) { // Start of the opening hours in a day, in 24-hour clock notation. Formatted to HH:MM
         put("start", formatHour(start));
     }
 
+    // End of opening hours
     public void setEnd(String end) { // End of the opening hours in a day, in 24-hour clock notation. Formatted to HH:MM
         put("end", formatHour(end));
     }
 
-    public void setBusiness(Business business) { // Business linked to the Hour
-        put("business", business);
-    }
+    // Business linked to the hour
+    public void setBusiness(Business business) { put("business", business); }
 
     // GETTERS
 

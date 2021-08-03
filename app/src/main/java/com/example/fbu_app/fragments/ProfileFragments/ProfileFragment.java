@@ -25,6 +25,7 @@ import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.activities.ShowImageActivity;
 import com.example.fbu_app.adapters.BusinessAdapter;
 import com.example.fbu_app.adapters.UserAdapter;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Like;
 import com.parse.FindCallback;
@@ -106,20 +107,8 @@ public class ProfileFragment extends Fragment {
         setViews(view);
         // Bind profile info
         populateViews();
-
-        // Set listener to open profile image
-        ivProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Launch intent to open show image activity
-                Intent intent = new Intent(getContext(), ShowImageActivity.class);
-                // Pass image url as extra
-                intent.putExtra("photoUrl", profileImage.getUrl());
-                ActivityOptionsCompat options = ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(((MainActivity) getActivity()), ivProfile, "profile_image");
-                startActivity(intent, options.toBundle());
-            }
-        });
+        // Set listeners
+        setListeners();
 
         // RV FOR LIKED BUSINESSES SETUP
 
@@ -145,7 +134,56 @@ public class ProfileFragment extends Fragment {
                 linearLayoutManager.getOrientation());
         rvSearch.addItemDecoration(dividerItemDecoration);
 
-        // SV SETUP
+    }
+
+    // VIEWS METHODS
+
+    protected void setViews(View view) {
+        // User info
+        ivProfile = view.findViewById(R.id.ivProfile);
+        tvUsername = view.findViewById(R.id.tvUsername);
+        tvName = view.findViewById(R.id.tvName);
+        tvDescription = view.findViewById(R.id.tvDescription);
+        tvFavorites = view.findViewById(R.id.tvFavorites);
+        // Recycler view
+        rvBusinesses = view.findViewById(R.id.rvBusinesses);
+        rvSearch = view.findViewById(R.id.rvSearch);
+        // Search views
+        svPeople = view.findViewById(R.id.svPeople);
+
+    }
+
+    // Binds the views with the users data
+    protected void populateViews() {
+        ImagesController.loadCircleImage(getContext(), profileImage.getUrl(), ivProfile);
+        // Fill TVs with username and email
+        tvUsername.setText(profileUser.getUsername());
+        // Set complete name text
+        String firstName = (String) profileUser.get("firstName");
+        String lastName = (String) profileUser.get("lastName");
+        String fullName = firstName != null && lastName != null ? firstName + " " + lastName : "";
+        // Set text for name
+        tvName.setText(fullName);
+        // Set text for description
+        tvDescription.setText(profileUser.get("description") != null ? (String) profileUser.get("description") : "");
+    }
+
+
+    protected  void setListeners() {
+
+        // Set listener to open profile image
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch intent to open show image activity
+                Intent intent = new Intent(getContext(), ShowImageActivity.class);
+                // Pass image url as extra
+                intent.putExtra("photoUrl", profileImage.getUrl());
+                ActivityOptionsCompat options = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(((MainActivity) getActivity()), ivProfile, "profile_image");
+                startActivity(intent, options.toBundle());
+            }
+        });
 
         // Set searchView Listeners
         svPeople.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -173,41 +211,6 @@ public class ProfileFragment extends Fragment {
                 svPeople.setIconified(false);
             }
         });
-    }
-
-    // VIEWS METHODS
-
-    protected void setViews(View view) {
-        // User info
-        ivProfile = view.findViewById(R.id.ivProfile);
-        tvUsername = view.findViewById(R.id.tvUsername);
-        tvName = view.findViewById(R.id.tvName);
-        tvDescription = view.findViewById(R.id.tvDescription);
-        tvFavorites = view.findViewById(R.id.tvFavorites);
-        // Recycler view
-        rvBusinesses = view.findViewById(R.id.rvBusinesses);
-        rvSearch = view.findViewById(R.id.rvSearch);
-        // Search views
-        svPeople = view.findViewById(R.id.svPeople);
-
-    }
-
-    // Binds the views with the users data
-    protected void populateViews() {
-        Glide.with(getContext())
-                .load(profileImage.getUrl())
-                .circleCrop()
-                .into(ivProfile);
-        // Fill TVs with username and email
-        tvUsername.setText(profileUser.getUsername());
-        // Set complete name text
-        String firstName = (String) profileUser.get("firstName");
-        String lastName = (String) profileUser.get("lastName");
-        String fullName = firstName != null && lastName != null ? firstName + " " + lastName : "";
-        // Set text for name
-        tvName.setText(fullName);
-        // Set text for description
-        tvDescription.setText(profileUser.get("description") != null ? (String) profileUser.get("description") : "");
     }
 
     // LISTENERS AND FEATURES

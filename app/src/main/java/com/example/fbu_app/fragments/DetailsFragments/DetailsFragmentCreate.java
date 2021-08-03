@@ -35,14 +35,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Calendar;
 import java.util.Date;
 
+// Details screen in which you can create a visit using
+// a date picker
 public class DetailsFragmentCreate extends DetailsFragmentBase {
 
-    Button btnDate, btnCreateVisit;
+    // FIELDS
 
-    Date visitDate;
-    String visitDateStr;
+    // Buttons
+    private Button btnDate, btnCreateVisit;
 
-    DatePickerDialog datePickerDialog;
+    // VISIT CREATIONS VARIABLES
+    private Date visitDate;
+    private String visitDateStr;
+    private DatePickerDialog datePickerDialog;
 
     public DetailsFragmentCreate(){}
 
@@ -76,9 +81,15 @@ public class DetailsFragmentCreate extends DetailsFragmentBase {
         // Initialize the datePicker using static method
         datePickerDialog = DatePickerController.initDatePicker(getContext(), dateSetListener);
 
-        // Assign Views
+    }
+
+    @Override
+    protected void setViews(View view) {
+        super.setViews(view);
+        // Assign new
         btnDate = view.findViewById(R.id.btnDate); // Date selection
         btnCreateVisit = view.findViewById(R.id.btnCreateVisit);
+
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.controllers.DatePickerController;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Like;
@@ -119,9 +120,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
             // Get business from visit
             visitBusiness = visit.getBusiness();
             // Bind business info to respective views
-            Glide.with(context)
-                    .load(visitBusiness.getImageUrl())
-                    .into(ivBusinessImage);
+            ImagesController.simpleImageLoad(context, visitBusiness.getImageUrl(), ivBusinessImage);
             // Set name text
             tvName.setText(visitBusiness.getName());
             // Set address text
@@ -136,10 +135,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
             // Get creator's profile picture
             ParseFile creatorImage = (ParseFile) visitCreator.get("profileImage");
             // Embbed creator pp into IV
-            Glide.with(context)
-                    .load(creatorImage.getUrl())
-                    .circleCrop()
-                    .into(ivCreatorImage);
+            ImagesController.loadCircleImage(context, creatorImage.getUrl(), ivCreatorImage);
 
             // Check if list of attendees exists
             List<ParseUser> attendees = visit.getAttendees();

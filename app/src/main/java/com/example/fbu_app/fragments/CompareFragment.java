@@ -46,30 +46,28 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
     public static final String VISIT_TAG = "visit";
 
     // ViewModels for fragment communication
-    BusinessesViewModel businessesViewModel;
-    VisitViewModel visitViewModel;
+    private BusinessesViewModel businessesViewModel;
+    private VisitViewModel visitViewModel;
 
     // Model to store businesses
-    List<Business> selectedBusinesses;
+    private List<Business> selectedBusinesses;
 
     // Date variables for visit creation
-    Date visitDate;
-    String visitDateStr;
+    private Date visitDate;
+    private String visitDateStr;
 
 
     // RV variables
-    RecyclerView rvBusinesses;
-    BusinessAdapterGo adapter;
+    private RecyclerView rvBusinesses;
+    private BusinessAdapterGo adapter;
 
     // Button for Explore Screen
-    Button btnExplore, btnRandomPick;
+    private Button btnExplore, btnRandomPick;
 
-    Spinner attributeSpinner;
+    private Spinner attributeSpinner;
 
     // Business object to store a random business in case random is picked
-    Business randomBusiness;
-
-    ParseUser tryUser;
+    private Business randomBusiness;
 
     public CompareFragment() {};
 
@@ -215,14 +213,12 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
         query.getFirstInBackground(new GetCallback<Business>() {
             @Override
             public void done(Business object, ParseException e) {
-                if (e != null) {
-                    return;
-                }
                 // if the business exists, change value of member variable
-                if (object != null) {
+                if (object != null && e != null) {
                     randomBusiness = object;
                 }
             }
         });
     }
+
 }

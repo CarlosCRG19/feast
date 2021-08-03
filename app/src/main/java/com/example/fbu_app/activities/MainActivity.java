@@ -21,6 +21,8 @@ import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
+// Host activity for the main fragments, only navigation code is included
+// in this file
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity"; // TAG for log messages
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     // Add arguments to fragment
                     fragment.setArguments(bundle);
                 } else {
-                    // By default, go to main feed
+                    // By default, go to main feed (Next Visits)
                     fragment = new NextVisitsFragment();
                 }
                 // Change to selected fragment using manager
@@ -93,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // OTHER METHODS
+    //-- OTHER METHODS --//
+
     public void showBottomNavBar() {
         // Change visibility of toolbar
         BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
@@ -102,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         btnCreate.show();
     }
 
-    // OTHER METHODS
     public void hideBottomNavBar() {
         // Change visibility of toolbar
         BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);

@@ -21,11 +21,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
+// Details screen to answer to invites, there is a confirm and a decline button
 public class DetailsFragmentInvitation extends DetailsFragmentBase {
 
     public static final String INVITATION_TAG = "invitation"; // Simple tag to get invitation from bundle
 
-    Button btnAccept, btnDecline;
+    // VIEWS
+    private Button btnAccept, btnDecline;
+
+    // VISIT OBJECTS
+    VisitInvitation invitation;
+    Visit visit;
+    ParseUser fromUser;
 
     public DetailsFragmentInvitation(){}
 
@@ -42,15 +49,36 @@ public class DetailsFragmentInvitation extends DetailsFragmentBase {
         super.onViewCreated(view, savedInstanceState);
 
         // Get visit from arguments
-        VisitInvitation invitation = (VisitInvitation) getArguments().get(INVITATION_TAG);
+        invitation = (VisitInvitation) getArguments().get(INVITATION_TAG);
         // Get info from invitation
-        Visit visit = invitation.getVisit();
-        ParseUser fromUser = invitation.getFromUser();
+        visit = invitation.getVisit();
+        fromUser = invitation.getFromUser();
 
-        // Set listener for both buttons
+    }
+
+    @Override
+    protected void setViews(View view) {
+        super.setViews(view);
 
         // Accept button
         btnAccept = view.findViewById(R.id.btnAccept);
+
+        // Decline button
+        btnDecline = view.findViewById(R.id.btnDecline);
+    }
+
+    // Save confirmation to a visit with
+    private void saveConfirmation(Visit visit, ParseUser newAttendee) {
+        // Add attendee to visit
+        visit.addAttendee(newAttendee);
+        // save current visit
+        visit.saveInBackground();
+    }
+
+    @Override
+    protected void setClickListeners() {
+        super.setClickListeners();
+
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,8 +95,6 @@ public class DetailsFragmentInvitation extends DetailsFragmentBase {
             }
         });
 
-        // Decline button
-        btnDecline = view.findViewById(R.id.btnDecline);
         btnDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,14 +108,6 @@ public class DetailsFragmentInvitation extends DetailsFragmentBase {
                 getActivity().onBackPressed();
             }
         });
-    }
 
-    // Save confirmation to a visit with
-    private void saveConfirmation(Visit visit, ParseUser newAttendee) {
-        // Add attendee to visit
-        visit.addAttendee(newAttendee);
-        // save current visit
-        visit.saveInBackground();
     }
-
 }

@@ -50,24 +50,23 @@ public class ExploreFragment extends Fragment {
 
     // Filters data
     private VisitViewModel visitViewModel; // communication object between fragments
+    // ViewModel that stores the selected businesses
+    private BusinessesViewModel businessesViewModel;
 
     // Navigation views
-    Button btnCompare;
-    ImageButton btnFilters;
+    private Button btnCompare;
+    private ImageButton btnFilters;
 
     // API client to handle requests
-    YelpClient yelpClient;
+    private YelpClient yelpClient;
 
     // Model to store received businesses
-    List<Business> displayedBusinesses;
-
-    // ViewModel that stores the selected businesses
-    BusinessesViewModel businessesViewModel;
+    private List<Business> displayedBusinesses;
 
     // CardStack tools
-    CardStackAdapter adapter; // binds data to the cards
-    CardStackLayoutManager manager; // general manager of the CardStack
-    CardStackView cardStackView; // view from yuyakaido library
+    private CardStackAdapter adapter; // binds data to the cards
+    private CardStackLayoutManager manager; // general manager of the CardStack
+    private CardStackView cardStackView; // view from yuyakaido library
 
     // Index of business from displayeBusinesses that is on screen
     int displayIndex;

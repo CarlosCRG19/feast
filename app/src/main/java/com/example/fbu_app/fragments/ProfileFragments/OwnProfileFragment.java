@@ -26,6 +26,7 @@ import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.controllers.MediaController;
 import com.example.fbu_app.fragments.DialogFragments.NotificationsFragment;
 import com.example.fbu_app.helpers.BitmapScaler;
@@ -67,8 +68,6 @@ public class OwnProfileFragment extends ProfileFragment {
         super.onViewCreated(view, savedInstanceState);
         // Set text of tvFavorites
         tvFavorites.setText("Your favorite restaurants");
-        // Set listeners for upload and logout buttons
-        setClickListeners();
     }
 
     @Override
@@ -81,8 +80,10 @@ public class OwnProfileFragment extends ProfileFragment {
         btnNotifications = view.findViewById(R.id.btnNotifications);
     }
 
-    // Set listeners for each buttons (these are only available if profileUser is the same as current user)
-    private void setClickListeners() {
+    @Override
+    protected void setListeners() {
+        super.setListeners();
+
 
         // Calls onPickPhoto to access media storage and select a photo
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -231,10 +232,7 @@ public class OwnProfileFragment extends ProfileFragment {
             }
         });
         // Change image on view
-        Glide.with(getContext())
-                .load(byteArray)
-                .circleCrop()
-                .into(ivProfile);
+        ImagesController.loadCircleImage(getContext(), byteArray, ivProfile);
     }
 
     // Calls logout method from ParseUser to forget current credentials

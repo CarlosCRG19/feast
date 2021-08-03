@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentInvitation;
 import com.example.fbu_app.models.FriendRequest;
 import com.example.fbu_app.models.Visit;
@@ -94,10 +95,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             // Get profile picture for fromUser
             ParseFile profilePicture = (ParseFile) fromUser.get("profileImage");
             // Unite info from invitation
-            Glide.with(context)
-                    .load(profilePicture.getUrl())
-                    .circleCrop()
-                    .into(ivProfilePicture);
+            ImagesController.loadCircleImage(context, profilePicture.getUrl(), ivProfilePicture);
             // Create text for notification
             String requestText = fromUser.getUsername() + " has sent you a friend request!";
             tvFriendRequest.setText(requestText);
@@ -150,25 +148,6 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                 }
             });
 
-        }
-
-        // SAVE POST METHODS
-
-        // Save friend request confirmation
-        private void saveConfirmation(ParseUser fromUser, ParseUser toUser) {
-            // Add both users to each others friend list
-            fromUser.add("friends", toUser);
-            toUser.add("friends", fromUser);
-            // save both users
-            fromUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e != null)
-                        Log.i("FriendRequest", "Failure saving users to friend list", e);
-                    return;
-                }
-            });
-            toUser.saveInBackground();
         }
     }
 }

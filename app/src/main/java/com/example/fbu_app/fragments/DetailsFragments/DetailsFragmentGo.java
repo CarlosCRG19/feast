@@ -33,14 +33,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 import java.util.Objects;
 
+// Detail screen from Explore action. If go button is clicked,
+// a visit to that restaurant is created
 public class DetailsFragmentGo extends DetailsFragmentBase {
 
     // VIEW MODEL
-    VisitViewModel visitViewModel;
+    private VisitViewModel visitViewModel;
 
     // VIEWS
-    ImageButton btnHide;
-    Button btnGo;
+    private ImageButton btnHide;
+    private Button btnGo;
 
 
     public DetailsFragmentGo(){}
@@ -59,9 +61,16 @@ public class DetailsFragmentGo extends DetailsFragmentBase {
 
         // Get view model
         visitViewModel = ViewModelProviders.of(getActivity()).get(VisitViewModel.class);
-        // Assign views
+    }
+
+    @Override
+    protected void setViews(View view) {
+        super.setViews(view);
+
+        // Assign new buttons
         btnGo = view.findViewById(R.id.btnGo);
         btnHide = view.findViewById(R.id.btnHide);
+
     }
 
     @Override

@@ -29,13 +29,10 @@ import java.util.List;
 public class OtherProfileFragment extends ProfileFragment{
 
     // Button for sending friend requests
-    Button btnFriendStatus;
-
-    // Boolean value to check if users are friends
-    boolean areFriends;
+    private Button btnFriendStatus;
 
     // Current user seeing this profile
-    ParseUser currentUser;
+    private ParseUser currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,8 +48,31 @@ public class OtherProfileFragment extends ProfileFragment{
         // Get current user
         currentUser = ParseUser.getCurrentUser();
 
+        // The button starts without being able to click on it, after verifying if there already
+        // exist a request or that both users are friends, the state might change
+        btnFriendStatus.setEnabled(false);
+        // Verify friendship status
+        checkFriendRequest();
+
+        // Set text of tvFavorites
+        String userFirstName = (String) profileUser.get("firstName");
+        String textFavorites = userFirstName != null ? userFirstName + "'s favorite restaurants" : "Favorite restaurants";
+        tvFavorites.setText(textFavorites);
+
+    }
+
+    // VIEW METHODS
+
+    @Override
+    protected void setViews(View view) {
+        super.setViews(view);
         // Assign value for button
         btnFriendStatus = view.findViewById(R.id.btnFriendStatus);
+    }
+
+    @Override
+    protected void setListeners() {
+        super.setListeners();
 
         // Assign button click listener to send a request
         btnFriendStatus.setOnClickListener(new View.OnClickListener() {
@@ -83,19 +103,9 @@ public class OtherProfileFragment extends ProfileFragment{
                 });
             }
         });
-        // The button starts without being able to click on it, after verifying if there already
-        // exist a request or that both users are friends, the state might change
-        btnFriendStatus.setEnabled(false);
-        // Verify friendship status
-        checkFriendRequest();
 
-        // Set text of tvFavorites
-        String userFirstName = (String) profileUser.get("firstName");
-        String textFavorites = userFirstName != null ? userFirstName + "'s favorite restaurants" : "Favorite restaurants";
-        tvFavorites.setText(textFavorites);
 
     }
-
 
     // Check for pending friend request
     private void checkFriendRequest() {

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
+import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.ProfileFragments.OtherProfileFragment;
 import com.example.fbu_app.fragments.ProfileFragments.OwnProfileFragment;
 import com.example.fbu_app.fragments.ProfileFragments.ProfileFragment;
@@ -97,11 +98,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             // Get profile picture
             ParseFile profileImage = (ParseFile) user.get("profileImage");
-            // Use glide to load PP
-            Glide.with(context)
-                    .load(profileImage.getUrl())
-                    .circleCrop()
-                    .into(ivUserImage);
+            // Load Profile Picture using static method
+            ImagesController.loadCircleImage(context, profileImage.getUrl(), ivUserImage);
 
             // Set TVs with the users data
             tvUsername.setText(user.getUsername());

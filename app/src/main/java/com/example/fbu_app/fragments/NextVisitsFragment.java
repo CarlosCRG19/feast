@@ -102,9 +102,6 @@ public class NextVisitsFragment extends Fragment {
             }
         });
 
-        // Make sure that bottom navbar is being displayed
-        showBottomnNavBar();
-
         // Make query for NextVisits
         queryNextVisits();
         queryInvitations();
@@ -208,18 +205,6 @@ public class NextVisitsFragment extends Fragment {
                 }
             }
         });
-    }
-
-    // OTHER METHODS
-    private void showBottomnNavBar() {
-        // Change navbar configuration
-        BottomAppBar bottomAppBar = getActivity().findViewById(R.id.bottomAppBar);
-        // Change visibility of toolbar
-        bottomAppBar.setVisibility(View.VISIBLE);
-        // Change create button configuration
-        FloatingActionButton btnCreate = getActivity().findViewById(R.id.btnCreate);
-        // Change visibility of button
-        btnCreate.show();
     }
 }
 
