@@ -19,6 +19,7 @@ import com.example.fbu_app.R;
 import com.example.fbu_app.adapters.FriendAdapter;
 import com.example.fbu_app.adapters.FriendRequestAdapter;
 import com.example.fbu_app.adapters.NotificationsAdapter;
+import com.example.fbu_app.controllers.NotificationsController;
 import com.example.fbu_app.models.Friend;
 import com.example.fbu_app.models.FriendRequest;
 import com.example.fbu_app.models.Visit;
@@ -191,6 +192,10 @@ public class InviteFragment extends DialogFragment {
                     Log.i("FriendInvite", "Error sending invite");
                     return;
                 }
+
+                // Send push notification to invited user
+                NotificationsController.sendVisitInvitationPush(visitInvitation);
+
                 if (isLast) {
                     // Display success message
                     Toast.makeText(getContext(), "Friends invited to visit!", Toast.LENGTH_SHORT).show();

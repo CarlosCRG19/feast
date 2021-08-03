@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.fbu_app.R;
+import com.example.fbu_app.controllers.NotificationsController;
 import com.example.fbu_app.fragments.LocationFragment;
 import com.example.fbu_app.fragments.NextVisitsFragment;
 import com.example.fbu_app.fragments.ProfileFragments.OwnProfileFragment;
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Allow push notifications to be send
+        NotificationsController.setupPushNotifications();
 
         // Object responsible of adding, removing or replacing Fragments in the stack
         final FragmentManager fragmentManager = getSupportFragmentManager();

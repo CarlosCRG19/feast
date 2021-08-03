@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.fbu_app.R;
+import com.example.fbu_app.controllers.NotificationsController;
 import com.example.fbu_app.models.FriendRequest;
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -93,6 +94,8 @@ public class OtherProfileFragment extends ProfileFragment{
                             Log.i("FriendRequest", "Error sending friend request");
                             return;
                         }
+                        // Send push notification to user
+                        NotificationsController.sendFriendRequestPush(friendRequest);
                         // Display success message
                         Toast.makeText(getContext(), "Friend request sent!", Toast.LENGTH_SHORT).show();
                         // Disable button

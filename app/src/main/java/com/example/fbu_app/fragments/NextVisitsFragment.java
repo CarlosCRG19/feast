@@ -39,21 +39,19 @@ import java.util.List;
 public class NextVisitsFragment extends Fragment {
 
     // VIEWS
-    RecyclerView rvVisits; // RV to display visits
+    private RecyclerView rvVisits, rvInvitations; // RV to display visits
     Button btnPastVisits; // Button to go to past visits
 
-    // Model to store visits data
-    List<Visit> visits;
-    // Adapter for RecyclerView
-    VisitsAdapter adapter;
-
-    // TEST INVITATION
-    InvitationAdapter invitationAdapter;
+    // Models to store visit and invitation data
+    private List<Visit> visits;
     List<VisitInvitation> invitations;
-    RecyclerView rvInvitations;
+
+    // Adapters
+    private VisitsAdapter adapter;
+    private InvitationAdapter invitationAdapter;
 
     // HELPERS
-    SwipeRefreshLayout swipeContainer; // handles refresh action
+    private SwipeRefreshLayout swipeContainer; // handles refresh action
 
     // Required empty constructor
     public NextVisitsFragment() {};

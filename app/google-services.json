@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "192956268173",
+    "project_id": "feast-1a9f5",
+    "storage_bucket": "feast-1a9f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192956268173:android:fe35731dda58879aca2cc4",
+        "android_client_info": {
+          "package_name": "com.example.fbu_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192956268173-5d2rkkgtghir0r0guas7lct046n5f37a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXyVFQ7S_3D0O686T6eSwDF3EIF9qk7z0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192956268173-5d2rkkgtghir0r0guas7lct046n5f37a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

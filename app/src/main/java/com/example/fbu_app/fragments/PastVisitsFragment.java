@@ -34,16 +34,16 @@ import java.util.List;
 public class PastVisitsFragment extends Fragment {
 
     // VIEWS
-    RecyclerView rvVisits; // RV to display visits
-    Button btnNextVisits; // Button to go to next visits
+    private RecyclerView rvVisits; // RV to display visits
+    private Button btnNextVisits; // Button to go to next visits
 
     // HELPERS
-    SwipeRefreshLayout swipeContainer; // handles refresh action
+    private SwipeRefreshLayout swipeContainer; // handles refresh action
 
     // Model to store visits data
-    List<Visit> visits;
+    private List<Visit> visits;
     // Adapter for RecyclerView
-    VisitsAdapter adapter;
+    private VisitsAdapter adapter;
 
     public PastVisitsFragment() {};
 

@@ -69,30 +69,31 @@ import java.util.List;
 public class LocationFragment extends Fragment {
 
     public static final String TAG = "LocationFragment"; // tag for log messages
-    public static final int AUTOCOMPLETE_REQUEST_CODE = 42;
-    public static final int REQUEST_LOCATION_PERMISSIONS_CODE = 100;
 
+    // REQUEST CODES
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 42;
+    private static final int REQUEST_LOCATION_PERMISSIONS_CODE = 100;
 
-    VisitViewModel visitViewModel; // Communication object between fragments
-    BusinessesViewModel businessesViewModel;
+    private VisitViewModel visitViewModel; // Communication objects between fragments
+    private BusinessesViewModel businessesViewModel;
 
     // DATE VARIABLES
-    Date visitDate;
-    String visitDateStr;
+    private Date visitDate;
+    private String visitDateStr;
 
     // VIEWS
-    DatePickerDialog datePickerDialog; // Date picking
-    Button btnDate, btnConfirmLocation;
-    EditText etPlaces; // Location selection
+    private DatePickerDialog datePickerDialog; // Date picking
+    private Button btnDate, btnConfirmLocation;
+    private EditText etPlaces; // Location selection
 
     // Latitude and Longitude values for selected location
-    double latitude, longitude;
+    private double latitude, longitude;
 
     // Google map
-    GoogleMap googleMap;
+    private GoogleMap googleMap;
 
     // Location Provider
-    FusedLocationProviderClient fusedLocationProviderClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     // Required empty constructor
     public LocationFragment() {};
@@ -113,7 +114,6 @@ public class LocationFragment extends Fragment {
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-//        return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_location, container, false);
         return view;
     }
@@ -122,9 +122,22 @@ public class LocationFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Initializes the places class for this app using the given API
+        Places.initialize(getContext().getApplicationContext(), BuildConfig.MAPS_API_KEY); // API hid in BuildConfig
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
-        // Setup Searchbar
-        etPlaces = view.findViewById(R.id.etPlaces);
+        // Set views from layout
+        setViews(view);
+
+        // Change text in date button
+        Pair<Date, String> todaysDate = DatePickerController.getTodaysDate();
+        visitDate = todaysDate.first;
+        visitDateStr = todaysDate.second;
+        btnDate.setText(visitDateStr);
+
+        // Set listeners
+        setListeners();
+
         // Setup Map
         setUpMap();
 
@@ -144,30 +157,20 @@ public class LocationFragment extends Fragment {
         };
         // Initialize the datePicker using controller
         datePickerDialog = DatePickerController.initDatePicker(getContext(), dateSetListener);
+    }
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+    //-- VIEWS METHODS --//
 
-
-
+    private void setViews(View view) {
         // Assign Views
         btnDate = view.findViewById(R.id.btnDate); // Date selection
         btnConfirmLocation = view.findViewById(R.id.btnConfirmLocation); // Location selection
-        // Button date setup
-        Pair<Date, String> todaysDate = DatePickerController.getTodaysDate();
-        visitDate = todaysDate.first;
-        visitDateStr = todaysDate.second;
-        btnDate.setText(visitDateStr);
-        btnDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                datePickerDialog.show();
-            }
-        });
-
-        // Initializes the places class for this app using the given API
-        Places.initialize(getContext().getApplicationContext(), BuildConfig.MAPS_API_KEY); // API hid in BuildConfig
-
+        // Setup Searchbar
+        etPlaces = view.findViewById(R.id.etPlaces);
         etPlaces.setFocusable(false);
+    }
+
+    private void setListeners(){
 
         // Set EditText listener
         etPlaces.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +189,14 @@ public class LocationFragment extends Fragment {
             }
         });
 
+        // Listener for date button
+        btnDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerDialog.show();
+            }
+        });
+
         // Button to finish this activity and send the data to the next fragment
         btnConfirmLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,7 +211,7 @@ public class LocationFragment extends Fragment {
                 visitViewModel.addFilter("radius", "20000");
                 // Search only for food businesses
                 visitViewModel.addFilter("term", "food");
-//                // Create new fragment
+                // Create new fragment
                 ExploreFragment exploreFragment = new ExploreFragment();
                 // Use activity's fragment manager to change fragment
                 getActivity().getSupportFragmentManager().beginTransaction()
@@ -208,7 +219,6 @@ public class LocationFragment extends Fragment {
                         .commit();
             }
         });
-
     }
 
 
