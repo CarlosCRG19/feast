@@ -50,23 +50,23 @@ An app that gamifies and optimizes the selection process for the best restaurant
 * [x] User can send friend requests to other users
 * [x] User can invite their friends to visits
 * [x] User can see notifications on visit and friend request acceptance.
-* [ ] A push notification is sent when the user receives a visit invitation or a friend request
+* [x] A push notification is sent when the user receives a visit invitation or a friend request
 * [ ] User can edit a visit (invite more friends or change date)    
 
 ### 2. Screen Archetypes
 
 * Login
-   * User can login into existing account
+   * [x] User can login into existing account
 * Registration Screen
-   * User can create new account
+   * [x] User can create new account
 * Explore screen
    * User can create a new visit      
-         * User can select a date
-         * User can select location
-   * User can see a sequence of cards with restaurants near them
-   * User can swipe right to select a restaurant (and left to ignore another)
-   * User can swipe up to see details of restaurants
-   * User can only see restaurants that match the specified filters
+         * [x] User can select a date
+         * [x] User can select location
+   * [x] User can see a sequence of cards with restaurants near them
+   * [x] User can swipe right to select a restaurant (and left to ignore another)
+   * [x] User can swipe up to see details of restaurants
+   * [x] User can only see restaurants that match the specified filters
 * Filters screen
    * [x] User can select different characteristics of the restaurants that they want to see in the main stream.
 * Detail screen
@@ -270,3 +270,11 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 
 <img src='sprint2_walkthrough.gif' title='Sprint 2 walkthrough' width='' alt='Sprint 2 walkthrough' />
 
+## Sprint 3 (July 26th - July 30th)
+
+* Complete UI redesign
+* User can cancel a visit
+* User can edit profile picture
+* Fixed various bugs 
+
+You can find a walkthrough here! : https://imgur.com/a/UABXGIa
