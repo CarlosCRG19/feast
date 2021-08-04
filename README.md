@@ -51,7 +51,7 @@ An app that gamifies and optimizes the selection process for the best restaurant
 * [x] User can invite their friends to visits
 * [x] User can see notifications on visit and friend request acceptance.
 * [x] A push notification is sent when the user receives a visit invitation or a friend request
-* [ ] User can edit a visit (invite more friends or change date)    
+* [x] User can edit a visit (invite more friends or change date)    
 
 ### 2. Screen Archetypes
 
@@ -237,6 +237,13 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
   * (Read/GET) Query business object 
   * (Read/GET) Query if like for that object exists
   * (Create/POST) Create a new visit from details screen 
+
+# APIs, SDKs and frameworks used
+
+* Yelp Fusion API
+* Google's Places API
+* Back4App SDK
+* Firebase SDK
 
 # Sprints walkthroughs
 
