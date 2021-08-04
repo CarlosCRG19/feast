@@ -3,12 +3,10 @@ package com.example.fbu_app.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,24 +14,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.fbu_app.R;
 import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.controllers.DatePickerController;
 import com.example.fbu_app.controllers.ImagesController;
-import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
-import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentInvitation;
+import com.example.fbu_app.fragments.VisitDetailsFragment;
 import com.example.fbu_app.models.Business;
-import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitInvitation;
-import com.parse.DeleteCallback;
-import com.parse.GetCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -200,17 +190,16 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         public void onClick(View v) {
             // Create new bundle to pass args
             Bundle bundle = new Bundle();
-            bundle.putParcelable(Business.TAG, visit.getBusiness());
-            bundle.putParcelable(INVITATION_TAG, invitation);
+            bundle.putParcelable(Visit.TAG, visit);
 
-            // Create new instance of detailsFragment (the user can create a new visit from this details screen)
-            DetailsFragmentInvitation detailsFragmentInvitation = new DetailsFragmentInvitation();
-            detailsFragmentInvitation.setArguments(bundle);
+            // Create new instance of visit details, the user can see who is attending the visit
+            VisitDetailsFragment visitDetailsFragment = new VisitDetailsFragment();
+            visitDetailsFragment.setArguments(bundle);
 
             // Make fragment transaction adding to back stack
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.flContainer, detailsFragmentInvitation)
+                    .replace(R.id.flContainer, visitDetailsFragment)
                     .addToBackStack(null)
                     .commit();
         }

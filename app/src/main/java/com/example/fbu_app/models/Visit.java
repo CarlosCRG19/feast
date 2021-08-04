@@ -17,6 +17,9 @@ import java.util.List;
 @ParseClassName("Visit")
 public class Visit extends ParseObject {
 
+    // TAG FOR REFERENCE
+    public static final String TAG = "visit";
+
     // ATTENDEES METHODS
     public void addAttendee(ParseUser user) { add("attendees", user); }
 

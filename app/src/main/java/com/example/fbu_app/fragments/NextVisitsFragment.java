@@ -44,7 +44,7 @@ public class NextVisitsFragment extends Fragment {
 
     // Models to store visit and invitation data
     private List<Visit> visits;
-    List<VisitInvitation> invitations;
+    private List<VisitInvitation> invitations;
 
     // Adapters
     private VisitsAdapter adapter;
@@ -70,6 +70,11 @@ public class NextVisitsFragment extends Fragment {
         // Make sure that bottom nav bar is being displayed
         ((MainActivity) getActivity()).showBottomNavBar();
 
+        // Find views from layout
+        setViews(view);
+        // Set click listeners for the views
+        setListeners();
+
         // Init visits list and adapter
         visits = new ArrayList<>();
         adapter = new VisitsAdapter(getContext(), visits);
@@ -79,17 +84,32 @@ public class NextVisitsFragment extends Fragment {
         invitationAdapter = new InvitationAdapter(getContext(), invitations);
 
         // Setup RecyclerView for invitations
-        rvInvitations = view.findViewById(R.id.rvVisitInvitations);
         rvInvitations.setLayoutManager(new LinearLayoutManager(getContext()));
         rvInvitations.setAdapter(invitationAdapter);
 
         // Setup RecyclerView for visits
-        rvVisits = view.findViewById(R.id.rvNextVisits);
         rvVisits.setLayoutManager(new LinearLayoutManager(getContext()));
         rvVisits.setAdapter(adapter);
 
-        // Button to pass to next visits
+
+        // Make query for NextVisits
+        queryNextVisits();
+        queryInvitations();
+
+        // Enable refresh feature
+        setRefreshFeature(view);
+
+    }
+
+    // Assigns views from layouts
+    private void setViews(View view) {
+        rvInvitations = view.findViewById(R.id.rvVisitInvitations);
+        rvVisits = view.findViewById(R.id.rvNextVisits);
         btnPastVisits = view.findViewById(R.id.btnPastVisits);
+    }
+
+    private void setListeners() {
+        // Button to pass to next visits
         btnPastVisits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,14 +119,6 @@ public class NextVisitsFragment extends Fragment {
                         .commit();
             }
         });
-
-        // Make query for NextVisits
-        queryNextVisits();
-        queryInvitations();
-
-        // Enable refresh feature
-        setRefreshFeature(view);
-
     }
 
     // Lets the user refresh the main feed swiping down on the RV

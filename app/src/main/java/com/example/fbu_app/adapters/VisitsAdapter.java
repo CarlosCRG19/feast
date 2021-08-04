@@ -21,6 +21,7 @@ import com.example.fbu_app.activities.MainActivity;
 import com.example.fbu_app.controllers.DatePickerController;
 import com.example.fbu_app.controllers.ImagesController;
 import com.example.fbu_app.fragments.DetailsFragments.DetailsFragmentCreate;
+import com.example.fbu_app.fragments.VisitDetailsFragment;
 import com.example.fbu_app.models.Business;
 import com.example.fbu_app.models.Like;
 import com.example.fbu_app.models.Visit;
@@ -50,7 +51,6 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
     public VisitsAdapter(Context context, List<Visit> visits) {
         this.context = context;
         this.visits = visits;
-        // Assign currentUser value with getMethod
     }
 
     @NonNull
@@ -167,16 +167,16 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
         public void onClick(View v) {
             // Create new bundle to pass args
             Bundle bundle = new Bundle();
-            bundle.putParcelable(Business.TAG, visitBusiness);
+            bundle.putParcelable(Visit.TAG, visit);
 
-            // Create new instance of detailsFragment (the user can create a new visit from this details screen)
-            DetailsFragmentCreate detailsFragmentCreate = new DetailsFragmentCreate();
-            detailsFragmentCreate.setArguments(bundle);
+            // Create new instance of visit details
+            VisitDetailsFragment visitDetailsFragment = new VisitDetailsFragment();
+            visitDetailsFragment.setArguments(bundle);
 
             // Make fragment transaction adding to back stack
             ((MainActivity) context).getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.flContainer, detailsFragmentCreate)
+                    .replace(R.id.flContainer, visitDetailsFragment)
                     .addToBackStack(null)
                     .commit();
         }
@@ -242,7 +242,6 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
                 Toast.makeText(context, "You will not attend this visit" , Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     // Checks for pending invitations that were made using this visit

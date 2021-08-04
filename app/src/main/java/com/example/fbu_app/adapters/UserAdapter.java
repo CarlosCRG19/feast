@@ -28,22 +28,40 @@ import java.util.List;
 // Class to populate the User search on create screen
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
+    // Codes for ViewHolders
+    public static final int BASIC_USER_CODE = 12;
+    public static final int SEARCH_USER_CODE = 42;
+
     // FIELDS
     private Context context;
     private List<ParseUser> users;
+    private int userType;
 
     // CONSTRUCTOR
-    public UserAdapter(Context context, List<ParseUser> parseUsers) {
+    public UserAdapter(Context context, List<ParseUser> parseUsers, int userType) {
         this.context = context;
         this.users = parseUsers;
+        this.userType = userType;
     }
 
     @NonNull
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.user_layout, parent, false);
-        return new ViewHolder(view);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        // Assign layout and holder for specific user type
+        if (viewType == BASIC_USER_CODE) {
+            View view = inflater.inflate(R.layout.attendee_layout, parent, false);
+            return new ViewHolder(view);
+        } else {
+            View view = inflater.inflate(R.layout.user_layout, parent, false);
+            return new SearchViewHolder(view);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return userType;
     }
 
     @Override
@@ -75,18 +93,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         // VIEWS
         private ImageView ivUserImage;
-        private TextView tvUsername, tvEmail;
-
         // USER FOR BINDING
-        ParseUser user;
+        protected ParseUser user;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // Get views from layout
             ivUserImage = itemView.findViewById(R.id.ivUserImage);
-            tvUsername = itemView.findViewById(R.id.tvUsername);
-            tvEmail = itemView.findViewById(R.id.tvName);
-
             // Set click listener to go to the users profile
             itemView.setOnClickListener(this);
         }
@@ -101,9 +114,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             // Load Profile Picture using static method
             ImagesController.loadCircleImage(context, profileImage.getUrl(), ivUserImage);
 
-            // Set TVs with the users data
-            tvUsername.setText(user.getUsername());
-            tvEmail.setText((String) user.get("firstName") + " " + (String) user.get("lastName"));
         }
 
 
@@ -133,9 +143,28 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     .addToBackStack(null)
                     .commit();
         }
+    }
 
+    public class SearchViewHolder extends ViewHolder {
 
+        // Views
+        private TextView tvUsername, tvEmail;
 
+        public SearchViewHolder(@NonNull @NotNull View itemView) {
+            super(itemView);
+            // Find views in layout
+            tvUsername = itemView.findViewById(R.id.tvUsername);
+            tvEmail = itemView.findViewById(R.id.tvName);
+        }
 
+        @Override
+        public void bind(ParseUser userToBind) {
+            super.bind(userToBind);
+
+            // Set TVs with the users data
+            tvUsername.setText(user.getUsername());
+            tvEmail.setText((String) user.get("firstName") + " " + (String) user.get("lastName"));
+
+        }
     }
 }

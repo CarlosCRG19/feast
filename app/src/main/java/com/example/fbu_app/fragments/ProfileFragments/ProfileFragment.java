@@ -101,7 +101,7 @@ public class ProfileFragment extends Fragment {
 
         // Adapters for the RVs
         adapter = new BusinessAdapter(getContext(), likedBusinesses); // adapter for liked businesses
-        userAdapter = new UserAdapter(getContext(), userList);
+        userAdapter = new UserAdapter(getContext(), userList, 42);
 
         // Set views from specified layout
         setViews(view);
