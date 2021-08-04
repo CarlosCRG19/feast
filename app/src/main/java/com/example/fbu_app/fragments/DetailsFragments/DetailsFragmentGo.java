@@ -1,32 +1,20 @@
 package com.example.fbu_app.fragments.DetailsFragments;
 
 import android.os.Bundle;
-import android.transition.ChangeBounds;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fbu_app.R;
-import com.example.fbu_app.fragments.ConfirmationFragment;
-import com.example.fbu_app.fragments.NextVisitsFragment;
-import com.example.fbu_app.models.Business;
-import com.example.fbu_app.models.Visit;
 import com.example.fbu_app.models.VisitViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
+
 
 import org.jetbrains.annotations.NotNull;
 

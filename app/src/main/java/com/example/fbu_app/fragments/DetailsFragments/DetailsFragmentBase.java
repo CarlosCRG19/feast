@@ -292,11 +292,11 @@ public class DetailsFragmentBase extends Fragment {
             @Override
             public void done(ParseException e) {
                 if(e != null) {
-                    Log.i("ParseSave", "Failed to save visit", e);
+                    Log.i("ParseSave", "Failed to save Feast", e);
                     return;
                 }
                 // Display success message
-                Toast.makeText(getContext(), "Succesfully created visit!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Succesfully created Feast!", Toast.LENGTH_SHORT).show();
                 // Create bundle to pass busines as argument
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(VISIT_TAG, newVisit);

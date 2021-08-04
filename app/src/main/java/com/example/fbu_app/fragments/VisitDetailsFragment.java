@@ -262,7 +262,7 @@ public class VisitDetailsFragment extends Fragment {
                 }
             });
             // Display success message
-            Toast.makeText(getContext(), "You will not attend this visit" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "You will not attend this Feast" , Toast.LENGTH_SHORT).show();
         }
     }
 

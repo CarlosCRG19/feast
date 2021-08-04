@@ -130,7 +130,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             // Bind data to views
             ImagesController.loadCircleImage(context, parseFile.getUrl(), ivProfilePicture);
             // Create notification text
-            String notificationText = user.getUsername() + " has " + status + " your Visit Invitation to " + visit.getBusiness().getName();
+            String notificationText = user.getUsername() + " has " + status + " your Feast invitation to " + visit.getBusiness().getName();
             tvNotification.setText(notificationText);
             // Delete VisitInvitation from database
             destroyVisitInvitation();

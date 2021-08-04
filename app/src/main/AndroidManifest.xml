@@ -73,12 +73,16 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".activities.LoginActivity" android:windowSoftInputMode="adjustPan">
+        <!-- Activities -->
+
+        <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.LoginActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.MainActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.SignupActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.ShowImageActivity"/>

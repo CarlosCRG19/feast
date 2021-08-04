@@ -216,11 +216,11 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
                     public void done(ParseException e) {
                         // Check for errors
                         if(e != null) {
-                            Toast.makeText(context, "Error deleting visit!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Error deleting Feast!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         // Display success message
-                        Toast.makeText(context, "Visit deleted!" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Feast deleted!" , Toast.LENGTH_SHORT).show();
                         // Eliminate row
                         visits.remove(getAdapterPosition());
                         // Notify item removed
@@ -239,7 +239,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.ViewHolder
                 // Notify item removed
                 notifyItemRemoved(getAdapterPosition());
                 // Display success message
-                Toast.makeText(context, "You will not attend this visit" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "You will not attend this Feast" , Toast.LENGTH_SHORT).show();
             }
         }
     }

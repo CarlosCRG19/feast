@@ -138,7 +138,6 @@ public class InviteFragment extends DialogFragment {
 
         // COMPOUND QUERY
 
-        //TODO: CHECK IF I CAN USE ONLY ONE STATUS CHECK
         ParseQuery<FriendRequest> compoundQuery = new ParseQuery<>(FriendRequest.class).or(Arrays.asList(queryMadeRequest, queryReceivedRequest));
         // Include both users in query
         compoundQuery.include("fromUser");
@@ -160,13 +159,20 @@ public class InviteFragment extends DialogFragment {
                     Friend friend;
                     // Compare toUser id with the current user id
                     if (request.getToUser().getObjectId().equals(currentUser.getObjectId())){
-                        // If request was made by current user, get the receiver
-                        friend = new Friend(request.getFromUser());
+                        // Check if user is already in list of attendees
+                        if(!visit.getAttendees().contains(request.getFromUser())) {
+                            // If request was made by current user, get the receiver
+                            friend = new Friend(request.getFromUser());
+                            friends.add(friend);
+                        }
                     } else {
-                        // In the other case, get the user that sent the request
-                        friend = new Friend(request.getToUser());
+                        // Check if user is already invited
+                        if(!visit.getAttendees().contains(request.getToUser())) {
+                            // In the other case, get the user that sent the request
+                            friend = new Friend(request.getToUser());
+                            friends.add(friend);
+                        }
                     }
-                    friends.add(friend);
                 }
                 friendAdapter.notifyDataSetChanged();
             }
@@ -198,7 +204,7 @@ public class InviteFragment extends DialogFragment {
 
                 if (isLast) {
                     // Display success message
-                    Toast.makeText(getContext(), "Friends invited to visit!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Friends invited to Feast!", Toast.LENGTH_SHORT).show();
                     // Return to previous fragment
                     dismiss();
                 }

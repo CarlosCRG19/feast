@@ -46,7 +46,7 @@
             android:shadowColor="@color/darkest_grey"
             android:textColor="@color/white"
             android:textSize="36sp"
-            android:text="Visit created!" />
+            android:text="Feast created!" />
 
     </LinearLayout>
 
@@ -167,7 +167,7 @@
             android:fontFamily="@font/open_sans_bold"
             android:textSize="20sp"
             android:textColor="@color/white"
-            android:text="Go to next visits"/>
+            android:text="Go to next feasts"/>
 
     </RelativeLayout>
 

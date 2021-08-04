@@ -192,7 +192,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:text="Create visit!" />
+                    android:text="Create feast!" />
 
             </LinearLayout>
 

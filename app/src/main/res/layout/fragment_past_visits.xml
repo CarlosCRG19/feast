@@ -27,7 +27,7 @@
             android:fontFamily="@font/open_sans_bold"
             android:textSize="16sp"
             android:textAllCaps="false"
-            android:text="Next Visits"/>
+            android:text="Next Feasts"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
             android:textColor="@color/white"
             android:fontFamily="@font/open_sans_bold"
             android:textSize="16sp"
-            android:text="Past Visits" />
+            android:text="Past Feasts" />
 
     </LinearLayout>
 

@@ -23,112 +23,99 @@
             android:textColor="@color/darkest_grey"
             android:fontFamily="@font/open_sans_bold"
             android:textSize="24sp"
-            android:text="Visit Details" />
+            android:text="Feast Details" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvBusiness"
-        android:layout_below="@+id/llVisitDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/open_sans_bold"
-        android:textColor="@color/dark_grey"
-        android:textSize="24sp"
-        android:text="Business" />
-
-    <TextView
-        android:layout_below="@+id/tvBusiness"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="4dp"
-        android:layout_height="1dp"
-        android:background="@color/grey" />
-
-    <RelativeLayout
-        android:id="@+id/rlBusiness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBusiness"
-        android:layout_marginHorizontal="42dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:foreground="?android:attr/selectableItemBackground">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvBusinessImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            app:cardCornerRadius="8dp">
-
-            <ImageView
-                android:id="@+id/ivBusinessImage"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:layout_alignParentTop="true"
-                android:layout_alignBottom="@+id/rvInfo"
-                tools:srcCompat="@tools:sample/avatars" />
-
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/cvBusinessImage"
-            android:fontFamily="@font/open_sans_bold"
-            android:textColor="@color/darkest_grey"
-            android:layout_toEndOf="@+id/cvBusinessImage"
-            android:layout_marginStart="8dp"
-            android:textSize="16sp"
-            tools:text="Business restaurant" />
-
-        <TextView
-            android:id="@+id/tvAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvName"
-            android:layout_marginTop="8dp"
-            android:layout_alignStart="@+id/tvName"
-            android:fontFamily="@font/open_sans"
-            android:textStyle="italic"
-            android:textColor="@color/dark_grey"
-            android:textSize="12sp"
-            tools:text="177A Bleecker Street"/>
-
-        <TextView
-            android:id="@+id/tvLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvAddress"
-            android:layout_marginTop="4dp"
-            android:layout_alignStart="@+id/tvName"
-            android:fontFamily="@font/open_sans"
-            android:textColor="@color/dark_grey"
-            android:textSize="12sp"
-            tools:text="Seattle, US"/>
-
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
-        android:padding="16dp"
-        android:layout_below="@+id/rlBusiness"
+        android:layout_below="@id/llVisitDetails"
+        android:padding="24dp"
         android:elevation="6dp"
         android:backgroundTint="@color/white"
         android:background="@drawable/button_background">
+
+        <RelativeLayout
+            android:id="@+id/rlBusiness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvBusinessImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                app:cardCornerRadius="8dp">
+
+                <ImageView
+                    android:id="@+id/ivBusinessImage"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@+id/rvInfo"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/cvBusinessImage"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/darkest_grey"
+                android:layout_toEndOf="@+id/cvBusinessImage"
+                android:layout_marginStart="8dp"
+                android:textSize="16sp"
+                tools:text="Business restaurant" />
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvName"
+                android:layout_marginTop="8dp"
+                android:layout_alignStart="@+id/tvName"
+                android:fontFamily="@font/open_sans"
+                android:textStyle="italic"
+                android:textColor="@color/dark_grey"
+                android:textSize="12sp"
+                tools:text="177A Bleecker Street"/>
+
+            <TextView
+                android:id="@+id/tvLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvAddress"
+                android:layout_marginTop="4dp"
+                android:layout_alignStart="@+id/tvName"
+                android:fontFamily="@font/open_sans"
+                android:textColor="@color/dark_grey"
+                android:textSize="12sp"
+                tools:text="Seattle, US"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_below="@+id/rlBusiness"
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_height="1dp"
+            android:background="@color/grey" />
 
         <TextView
             android:id="@+id/tvDateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/rlBusiness"
+            android:layout_marginTop="48dp"
             android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/darkest_grey"
             android:textSize="16sp"
@@ -160,14 +147,14 @@
             android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/darkest_grey"
             android:textSize="16sp"
-            android:text="Visit host" />
+            android:text="Feast host" />
 
         <ImageView
             android:id="@+id/ivCreatorImage"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_toStartOf="@+id/tvCreatorUsername"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="6dp"
             android:layout_alignBottom="@+id/tvCreatorText"
             android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/avatars" />
@@ -257,7 +244,7 @@
             android:fontFamily="@font/open_sans_bold"
             android:textSize="20sp"
             android:textColor="@color/white"
-            android:text="Delete Visit"/>
+            android:text="Delete Feast"/>
 
     </LinearLayout>
 

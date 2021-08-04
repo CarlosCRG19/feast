@@ -132,7 +132,7 @@ public class PastVisitsFragment extends Fragment {
             public void done(List<Visit> visitsList, ParseException e) {
                 // Check for errors
                 if (e != null) {
-                    Log.e("NextVisitsFragment", "Issue getting visits", e);
+                    Log.e("NextVisitsFragment", "Issue getting feasts", e);
                     return;
                 }
                 // Clear list

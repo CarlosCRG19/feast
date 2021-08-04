@@ -28,10 +28,26 @@
             android:id="@+id/tvName"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/tvOpen"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/darkest_grey"
             android:textSize="24sp"
             tools:text="Restaurant name" />
+
+        <TextView
+            android:id="@+id/tvOpen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tvName"
+            android:layout_alignEnd="@id/btnInfo"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:textColor="@color/dark_grey"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            tools:text="Open "/>
 
         <RatingBar
             android:id="@+id/rbRating"
@@ -96,18 +112,7 @@
             android:textSize="16sp"
             tools:text="pizza, italian, burgers" />
 
-        <TextView
-            android:id="@+id/tvOpen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/tvName"
-            android:layout_alignEnd="@id/btnInfo"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/open_sans_bold"
-            android:textColor="@color/dark_grey"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            tools:text="Open "/>
+
 
         <ImageButton
             android:id="@+id/btnInfo"

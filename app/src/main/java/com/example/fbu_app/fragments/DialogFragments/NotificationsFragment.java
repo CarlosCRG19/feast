@@ -144,7 +144,7 @@ public class NotificationsFragment extends DialogFragment {
             public void done(List<VisitInvitation> visitInvitations, ParseException e) {
                 // Check for errors
                 if (visitInvitations == null && e!= null) {
-                    Log.i("VisitInvitations", "No visit invitations found");
+                    Log.i("VisitInvitations", "No Feast invitations found");
                     return;
                 }
                 // Add objects to data model

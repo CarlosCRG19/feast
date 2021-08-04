@@ -129,11 +129,11 @@ public class CompareFragment extends Fragment implements AdapterView.OnItemSelec
                         @Override
                         public void done(ParseException e) {
                             if(e != null) {
-                                Log.i("ParseSave", "Failed to save visit", e);
+                                Log.i("ParseSave", "Failed to save Feast", e);
                                 return;
                             }
                             // Display success message
-                            Toast.makeText(getContext(), "Created random visit to " + randomBusiness.getName() + "!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Created random Feast to " + randomBusiness.getName() + "!", Toast.LENGTH_SHORT).show();
                             // Create bundle to pass busines as argument
                             Bundle bundle = new Bundle();
                             bundle.putParcelable(VISIT_TAG, newVisit);
