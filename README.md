@@ -155,7 +155,7 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 
 | Property | Type | Description |
 | --- | --- | --- |
-| objectID | String | unique identifier for the Restaurant (default field) |
+| objectID | String | unique identifier for the User (default field) |
 | createdAt | DateTime | date when user is created |
 | username | String | name of the user |
 | email | String | user's email |
@@ -169,7 +169,7 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 
 | Property | Type | Description |
 | --- | --- | --- |
-| objectID | String | unique identifier for the Restaurant (default field) |
+| objectID | String | unique identifier for the created Visit (default field) |
 | createdAt | DateTime | date when visit is created |
 | user | Pointer to User | user that liked the restaurant |
 | restaurant | Pointer to Restaurant | restaurant that has been selected |
@@ -181,7 +181,7 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 
 | Property | Type | Description |
 | --- | --- | --- |
-| objectID | String | Unique identifier for the Restaurant (default field) |
+| objectID | String | Unique identifier for the Like object (default field) |
 | createdAt | DateTime | date when like is created |
 | user | Pointer to User | User that liked the restaurant
 | restaurant | Pointer to Restaurant | reference to Restaurant object that this like belongs to |
@@ -190,7 +190,7 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 
 | Property | Type | Description |
 | --- | --- | --- |
-| objectID | String | Unique identifier for the location (default field) |
+| objectID | String | Unique identifier for the Hour object (default field) |
 | day | int | From 0 to 6, representing day of the week from Monday to Sunday. Notice that you may get the same day of the week more than once if the business has more than one opening time slots. | 
 | open | String | Start of the opening hours in a day, in 24-hour clock notation, like 1000 means 10 AM. | 
 | end | String | End of the opening hours in a day, in 24-hour clock notation, like 2130 means 9:30 PM. | 
@@ -200,7 +200,7 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 
 | Property | Type | Description |
 | --- | --- | --- |
-| objectID | String | Unique identifier for the location (default field) |
+| objectID | String | Unique identifier for the invitation (default field) |
 | visit | Pointer to Visit | Visit related to this invitation | 
 | fromUser | Pointer to User | User that created the visit invitation | 
 | toUser | Pointer to User | User that is being invited to visit | 
@@ -210,7 +210,7 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 
 | Property | Type | Description |
 | --- | --- | --- |
-| objectID | String | Unique identifier for the location (default field) |
+| objectID | String | Unique identifier for the friend relation (default field) |
 | fromUser | Pointer to User | User that sent friend request | 
 | toUser | Pointer to User | User that received friend request | 
 | status | String | current state of the request, can be "pending", "accepted" or "declined" | 
