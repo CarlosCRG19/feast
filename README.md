@@ -284,4 +284,4 @@ https://www.figma.com/proto/FATivGVWvbM1oYVIUHpsfT/Untitled?node-id=7%3A83&scali
 * User can edit profile picture
 * Fixed various bugs 
 
-You can find a walkthrough here! : https://imgur.com/a/UABXGIa
+<img src='sprint3_walkthrough.gif' title='Sprint 3 walkthrough' width='' alt='Sprint 3 walkthrough' />
